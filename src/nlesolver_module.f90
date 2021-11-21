@@ -907,12 +907,12 @@ contains
 !  about 1.324.
 !
 !  the function f is never evaluated at two points closer together
-!  than eps*abs(fmin) + (tol/3), where eps is approximately the square
-!  root of the relative machine precision. if f is a unimodal
-!  function and the computed values of f are always unimodal when
-!  separated by at least eps*abs(x) + (tol/3), then fmin approximates
-!  the abcissa of the global minimum of f on the interval ax,bx with
-!  an error less than 3*eps*abs(fmin) + tol. if f is not unimodal,
+!  than `eps*abs(fmin) + (tol/3)`, where `eps` is approximately the square
+!  root of the relative machine precision. if `f` is a unimodal
+!  function and the computed values of `f` are always unimodal when
+!  separated by at least `eps*abs(x) + (tol/3)`, then fmin approximates
+!  the abcissa of the global minimum of `f` on the interval `ax,bx` with
+!  an error less than `3*eps*abs(fmin) + tol`. if `f` is not unimodal,
 !  then fmin may approximate a local, but perhaps non-global, minimum to
 !  the same accuracy.
 !
@@ -922,7 +922,7 @@ contains
 !    minimization without derivatives, prentice - hall, inc. (1973).
 !
 !### See also
-!  * http://www.netlib.org/fmm/fmin.f
+!  * [fmin from Netlib](http://www.netlib.org/fmm/fmin.f)
 
     function fmin(f,ax,bx,tol) result(xmin)
 

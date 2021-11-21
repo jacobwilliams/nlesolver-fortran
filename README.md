@@ -1,4 +1,5 @@
-# nlesolver-fortran
+![nlesolver-fortran](media/logo.png)
+============
 
 Nonlinear Equation Solver with Modern Fortran.
 
