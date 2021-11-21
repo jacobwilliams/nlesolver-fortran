@@ -19,6 +19,6 @@ library = true
 
 [[test]]
 name = "nlesolver_test_1"
-link = ["lapack"]
+link = ["lapack", "blas"]
 source-dir = "tests"
 main = "nlesolver_test_1.f90"
