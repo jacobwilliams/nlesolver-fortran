@@ -48,21 +48,14 @@
         integer     :: m                = 0             !! number of constraints
         integer     :: max_iter         = 100           !! maximum number of iterations
         real(wp)    :: tol              = 1.0e-6_wp     !! convergence tolerance for function values
-        integer     :: step_mode        = 1             !! step mode:
-                                                        !!
-                                                        !!  * 1 = use the specified `alpha` (0,1]
-                                                        !!  * 2 = backtracking linesearch
-                                                        !!  * 3 = exact linesearch
-                                                        !!  * 4 = evaluate function at specified fixed points
-                                                        !!  * 5 [NOT YET IMPLEMENTED]
         real(wp)    :: alpha            = 1.0_wp        !! step length (when specified constant)
         real(wp)    :: alpha_min        = 0.1_wp        !! minimum step length (when allowed to vary)
         real(wp)    :: alpha_max        = 1.0_wp        !! maximum step length (when allowed to vary)
         real(wp)    :: tolx             = 1.0e-8_wp     !! convergence tolerance for `x`
         real(wp)    :: c                = 0.5_wp        !! backtracking linesearch parameter (0,1)
         real(wp)    :: tau              = 0.5_wp        !! backtracking linesearch parameter (0,1)
-        real(wp)    :: fmin_tol         = 1.0e-5_wp     !! tolerance for "exact" linesearch (`step_mode=3`)
-        integer     :: n_intervals      = 3             !! number of intervals for fixed point linesearch (`step_mode=4`)
+        real(wp)    :: fmin_tol         = 1.0e-5_wp     !! tolerance for "exact" linesearch
+        integer     :: n_intervals      = 3             !! number of intervals for fixed point linesearch
         logical     :: use_broyden      = .false.       !! if true, a Broyden update is used
                                                         !! rather than computing the Jacobian
                                                         !! at every step. The `grad` function is
@@ -77,10 +70,11 @@
         character(len=:),allocatable :: message         !! latest status message
         integer     :: istat            = -999          !! latest status message
 
-        procedure(func_func),pointer   :: func             => null() !! user-supplied routine to compute the function
-        procedure(grad_func),pointer   :: grad             => null() !! user-supplied routine tocompute the gradient of the function
-        procedure(export_func),pointer :: export_iteration => null() !! user-supplied routine to export iterations
-        procedure(wait_func),pointer   :: user_input_check => null() !! user-supplied routine to enable user to stop iterations
+        procedure(func_func),pointer       :: func             => null() !! user-supplied routine to compute the function
+        procedure(grad_func),pointer       :: grad             => null() !! user-supplied routine tocompute the gradient of the function
+        procedure(export_func),pointer     :: export_iteration => null() !! user-supplied routine to export iterations
+        procedure(wait_func),pointer       :: user_input_check => null() !! user-supplied routine to enable user to stop iterations
+        procedure(linesearch_func),pointer :: linesearch       => null() !! line search method (determined by `step_mode` user input in [[nlesolver_type:initialize]])
 
         contains
 
@@ -91,10 +85,6 @@
         procedure,public :: destroy    => destroy_nlesolver_variables
         procedure,public :: status     => get_status
 
-        procedure :: simple_step
-        procedure :: backtracking_linesearch
-        procedure :: exact_linesearch
-        procedure :: fixed_point_linesearch
         procedure :: set_status
 
         end type nlesolver_type
@@ -137,6 +127,22 @@
             class(nlesolver_type),intent(inout) :: me
             logical,intent(out)                 :: user_stop
         end subroutine wait_func
+
+        subroutine linesearch_func(me,xold,p,fjac,x,f,fvec)
+            !! line search method. Note that not all inputs/outputs are
+            !! used by all methods.
+            import :: wp,nlesolver_type
+            implicit none
+            class(nlesolver_type),intent(inout) :: me
+            real(wp),dimension(me%n),intent(in) :: xold      !! previous value of `x`
+            real(wp),dimension(me%n),intent(in) :: p         !! search direction
+            real(wp),dimension(me%m,me%n),intent(in) :: fjac !! jacobian matrix
+            real(wp),dimension(me%n),intent(out) :: x        !! new `x`
+            real(wp),intent(inout) :: f                      !! input: current magnitude of `fvec`,
+                                                             !! output: new value of `f`
+            real(wp),dimension(me%m),intent(inout) :: fvec   !! input: current function vector,
+                                                             !! output: new function vector
+        end subroutine linesearch_func
 
     end interface
 
@@ -256,7 +262,6 @@
                                                             !!  * 2 = backtracking linesearch (between `alpha_min` and `alpha_max`)
                                                             !!  * 3 = exact linesearch (between `alpha_min` and `alpha_max`)
                                                             !!  * 4 = evaluate function at specified fixed points  (between `alpha_min` and `alpha_max`)
-                                                            !!  * 5 [NOT YET IMPLEMENTED]
     real(wp),intent(in),optional      :: alpha              !! (0,1]
     real(wp),intent(in),optional      :: alpha_min          !! (0,1]
     real(wp),intent(in),optional      :: alpha_max          !! (0,1]
@@ -291,7 +296,26 @@
     me%grad     => grad
 
     !optional:
-    if (present(step_mode))        me%step_mode        = abs(step_mode)
+
+    if (present(step_mode)) then
+        select case (step_mode)
+        case(1) ! = use the specified `alpha` (0,1]
+            me%linesearch => simple_step
+        case(2) ! = backtracking linesearch (between `alpha_min` and `alpha_max`)
+            me%linesearch => backtracking_linesearch
+        case(3) ! = exact linesearch (between `alpha_min` and `alpha_max`)
+            me%linesearch => exact_linesearch
+        case(4) ! = evaluate function at specified fixed points  (between `alpha_min` and `alpha_max`)
+            me%linesearch => fixed_point_linesearch
+        case default
+            status_ok = .false.
+            call me%set_status(istat = -5, string = 'Error: invalid step_mode:',i=step_mode)
+            return
+        end select
+    else
+        me%linesearch => simple_step
+    end if
+
     if (present(alpha))            me%alpha            = abs(alpha)
     if (present(alpha_min))        me%alpha_min        = abs(alpha_min)
     if (present(alpha_max))        me%alpha_max        = abs(alpha_max)
@@ -326,11 +350,6 @@
     if (me%alpha_max<=me%alpha_min) then
         status_ok = .false.
         call me%set_status(istat = -4, string = 'Error: alpha_min must be < alpha_max')
-        return
-    end if
-    if (me%step_mode<1 .or. me%step_mode>4) then
-        status_ok = .false.
-        call me%set_status(istat = -5, string = 'Error: invalid step_mode:',i=me%step_mode)
         return
     end if
 
@@ -470,7 +489,7 @@
                 prev_fjac = fjac
                 prev_fvec = fvec
             else
-                !compute the jacobian:
+                ! compute the jacobian:
                 call me%grad(x,fjac)
                 recompute_jac = .false.  ! for broyden
                 broyden_counter = 0
@@ -479,11 +498,11 @@
             xold = x
             fold = f
 
-            !compute the search direction by solving linear system:
+            ! compute the search direction p by solving linear system:
             rhs = -fvec ! RHS of the linear system
             call linear_solver(me%m,me%n,fjac,rhs,p,info)
 
-            !check for errors:
+            ! check for errors:
             if (info /= 0) then
 
                 call me%set_status(istat = -6, string = 'Error solving linear system. info =', i=info)
@@ -491,39 +510,10 @@
 
             else
 
-                !p is the search direction
+                ! next step, using the specified method:
+                call me%linesearch(xold,p,fjac,x,f,fvec)
 
-                ! note: the valid step_mode was checked in the initialize routine.
-                select case (me%step_mode)
-
-                case(1) !just use the specified alpha (0,1]
-
-                    call me%simple_step(xold,p,x,f,fvec)
-
-                case(2) ! backtracking line search
-
-                    call me%backtracking_linesearch(xold,p,fjac,x,f,fvec)
-
-                case(3) ! use a minimizer to find the min between alpha_min and alpha_max
-
-                    call me%exact_linesearch(xold,p,fvec,x,f)
-
-                case(4)
-                    ! compute the function at a specified number of points
-                    ! and then just choose the one with the lowest f
-
-                    call me%fixed_point_linesearch(xold,p,me%n_intervals,x,f,fvec)
-
-                case(5)
-                    ! trust region method ...
-
-                    error stop 'trust region method not yet implemented'
-
-                case default    !invalid option
-                    error stop 'Error: invalid step_mode in nlesolver'
-                end select
-
-                !keep track of the number of steps in the "uphill" direction:
+                ! keep track of the number of steps in the "uphill" direction:
                 if (f>fold) then
                     n_uphill = n_uphill + 1
                 else
@@ -689,16 +679,17 @@
 !>
 !  Take a simple step in the search direction of `p * alpha`.
 
-    subroutine simple_step(me,xold,p,x,f,fvec)
+    subroutine simple_step(me,xold,p,fjac,x,f,fvec)
 
     implicit none
 
     class(nlesolver_type),intent(inout) :: me
     real(wp),dimension(me%n),intent(in) :: xold      !! previous value of `x`
     real(wp),dimension(me%n),intent(in) :: p         !! search direction
-    real(wp),dimension(me%m),intent(out) :: fvec     !! function vector
+    real(wp),dimension(me%m,me%n),intent(in) :: fjac !! jacobian matrix
     real(wp),dimension(me%n),intent(out) :: x        !! new `x`
     real(wp),intent(inout) :: f                      !! magnitude of `fvec`
+    real(wp),dimension(me%m),intent(inout) :: fvec   !! function vector
 
     x = xold + p * me%alpha
 
@@ -720,7 +711,7 @@
     class(nlesolver_type),intent(inout) :: me
     real(wp),dimension(me%n),intent(in) :: xold      !! previous value of `x`
     real(wp),dimension(me%n),intent(in) :: p         !! search direction
-    real(wp),dimension(me%m,me%n),intent(in) :: fjac !! line search obj fcn gradient vector
+    real(wp),dimension(me%m,me%n),intent(in) :: fjac !! jacobian matrix
     real(wp),dimension(me%n),intent(out) :: x        !! new `x`
     real(wp),intent(inout) :: f                      !! magnitude of `fvec`
     real(wp),dimension(me%m),intent(inout) :: fvec   !! function vector
@@ -788,16 +779,17 @@
 !
 !  Usually this is overkill and not necessary, but is here as an option for testing.
 
-    subroutine exact_linesearch(me,xold,p,fvec,x,f)
+    subroutine exact_linesearch(me,xold,p,fjac,x,f,fvec)
 
     implicit none
 
-    class(nlesolver_type),intent(inout)  :: me
-    real(wp),dimension(me%n),intent(in)  :: xold      !! previous value of `x`
-    real(wp),dimension(me%n),intent(in)  :: p         !! search direction
-    real(wp),dimension(me%m),intent(out) :: fvec      !! function vector
-    real(wp),dimension(me%n),intent(out) :: x         !! new `x`
-    real(wp),intent(out)                 :: f         !! magnitude of `fvec`
+    class(nlesolver_type),intent(inout) :: me
+    real(wp),dimension(me%n),intent(in) :: xold      !! previous value of `x`
+    real(wp),dimension(me%n),intent(in) :: p         !! search direction
+    real(wp),dimension(me%m,me%n),intent(in) :: fjac !! jacobian matrix
+    real(wp),dimension(me%n),intent(out) :: x        !! new `x`
+    real(wp),intent(inout) :: f                      !! magnitude of `fvec`
+    real(wp),dimension(me%m),intent(inout) :: fvec   !! function vector
 
     real(wp),dimension(:),allocatable :: xnew !! used in [[func_for_fmin]]
     real(wp) :: alpha_min
@@ -838,17 +830,17 @@ contains
 !  A simple search that just evaluates the function at a specified
 !  number of points and picks the one with the minimum function value.
 
-    subroutine fixed_point_linesearch(me,xold,p,n,x,f,fvec)
+    subroutine fixed_point_linesearch(me,xold,p,fjac,x,f,fvec)
 
     implicit none
 
-    class(nlesolver_type),intent(inout)  :: me
-    real(wp),dimension(me%n),intent(in)  :: xold     !! previous value of `x`
-    real(wp),dimension(me%n),intent(in)  :: p        !! search direction
-    integer,intent(in)                   :: n        !! number of steps to divide the interval (`>=1`)
-    real(wp),dimension(me%m),intent(out) :: fvec     !! function vector
+    class(nlesolver_type),intent(inout) :: me
+    real(wp),dimension(me%n),intent(in) :: xold      !! previous value of `x`
+    real(wp),dimension(me%n),intent(in) :: p         !! search direction
+    real(wp),dimension(me%m,me%n),intent(in) :: fjac !! jacobian matrix
     real(wp),dimension(me%n),intent(out) :: x        !! new `x`
-    real(wp),intent(out) :: f                        !! magnitude of `fvec`
+    real(wp),intent(inout) :: f                      !! magnitude of `fvec`
+    real(wp),dimension(me%m),intent(inout) :: fvec   !! function vector
 
     integer :: i !! counter
     integer :: n_points !! number of points to compute
@@ -857,7 +849,9 @@ contains
     real(wp),dimension(:),allocatable :: fvec_tmp !! temp `fvec`
     real(wp) :: f_tmp !! temp `f`
     real(wp) :: step_size !! step size for `alpha`
+    integer :: n !! number of steps to divide the interval
 
+    n = me%n_intervals
     n_points = 2 + max(abs(n-1),1) !! alpha_min + alpha_max + n-1 points
 
     allocate(alphas_to_try(n_points))

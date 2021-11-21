@@ -136,7 +136,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title="100.0% of total for modules and submodules.">628 statements</a>
+    title="100.0% of total for modules and submodules.">638 statements</a>
      </li> 
      
      
@@ -214,6 +214,8 @@
       <a class="list-group-item" href="../module/nlesolver_module.html#interface-export_func">export_func</a>
       
       <a class="list-group-item" href="../module/nlesolver_module.html#interface-wait_func">wait_func</a>
+      
+      <a class="list-group-item" href="../module/nlesolver_module.html#interface-linesearch_func">linesearch_func</a>
       
     </div>
   </div>
@@ -485,6 +487,8 @@
       <a class="list-group-item" href="../module/nlesolver_module.html#interface-export_func">export_func</a>
       
       <a class="list-group-item" href="../module/nlesolver_module.html#interface-wait_func">wait_func</a>
+      
+      <a class="list-group-item" href="../module/nlesolver_module.html#interface-linesearch_func">linesearch_func</a>
       
     </div>
   </div>
@@ -1028,6 +1032,159 @@ private subroutine wait_func(me, user_stop)
 </div>
 
     
+     
+<div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="interface-linesearch_func"></span><h3>abstract interface
+    
+  </h3></div>
+  
+  <ul class="list-group">
+    <li class="list-group-item">
+    
+    
+    <h3>
+private subroutine linesearch_func(me, xold, p, fjac, x, f, fvec)
+    
+    
+   
+</h3>
+    
+
+
+
+<p>line search method. Note that not all inputs/outputs are
+used by all methods.</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>me</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(me%n)</td><td>::</td>
+  <td><strong>xold</strong></td><td><p>previous value of <code>x</code></p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(me%n)</td><td>::</td>
+  <td><strong>p</strong></td><td><p>search direction</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(me%m,me%n)</td><td>::</td>
+  <td><strong>fjac</strong></td><td><p>jacobian matrix</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+  <td>intent(out),</td>
+  <td></td>
+  
+  <td>dimension(me%n)</td><td>::</td>
+  <td><strong>x</strong></td><td><p>new <code>x</code></p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>f</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>dimension(me%m)</td><td>::</td>
+  <td><strong>fvec</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+    </li>
+  </ul>
+</div>
+
+    
     </section>
   <br>
     
@@ -1111,20 +1268,6 @@ private subroutine wait_func(me, user_stop)
   <td>private</td>
   <td></td><td>::</td>
   <td><strong>tol</strong></td><td> =</td><td>1.0e-6_wp</td><td><p>convergence tolerance for function values</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" id="variable-step_mode"></span>integer,</td>
-  
-  <td>private</td>
-  <td></td><td>::</td>
-  <td><strong>step_mode</strong></td><td> =</td><td>1</td><td><p>step mode:</p><a href="../type/nlesolver_type.html#variable-step_mode" class="pull-right"><emph>Read more&hellip;</emph></a></td>
   
 </tr>
 
@@ -1222,7 +1365,7 @@ private subroutine wait_func(me, user_stop)
   
   <td>private</td>
   <td></td><td>::</td>
-  <td><strong>fmin_tol</strong></td><td> =</td><td>1.0e-5_wp</td><td><p>tolerance for "exact" linesearch (<code>step_mode=3</code>)</p></td>
+  <td><strong>fmin_tol</strong></td><td> =</td><td>1.0e-5_wp</td><td><p>tolerance for "exact" linesearch</p></td>
   
 </tr>
 
@@ -1236,7 +1379,7 @@ private subroutine wait_func(me, user_stop)
   
   <td>private</td>
   <td></td><td>::</td>
-  <td><strong>n_intervals</strong></td><td> =</td><td>3</td><td><p>number of intervals for fixed point linesearch (<code>step_mode=4</code>)</p></td>
+  <td><strong>n_intervals</strong></td><td> =</td><td>3</td><td><p>number of intervals for fixed point linesearch</p></td>
   
 </tr>
 
@@ -1400,6 +1543,20 @@ to allow where the value of <code>f</code> increases</p></td>
   
 </tr>
 
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-linesearch"></span>procedure(<a href='../interface/linesearch_func.html'>linesearch_func</a>),</td>
+  
+  <td>private,</td>
+  <td>pointer</td><td>::</td>
+  <td><strong>linesearch</strong></td><td>=> </td><td>null()</td><td><p>line search method (determined by <code>step_mode</code> user input in <a href="../type/nlesolver_type.html#boundprocedure-initialize">initialize</a>)</p></td>
+  
+</tr>
+
 </tbody>
 </table>
 
@@ -1421,18 +1578,6 @@ to allow where the value of <code>f</code> increases</p></td>
        <td></td></tr>
       
        <tr><td>procedure, public :: <strong><a href='../type/nlesolver_type.html#boundprocedure-status'>status</a></strong>  => get_status </td>
-       <td></td></tr>
-      
-       <tr><td>procedure, private :: <strong><a href='../type/nlesolver_type.html#boundprocedure-simple_step'>simple_step</a></strong>  </td>
-       <td></td></tr>
-      
-       <tr><td>procedure, private :: <strong><a href='../type/nlesolver_type.html#boundprocedure-backtracking_linesearch'>backtracking_linesearch</a></strong>  </td>
-       <td></td></tr>
-      
-       <tr><td>procedure, private :: <strong><a href='../type/nlesolver_type.html#boundprocedure-exact_linesearch'>exact_linesearch</a></strong>  </td>
-       <td></td></tr>
-      
-       <tr><td>procedure, private :: <strong><a href='../type/nlesolver_type.html#boundprocedure-fixed_point_linesearch'>fixed_point_linesearch</a></strong>  </td>
        <td></td></tr>
       
        <tr><td>procedure, private :: <strong><a href='../type/nlesolver_type.html#boundprocedure-set_status'>set_status</a></strong>  </td>
@@ -2018,7 +2163,6 @@ first iteration.</p></td>
 <li>2 = backtracking linesearch (between <code>alpha_min</code> and <code>alpha_max</code>)</li>
 <li>3 = exact linesearch (between <code>alpha_min</code> and <code>alpha_max</code>)</li>
 <li>4 = evaluate function at specified fixed points  (between <code>alpha_min</code> and <code>alpha_max</code>)</li>
-<li>5 [NOT YET IMPLEMENTED]</li>
 </ul></td>
   
 </tr>
@@ -2426,7 +2570,7 @@ private subroutine <a href='../proc/linear_solver.html'>linear_solver</a>(m, n, 
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-simple_step"></span><h3>
-private subroutine <a href='../proc/simple_step.html'>simple_step</a>(me, xold, p, x, f, fvec)
+private subroutine <a href='../proc/simple_step.html'>simple_step</a>(me, xold, p, fjac, x, f, fvec)
     
     
    
@@ -2508,6 +2652,21 @@ private subroutine <a href='../proc/simple_step.html'>simple_step</a>(me, xold, 
 <tr>
   
   <td><span class="anchor" ></span>real(kind=wp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(me%m,me%n)</td><td>::</td>
+  <td><strong>fjac</strong></td><td><p>jacobian matrix</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=wp),</td>
   <td>intent(out),</td>
   <td></td>
   
@@ -2538,7 +2697,7 @@ private subroutine <a href='../proc/simple_step.html'>simple_step</a>(me, xold, 
 <tr>
   
   <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(out),</td>
+  <td>intent(inout),</td>
   <td></td>
   
   <td>dimension(me%m)</td><td>::</td>
@@ -2646,7 +2805,7 @@ private subroutine <a href='../proc/backtracking_linesearch.html'>backtracking_l
   <td></td>
   
   <td>dimension(me%m,me%n)</td><td>::</td>
-  <td><strong>fjac</strong></td><td><p>line search obj fcn gradient vector</p></td>
+  <td><strong>fjac</strong></td><td><p>jacobian matrix</p></td>
   
 </tr>
 
@@ -2709,7 +2868,7 @@ private subroutine <a href='../proc/backtracking_linesearch.html'>backtracking_l
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-exact_linesearch"></span><h3>
-private subroutine <a href='../proc/exact_linesearch.html'>exact_linesearch</a>(me, xold, p, fvec, x, f)
+private subroutine <a href='../proc/exact_linesearch.html'>exact_linesearch</a>(me, xold, p, fjac, x, f, fvec)
     
     
    
@@ -2794,11 +2953,11 @@ find the minimum value of <code>f(x)</code> between
 <tr>
   
   <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(out),</td>
+  <td>intent(in),</td>
   <td></td>
   
-  <td>dimension(me%m)</td><td>::</td>
-  <td><strong>fvec</strong></td><td><p>function vector</p></td>
+  <td>dimension(me%m,me%n)</td><td>::</td>
+  <td><strong>fjac</strong></td><td><p>jacobian matrix</p></td>
   
 </tr>
 
@@ -2824,11 +2983,26 @@ find the minimum value of <code>f(x)</code> between
 <tr>
   
   <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(out)</td>
+  <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
   <td><strong>f</strong></td><td><p>magnitude of <code>fvec</code></p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>dimension(me%m)</td><td>::</td>
+  <td><strong>fvec</strong></td><td><p>function vector</p></td>
   
 </tr>
 
@@ -2846,7 +3020,7 @@ find the minimum value of <code>f(x)</code> between
     
   <div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="proc-fixed_point_linesearch"></span><h3>
-private subroutine <a href='../proc/fixed_point_linesearch.html'>fixed_point_linesearch</a>(me, xold, p, n, x, f, fvec)
+private subroutine <a href='../proc/fixed_point_linesearch.html'>fixed_point_linesearch</a>(me, xold, p, fjac, x, f, fvec)
     
     
    
@@ -2928,12 +3102,12 @@ private subroutine <a href='../proc/fixed_point_linesearch.html'>fixed_point_lin
   
 <tr>
   
-  <td><span class="anchor" ></span>integer,</td>
-  <td>intent(in)</td>
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+  <td>intent(in),</td>
   <td></td>
   
-  <td></td><td>::</td>
-  <td><strong>n</strong></td><td><p>number of steps to divide the interval (<code>&gt;=1</code>)</p></td>
+  <td>dimension(me%m,me%n)</td><td>::</td>
+  <td><strong>fjac</strong></td><td><p>jacobian matrix</p></td>
   
 </tr>
 
@@ -2959,7 +3133,7 @@ private subroutine <a href='../proc/fixed_point_linesearch.html'>fixed_point_lin
 <tr>
   
   <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(out)</td>
+  <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
@@ -2974,7 +3148,7 @@ private subroutine <a href='../proc/fixed_point_linesearch.html'>fixed_point_lin
 <tr>
   
   <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(out),</td>
+  <td>intent(inout),</td>
   <td></td>
   
   <td>dimension(me%m)</td><td>::</td>

@@ -136,7 +136,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 2.2% of total for procedures.">12 statements</a>
+    title=" 2.4% of total for procedures.">13 statements</a>
      </li> 
      
      
@@ -209,7 +209,7 @@
     
     <div class="col-md-9" id='text'>
     <h2>
-private subroutine simple_step(me, xold, p, x, f, fvec)
+private subroutine simple_step(me, xold, p, fjac, x, f, fvec)
     
     
    
@@ -240,7 +240,7 @@ private subroutine simple_step(me, xold, p, x, f, fvec)
   
 <tr>
   
-  <td><span class="anchor" id="variable-me~10"></span>class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),</td>
+  <td><span class="anchor" id="variable-me~11"></span>class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -255,7 +255,7 @@ private subroutine simple_step(me, xold, p, x, f, fvec)
   
 <tr>
   
-  <td><span class="anchor" id="variable-xold"></span>real(kind=wp),</td>
+  <td><span class="anchor" id="variable-xold~2"></span>real(kind=wp),</td>
   <td>intent(in),</td>
   <td></td>
   
@@ -270,7 +270,7 @@ private subroutine simple_step(me, xold, p, x, f, fvec)
   
 <tr>
   
-  <td><span class="anchor" id="variable-p"></span>real(kind=wp),</td>
+  <td><span class="anchor" id="variable-p~2"></span>real(kind=wp),</td>
   <td>intent(in),</td>
   <td></td>
   
@@ -285,7 +285,22 @@ private subroutine simple_step(me, xold, p, x, f, fvec)
   
 <tr>
   
-  <td><span class="anchor" id="variable-x~6"></span>real(kind=wp),</td>
+  <td><span class="anchor" id="variable-fjac~2"></span>real(kind=wp),</td>
+  <td>intent(in),</td>
+  <td></td>
+  
+  <td>dimension(me%m,me%n)</td><td>::</td>
+  <td><strong>fjac</strong></td><td><p>jacobian matrix</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-x~7"></span>real(kind=wp),</td>
   <td>intent(out),</td>
   <td></td>
   
@@ -300,7 +315,7 @@ private subroutine simple_step(me, xold, p, x, f, fvec)
   
 <tr>
   
-  <td><span class="anchor" id="variable-f~4"></span>real(kind=wp),</td>
+  <td><span class="anchor" id="variable-f~5"></span>real(kind=wp),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -315,8 +330,8 @@ private subroutine simple_step(me, xold, p, x, f, fvec)
   
 <tr>
   
-  <td><span class="anchor" id="variable-fvec"></span>real(kind=wp),</td>
-  <td>intent(out),</td>
+  <td><span class="anchor" id="variable-fvec~2"></span>real(kind=wp),</td>
+  <td>intent(inout),</td>
   <td></td>
   
   <td>dimension(me%m)</td><td>::</td>
@@ -391,16 +406,17 @@ private subroutine simple_step(me, xold, p, x, f, fvec)
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span>    <span class="k">subroutine </span><span class="n">simple_step</span><span class="p">(</span><span class="n">me</span><span class="p">,</span><span class="n">xold</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">fvec</span><span class="p">)</span>
+    <div class="highlight"><pre><span></span>    <span class="k">subroutine </span><span class="n">simple_step</span><span class="p">(</span><span class="n">me</span><span class="p">,</span><span class="n">xold</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">fjac</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">fvec</span><span class="p">)</span>
 
     <span class="k">implicit none</span>
 
 <span class="k">    class</span><span class="p">(</span><span class="n">nlesolver_type</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">me</span>
     <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xold</span>      <span class="c">!! previous value of `x`</span>
     <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">p</span>         <span class="c">!! search direction</span>
-    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="kd">::</span> <span class="n">fvec</span>     <span class="c">!! function vector</span>
+    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">fjac</span> <span class="c">!! jacobian matrix</span>
     <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="kd">::</span> <span class="n">x</span>        <span class="c">!! new `x`</span>
     <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">f</span>                      <span class="c">!! magnitude of `fvec`</span>
+    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">fvec</span>   <span class="c">!! function vector</span>
 
     <span class="n">x</span> <span class="o">=</span> <span class="n">xold</span> <span class="o">+</span> <span class="n">p</span> <span class="o">*</span> <span class="n">me</span><span class="p">%</span><span class="n">alpha</span>
 

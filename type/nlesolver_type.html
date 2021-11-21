@@ -136,7 +136,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title="<p>100.0% of total for derived types.</p>Including implementation: 432 statements, 100.0% of total for derived types.">38 statements</a>
+    title="<p>100.0% of total for derived types.</p>Including implementation: 304 statements, 100.0% of total for derived types.">34 statements</a>
      </li> 
      
      
@@ -189,8 +189,6 @@
       
       <a class="list-group-item" href="../type/nlesolver_type.html#variable-tol">tol</a>
       
-      <a class="list-group-item" href="../type/nlesolver_type.html#variable-step_mode">step_mode</a>
-      
       <a class="list-group-item" href="../type/nlesolver_type.html#variable-alpha">alpha</a>
       
       <a class="list-group-item" href="../type/nlesolver_type.html#variable-alpha_min">alpha_min</a>
@@ -229,6 +227,8 @@
       
       <a class="list-group-item" href="../type/nlesolver_type.html#variable-user_input_check">user_input_check</a>
       
+      <a class="list-group-item" href="../type/nlesolver_type.html#variable-linesearch">linesearch</a>
+      
     </div>
   </div>
 </div>
@@ -262,14 +262,6 @@
       <a class="list-group-item" href="../type/nlesolver_type.html#boundprocedure-destroy">destroy</a>
       
       <a class="list-group-item" href="../type/nlesolver_type.html#boundprocedure-status">status</a>
-      
-      <a class="list-group-item" href="../type/nlesolver_type.html#boundprocedure-simple_step">simple_step</a>
-      
-      <a class="list-group-item" href="../type/nlesolver_type.html#boundprocedure-backtracking_linesearch">backtracking_linesearch</a>
-      
-      <a class="list-group-item" href="../type/nlesolver_type.html#boundprocedure-exact_linesearch">exact_linesearch</a>
-      
-      <a class="list-group-item" href="../type/nlesolver_type.html#boundprocedure-fixed_point_linesearch">fixed_point_linesearch</a>
       
       <a class="list-group-item" href="../type/nlesolver_type.html#boundprocedure-set_status">set_status</a>
       
@@ -321,8 +313,6 @@
       
       <a class="list-group-item" href="../type/nlesolver_type.html#variable-tol">tol</a>
       
-      <a class="list-group-item" href="../type/nlesolver_type.html#variable-step_mode">step_mode</a>
-      
       <a class="list-group-item" href="../type/nlesolver_type.html#variable-alpha">alpha</a>
       
       <a class="list-group-item" href="../type/nlesolver_type.html#variable-alpha_min">alpha_min</a>
@@ -361,6 +351,8 @@
       
       <a class="list-group-item" href="../type/nlesolver_type.html#variable-user_input_check">user_input_check</a>
       
+      <a class="list-group-item" href="../type/nlesolver_type.html#variable-linesearch">linesearch</a>
+      
     </div>
   </div>
 </div>
@@ -394,14 +386,6 @@
       <a class="list-group-item" href="../type/nlesolver_type.html#boundprocedure-destroy">destroy</a>
       
       <a class="list-group-item" href="../type/nlesolver_type.html#boundprocedure-status">status</a>
-      
-      <a class="list-group-item" href="../type/nlesolver_type.html#boundprocedure-simple_step">simple_step</a>
-      
-      <a class="list-group-item" href="../type/nlesolver_type.html#boundprocedure-backtracking_linesearch">backtracking_linesearch</a>
-      
-      <a class="list-group-item" href="../type/nlesolver_type.html#boundprocedure-exact_linesearch">exact_linesearch</a>
-      
-      <a class="list-group-item" href="../type/nlesolver_type.html#boundprocedure-fixed_point_linesearch">fixed_point_linesearch</a>
       
       <a class="list-group-item" href="../type/nlesolver_type.html#boundprocedure-set_status">set_status</a>
       
@@ -499,27 +483,6 @@
   
 <tr>
   
-  <td><span class="anchor" id="variable-step_mode"></span>integer,</td>
-  
-  <td>private</td>
-  <td></td><td>::</td>
-  <td><strong>step_mode</strong></td><td> =</td><td>1</td><td><p>step mode:</p>
-<ul>
-<li>1 = use the specified <code>alpha</code> (0,1]</li>
-<li>2 = backtracking linesearch</li>
-<li>3 = exact linesearch</li>
-<li>4 = evaluate function at specified fixed points</li>
-<li>5 [NOT YET IMPLEMENTED]</li>
-</ul></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
   <td><span class="anchor" id="variable-alpha"></span>real(kind=wp),</td>
   
   <td>private</td>
@@ -608,7 +571,7 @@
   
   <td>private</td>
   <td></td><td>::</td>
-  <td><strong>fmin_tol</strong></td><td> =</td><td>1.0e-5_wp</td><td><p>tolerance for "exact" linesearch (<code>step_mode=3</code>)</p></td>
+  <td><strong>fmin_tol</strong></td><td> =</td><td>1.0e-5_wp</td><td><p>tolerance for "exact" linesearch</p></td>
   
 </tr>
 
@@ -622,7 +585,7 @@
   
   <td>private</td>
   <td></td><td>::</td>
-  <td><strong>n_intervals</strong></td><td> =</td><td>3</td><td><p>number of intervals for fixed point linesearch (<code>step_mode=4</code>)</p></td>
+  <td><strong>n_intervals</strong></td><td> =</td><td>3</td><td><p>number of intervals for fixed point linesearch</p></td>
   
 </tr>
 
@@ -783,6 +746,20 @@ to allow where the value of <code>f</code> increases</p></td>
   <td>private,</td>
   <td>pointer</td><td>::</td>
   <td><strong>user_input_check</strong></td><td>=> </td><td>null()</td><td><p>user-supplied routine to enable user to stop iterations</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-linesearch"></span>procedure(<a href='../interface/linesearch_func.html'>linesearch_func</a>),</td>
+  
+  <td>private,</td>
+  <td>pointer</td><td>::</td>
+  <td><strong>linesearch</strong></td><td>=> </td><td>null()</td><td><p>line search method (determined by <code>step_mode</code> user input in <a href="../type/nlesolver_type.html#boundprocedure-initialize">initialize</a>)</p></td>
   
 </tr>
 
@@ -1043,7 +1020,6 @@ first iteration.</p></td>
 <li>2 = backtracking linesearch (between <code>alpha_min</code> and <code>alpha_max</code>)</li>
 <li>3 = exact linesearch (between <code>alpha_min</code> and <code>alpha_max</code>)</li>
 <li>4 = evaluate function at specified fixed points  (between <code>alpha_min</code> and <code>alpha_max</code>)</li>
-<li>5 [NOT YET IMPLEMENTED]</li>
 </ul></td>
   
 </tr>
@@ -1448,628 +1424,6 @@ private subroutine <a href='../proc/get_status.html'>get_status</a>(me, istat, m
     
      
 <div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-simple_step"></span><h3>procedure, private :: <strong>simple_step</strong>  
-    
-  </h3></div>
-  
-  <ul class="list-group">
-    
-      <li class="list-group-item">
-      
-        
-          
-    
-    <h3>
-private subroutine <a href='../proc/simple_step.html'>simple_step</a>(me, xold, p, x, f, fvec)
-    
-    
-   
-</h3>
-    
-
-
-
-
-
-
-
-<p>Take a simple step in the search direction of <code>p * alpha</code>.</p>
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),</td>
-  <td>intent(inout)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>me</strong></td><td></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(in),</td>
-  <td></td>
-  
-  <td>dimension(me%n)</td><td>::</td>
-  <td><strong>xold</strong></td><td><p>previous value of <code>x</code></p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(in),</td>
-  <td></td>
-  
-  <td>dimension(me%n)</td><td>::</td>
-  <td><strong>p</strong></td><td><p>search direction</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(out),</td>
-  <td></td>
-  
-  <td>dimension(me%n)</td><td>::</td>
-  <td><strong>x</strong></td><td><p>new <code>x</code></p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(inout)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>f</strong></td><td><p>magnitude of <code>fvec</code></p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(out),</td>
-  <td></td>
-  
-  <td>dimension(me%m)</td><td>::</td>
-  <td><strong>fvec</strong></td><td><p>function vector</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-
-        
-      
-      </li>
-    
-  </ul>
-</div>
-
-    
-     
-<div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-backtracking_linesearch"></span><h3>procedure, private :: <strong>backtracking_linesearch</strong>  
-    
-  </h3></div>
-  
-  <ul class="list-group">
-    
-      <li class="list-group-item">
-      
-        
-          
-    
-    <h3>
-private subroutine <a href='../proc/backtracking_linesearch.html'>backtracking_linesearch</a>(me, xold, p, fjac, x, f, fvec)
-    
-    
-   
-</h3>
-    
-
-
-
-
-
-
-
-<p>Backtracking line search.</p>
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),</td>
-  <td>intent(inout)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>me</strong></td><td></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(in),</td>
-  <td></td>
-  
-  <td>dimension(me%n)</td><td>::</td>
-  <td><strong>xold</strong></td><td><p>previous value of <code>x</code></p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(in),</td>
-  <td></td>
-  
-  <td>dimension(me%n)</td><td>::</td>
-  <td><strong>p</strong></td><td><p>search direction</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(in),</td>
-  <td></td>
-  
-  <td>dimension(me%m,me%n)</td><td>::</td>
-  <td><strong>fjac</strong></td><td><p>line search obj fcn gradient vector</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(out),</td>
-  <td></td>
-  
-  <td>dimension(me%n)</td><td>::</td>
-  <td><strong>x</strong></td><td><p>new <code>x</code></p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(inout)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>f</strong></td><td><p>magnitude of <code>fvec</code></p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(inout),</td>
-  <td></td>
-  
-  <td>dimension(me%m)</td><td>::</td>
-  <td><strong>fvec</strong></td><td><p>function vector</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-
-        
-      
-      </li>
-    
-  </ul>
-</div>
-
-    
-     
-<div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-exact_linesearch"></span><h3>procedure, private :: <strong>exact_linesearch</strong>  
-    
-  </h3></div>
-  
-  <ul class="list-group">
-    
-      <li class="list-group-item">
-      
-        
-          
-    
-    <h3>
-private subroutine <a href='../proc/exact_linesearch.html'>exact_linesearch</a>(me, xold, p, fvec, x, f)
-    
-    
-   
-</h3>
-    
-
-
-
-
-
-
-
-<p>An exact linesearch that uses a derivative-free minimizer to
-find the minimum value of <code>f(x)</code> between
-<code>x = xold + p * alpha_min</code> and
-<code>x = xold + p * alpha_max</code>.</p><a href="../proc/exact_linesearch.html" class="pull-right"><emph>Read more&hellip;</emph></a>
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),</td>
-  <td>intent(inout)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>me</strong></td><td></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(in),</td>
-  <td></td>
-  
-  <td>dimension(me%n)</td><td>::</td>
-  <td><strong>xold</strong></td><td><p>previous value of <code>x</code></p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(in),</td>
-  <td></td>
-  
-  <td>dimension(me%n)</td><td>::</td>
-  <td><strong>p</strong></td><td><p>search direction</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(out),</td>
-  <td></td>
-  
-  <td>dimension(me%m)</td><td>::</td>
-  <td><strong>fvec</strong></td><td><p>function vector</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(out),</td>
-  <td></td>
-  
-  <td>dimension(me%n)</td><td>::</td>
-  <td><strong>x</strong></td><td><p>new <code>x</code></p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(out)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>f</strong></td><td><p>magnitude of <code>fvec</code></p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-
-        
-      
-      </li>
-    
-  </ul>
-</div>
-
-    
-     
-<div class="panel panel-default">
-  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-fixed_point_linesearch"></span><h3>procedure, private :: <strong>fixed_point_linesearch</strong>  
-    
-  </h3></div>
-  
-  <ul class="list-group">
-    
-      <li class="list-group-item">
-      
-        
-          
-    
-    <h3>
-private subroutine <a href='../proc/fixed_point_linesearch.html'>fixed_point_linesearch</a>(me, xold, p, n, x, f, fvec)
-    
-    
-   
-</h3>
-    
-
-
-
-
-
-
-
-<p>A simple search that just evaluates the function at a specified
- number of points and picks the one with the minimum function value.</p><a href="../proc/fixed_point_linesearch.html" class="pull-right"><emph>Read more&hellip;</emph></a>
-    
-    <h4>Arguments</h4>
-    
-      
-      
-<table class="table table-striped varlist">
-<thead><tr><th>Type</th>
-<th>Intent</th><th>Optional</th>
-<th>Attributes</th><th></th><th>Name</th><th></th></thead>
-
-
-
-<tbody>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),</td>
-  <td>intent(inout)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>me</strong></td><td></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(in),</td>
-  <td></td>
-  
-  <td>dimension(me%n)</td><td>::</td>
-  <td><strong>xold</strong></td><td><p>previous value of <code>x</code></p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(in),</td>
-  <td></td>
-  
-  <td>dimension(me%n)</td><td>::</td>
-  <td><strong>p</strong></td><td><p>search direction</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>integer,</td>
-  <td>intent(in)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>n</strong></td><td><p>number of steps to divide the interval (<code>&gt;=1</code>)</p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(out),</td>
-  <td></td>
-  
-  <td>dimension(me%n)</td><td>::</td>
-  <td><strong>x</strong></td><td><p>new <code>x</code></p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(out)</td>
-  <td></td>
-  
-  <td></td><td>::</td>
-  <td><strong>f</strong></td><td><p>magnitude of <code>fvec</code></p></td>
-  
-</tr>
-
-  
-  
-  
-  
-<tr>
-  
-  <td><span class="anchor" ></span>real(kind=wp),</td>
-  <td>intent(out),</td>
-  <td></td>
-  
-  <td>dimension(me%m)</td><td>::</td>
-  <td><strong>fvec</strong></td><td><p>function vector</p></td>
-  
-</tr>
-
-</tbody>
-</table>
-
-      
-    
-    
-
-        
-      
-      </li>
-    
-  </ul>
-</div>
-
-    
-     
-<div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-set_status"></span><h3>procedure, private :: <strong>set_status</strong>  
     
   </h3></div>
@@ -2216,21 +1570,14 @@ private subroutine <a href='../proc/set_status.html'>set_status</a>(me, istat, s
         <span class="kt">integer</span>     <span class="kd">::</span> <span class="n">m</span>                <span class="o">=</span> <span class="mi">0</span>             <span class="c">!! number of constraints</span>
         <span class="kt">integer</span>     <span class="kd">::</span> <span class="n">max_iter</span>         <span class="o">=</span> <span class="mi">100</span>           <span class="c">!! maximum number of iterations</span>
         <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">tol</span>              <span class="o">=</span> <span class="mf">1.0e-6_wp</span>     <span class="c">!! convergence tolerance for function values</span>
-        <span class="kt">integer</span>     <span class="kd">::</span> <span class="n">step_mode</span>        <span class="o">=</span> <span class="mi">1</span>             <span class="c">!! step mode:</span>
-                                                        <span class="c">!!</span>
-                                                        <span class="c">!!  * 1 = use the specified `alpha` (0,1]</span>
-                                                        <span class="c">!!  * 2 = backtracking linesearch</span>
-                                                        <span class="c">!!  * 3 = exact linesearch</span>
-                                                        <span class="c">!!  * 4 = evaluate function at specified fixed points</span>
-                                                        <span class="c">!!  * 5 [NOT YET IMPLEMENTED]</span>
         <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">alpha</span>            <span class="o">=</span> <span class="mf">1.0_wp</span>        <span class="c">!! step length (when specified constant)</span>
         <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">alpha_min</span>        <span class="o">=</span> <span class="mf">0.1_wp</span>        <span class="c">!! minimum step length (when allowed to vary)</span>
         <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">alpha_max</span>        <span class="o">=</span> <span class="mf">1.0_wp</span>        <span class="c">!! maximum step length (when allowed to vary)</span>
         <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">tolx</span>             <span class="o">=</span> <span class="mf">1.0e-8_wp</span>     <span class="c">!! convergence tolerance for `x`</span>
         <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">c</span>                <span class="o">=</span> <span class="mf">0.5_wp</span>        <span class="c">!! backtracking linesearch parameter (0,1)</span>
         <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">tau</span>              <span class="o">=</span> <span class="mf">0.5_wp</span>        <span class="c">!! backtracking linesearch parameter (0,1)</span>
-        <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">fmin_tol</span>         <span class="o">=</span> <span class="mf">1.0e-5_wp</span>     <span class="c">!! tolerance for &quot;exact&quot; linesearch (`step_mode=3`)</span>
-        <span class="kt">integer</span>     <span class="kd">::</span> <span class="n">n_intervals</span>      <span class="o">=</span> <span class="mi">3</span>             <span class="c">!! number of intervals for fixed point linesearch (`step_mode=4`)</span>
+        <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">fmin_tol</span>         <span class="o">=</span> <span class="mf">1.0e-5_wp</span>     <span class="c">!! tolerance for &quot;exact&quot; linesearch</span>
+        <span class="kt">integer</span>     <span class="kd">::</span> <span class="n">n_intervals</span>      <span class="o">=</span> <span class="mi">3</span>             <span class="c">!! number of intervals for fixed point linesearch</span>
         <span class="kt">logical</span>     <span class="kd">::</span> <span class="n">use_broyden</span>      <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span>       <span class="c">!! if true, a Broyden update is used</span>
                                                         <span class="c">!! rather than computing the Jacobian</span>
                                                         <span class="c">!! at every step. The `grad` function is</span>
@@ -2245,10 +1592,11 @@ private subroutine <a href='../proc/set_status.html'>set_status</a>(me, istat, s
         <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="k">allocatable</span> <span class="kd">::</span> <span class="n">message</span>         <span class="c">!! latest status message</span>
         <span class="kt">integer</span>     <span class="kd">::</span> <span class="n">istat</span>            <span class="o">=</span> <span class="o">-</span><span class="mi">999</span>          <span class="c">!! latest status message</span>
 
-        <span class="k">procedure</span><span class="p">(</span><span class="n">func_func</span><span class="p">),</span><span class="k">pointer</span>   <span class="kd">::</span> <span class="n">func</span>             <span class="o">=&gt;</span> <span class="nb">null</span><span class="p">()</span> <span class="c">!! user-supplied routine to compute the function</span>
-        <span class="k">procedure</span><span class="p">(</span><span class="n">grad_func</span><span class="p">),</span><span class="k">pointer</span>   <span class="kd">::</span> <span class="n">grad</span>             <span class="o">=&gt;</span> <span class="nb">null</span><span class="p">()</span> <span class="c">!! user-supplied routine tocompute the gradient of the function</span>
-        <span class="k">procedure</span><span class="p">(</span><span class="n">export_func</span><span class="p">),</span><span class="k">pointer</span> <span class="kd">::</span> <span class="n">export_iteration</span> <span class="o">=&gt;</span> <span class="nb">null</span><span class="p">()</span> <span class="c">!! user-supplied routine to export iterations</span>
-        <span class="k">procedure</span><span class="p">(</span><span class="n">wait_func</span><span class="p">),</span><span class="k">pointer</span>   <span class="kd">::</span> <span class="n">user_input_check</span> <span class="o">=&gt;</span> <span class="nb">null</span><span class="p">()</span> <span class="c">!! user-supplied routine to enable user to stop iterations</span>
+        <span class="k">procedure</span><span class="p">(</span><span class="n">func_func</span><span class="p">),</span><span class="k">pointer</span>       <span class="kd">::</span> <span class="n">func</span>             <span class="o">=&gt;</span> <span class="nb">null</span><span class="p">()</span> <span class="c">!! user-supplied routine to compute the function</span>
+        <span class="k">procedure</span><span class="p">(</span><span class="n">grad_func</span><span class="p">),</span><span class="k">pointer</span>       <span class="kd">::</span> <span class="n">grad</span>             <span class="o">=&gt;</span> <span class="nb">null</span><span class="p">()</span> <span class="c">!! user-supplied routine tocompute the gradient of the function</span>
+        <span class="k">procedure</span><span class="p">(</span><span class="n">export_func</span><span class="p">),</span><span class="k">pointer</span>     <span class="kd">::</span> <span class="n">export_iteration</span> <span class="o">=&gt;</span> <span class="nb">null</span><span class="p">()</span> <span class="c">!! user-supplied routine to export iterations</span>
+        <span class="k">procedure</span><span class="p">(</span><span class="n">wait_func</span><span class="p">),</span><span class="k">pointer</span>       <span class="kd">::</span> <span class="n">user_input_check</span> <span class="o">=&gt;</span> <span class="nb">null</span><span class="p">()</span> <span class="c">!! user-supplied routine to enable user to stop iterations</span>
+        <span class="k">procedure</span><span class="p">(</span><span class="n">linesearch_func</span><span class="p">),</span><span class="k">pointer</span> <span class="kd">::</span> <span class="n">linesearch</span>       <span class="o">=&gt;</span> <span class="nb">null</span><span class="p">()</span> <span class="c">!! line search method (determined by `step_mode` user input in [[nlesolver_type:initialize]])</span>
 
         <span class="k">contains</span>
 
@@ -2259,10 +1607,6 @@ private subroutine <a href='../proc/set_status.html'>set_status</a>(me, istat, s
         <span class="k">procedure</span><span class="p">,</span><span class="k">public</span> <span class="kd">::</span> <span class="n">destroy</span>    <span class="o">=&gt;</span> <span class="n">destroy_nlesolver_variables</span>
         <span class="k">procedure</span><span class="p">,</span><span class="k">public</span> <span class="kd">::</span> <span class="n">status</span>     <span class="o">=&gt;</span> <span class="n">get_status</span>
 
-        <span class="k">procedure</span> <span class="kd">::</span> <span class="n">simple_step</span>
-        <span class="k">procedure</span> <span class="kd">::</span> <span class="n">backtracking_linesearch</span>
-        <span class="k">procedure</span> <span class="kd">::</span> <span class="n">exact_linesearch</span>
-        <span class="k">procedure</span> <span class="kd">::</span> <span class="n">fixed_point_linesearch</span>
         <span class="k">procedure</span> <span class="kd">::</span> <span class="n">set_status</span>
 
         <span class="k">end type </span><span class="n">nlesolver_type</span>

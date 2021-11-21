@@ -136,7 +136,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 5.1% of total for procedures.">28 statements</a>
+    title=" 5.3% of total for procedures.">29 statements</a>
      </li> 
      
      
@@ -209,7 +209,7 @@
     
     <div class="col-md-9" id='text'>
     <h2>
-private subroutine exact_linesearch(me, xold, p, fvec, x, f)
+private subroutine exact_linesearch(me, xold, p, fjac, x, f, fvec)
     
     
    
@@ -244,7 +244,7 @@ find the minimum value of <code>f(x)</code> between
   
 <tr>
   
-  <td><span class="anchor" id="variable-me~12"></span>class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),</td>
+  <td><span class="anchor" id="variable-me~13"></span>class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -259,7 +259,7 @@ find the minimum value of <code>f(x)</code> between
   
 <tr>
   
-  <td><span class="anchor" id="variable-xold~3"></span>real(kind=wp),</td>
+  <td><span class="anchor" id="variable-xold~4"></span>real(kind=wp),</td>
   <td>intent(in),</td>
   <td></td>
   
@@ -274,7 +274,7 @@ find the minimum value of <code>f(x)</code> between
   
 <tr>
   
-  <td><span class="anchor" id="variable-p~3"></span>real(kind=wp),</td>
+  <td><span class="anchor" id="variable-p~4"></span>real(kind=wp),</td>
   <td>intent(in),</td>
   <td></td>
   
@@ -289,12 +289,12 @@ find the minimum value of <code>f(x)</code> between
   
 <tr>
   
-  <td><span class="anchor" id="variable-fvec~3"></span>real(kind=wp),</td>
-  <td>intent(out),</td>
+  <td><span class="anchor" id="variable-fjac~4"></span>real(kind=wp),</td>
+  <td>intent(in),</td>
   <td></td>
   
-  <td>dimension(me%m)</td><td>::</td>
-  <td><strong>fvec</strong></td><td><p>function vector</p></td>
+  <td>dimension(me%m,me%n)</td><td>::</td>
+  <td><strong>fjac</strong></td><td><p>jacobian matrix</p></td>
   
 </tr>
 
@@ -304,7 +304,7 @@ find the minimum value of <code>f(x)</code> between
   
 <tr>
   
-  <td><span class="anchor" id="variable-x~8"></span>real(kind=wp),</td>
+  <td><span class="anchor" id="variable-x~9"></span>real(kind=wp),</td>
   <td>intent(out),</td>
   <td></td>
   
@@ -319,12 +319,27 @@ find the minimum value of <code>f(x)</code> between
   
 <tr>
   
-  <td><span class="anchor" id="variable-f~6"></span>real(kind=wp),</td>
-  <td>intent(out)</td>
+  <td><span class="anchor" id="variable-f~7"></span>real(kind=wp),</td>
+  <td>intent(inout)</td>
   <td></td>
   
   <td></td><td>::</td>
   <td><strong>f</strong></td><td><p>magnitude of <code>fvec</code></p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-fvec~4"></span>real(kind=wp),</td>
+  <td>intent(inout),</td>
+  <td></td>
+  
+  <td>dimension(me%m)</td><td>::</td>
+  <td><strong>fvec</strong></td><td><p>function vector</p></td>
   
 </tr>
 
@@ -498,16 +513,17 @@ find the minimum value of <code>f(x)</code> between
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="highlight"><pre><span></span>    <span class="k">subroutine </span><span class="n">exact_linesearch</span><span class="p">(</span><span class="n">me</span><span class="p">,</span><span class="n">xold</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">fvec</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">f</span><span class="p">)</span>
+    <div class="highlight"><pre><span></span>    <span class="k">subroutine </span><span class="n">exact_linesearch</span><span class="p">(</span><span class="n">me</span><span class="p">,</span><span class="n">xold</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">fjac</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">fvec</span><span class="p">)</span>
 
     <span class="k">implicit none</span>
 
-<span class="k">    class</span><span class="p">(</span><span class="n">nlesolver_type</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">me</span>
-    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">xold</span>      <span class="c">!! previous value of `x`</span>
-    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>  <span class="kd">::</span> <span class="n">p</span>         <span class="c">!! search direction</span>
-    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="kd">::</span> <span class="n">fvec</span>      <span class="c">!! function vector</span>
-    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="kd">::</span> <span class="n">x</span>         <span class="c">!! new `x`</span>
-    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>                 <span class="kd">::</span> <span class="n">f</span>         <span class="c">!! magnitude of `fvec`</span>
+<span class="k">    class</span><span class="p">(</span><span class="n">nlesolver_type</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">me</span>
+    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xold</span>      <span class="c">!! previous value of `x`</span>
+    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">p</span>         <span class="c">!! search direction</span>
+    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">fjac</span> <span class="c">!! jacobian matrix</span>
+    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="kd">::</span> <span class="n">x</span>        <span class="c">!! new `x`</span>
+    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">f</span>                      <span class="c">!! magnitude of `fvec`</span>
+    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">fvec</span>   <span class="c">!! function vector</span>
 
     <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span> <span class="kd">::</span> <span class="n">xnew</span> <span class="c">!! used in [[func_for_fmin]]</span>
     <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">alpha_min</span>

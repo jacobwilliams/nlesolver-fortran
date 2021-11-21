@@ -136,7 +136,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title="26.8% of total for procedures.">147 statements</a>
+    title="24.3% of total for procedures.">134 statements</a>
      </li> 
      
      
@@ -240,7 +240,7 @@ private subroutine nlesolver_solver(me, x)
   
 <tr>
   
-  <td><span class="anchor" id="variable-me~8"></span>class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),</td>
+  <td><span class="anchor" id="variable-me~9"></span>class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),</td>
   <td>intent(inout)</td>
   <td></td>
   
@@ -255,7 +255,7 @@ private subroutine nlesolver_solver(me, x)
   
 <tr>
   
-  <td><span class="anchor" id="variable-x~4"></span>real(kind=wp),</td>
+  <td><span class="anchor" id="variable-x~5"></span>real(kind=wp),</td>
   <td>intent(inout),</td>
   <td></td>
   
@@ -559,7 +559,7 @@ private subroutine nlesolver_solver(me, x)
 <span class="k">                </span><span class="n">prev_fjac</span> <span class="o">=</span> <span class="n">fjac</span>
                 <span class="n">prev_fvec</span> <span class="o">=</span> <span class="n">fvec</span>
             <span class="k">else</span>
-                <span class="c">!compute the jacobian:</span>
+                <span class="c">! compute the jacobian:</span>
                 <span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">grad</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">fjac</span><span class="p">)</span>
                 <span class="n">recompute_jac</span> <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span>  <span class="c">! for broyden</span>
                 <span class="n">broyden_counter</span> <span class="o">=</span> <span class="mi">0</span>
@@ -568,11 +568,11 @@ private subroutine nlesolver_solver(me, x)
 <span class="k">            </span><span class="n">xold</span> <span class="o">=</span> <span class="n">x</span>
             <span class="n">fold</span> <span class="o">=</span> <span class="n">f</span>
 
-            <span class="c">!compute the search direction by solving linear system:</span>
+            <span class="c">! compute the search direction p by solving linear system:</span>
             <span class="n">rhs</span> <span class="o">=</span> <span class="o">-</span><span class="n">fvec</span> <span class="c">! RHS of the linear system</span>
             <span class="k">call </span><span class="n">linear_solver</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">,</span><span class="n">fjac</span><span class="p">,</span><span class="n">rhs</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">info</span><span class="p">)</span>
 
-            <span class="c">!check for errors:</span>
+            <span class="c">! check for errors:</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">info</span> <span class="o">/=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
 
 <span class="k">                call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span> <span class="o">=</span> <span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;Error solving linear system. info =&#39;</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">info</span><span class="p">)</span>
@@ -580,39 +580,10 @@ private subroutine nlesolver_solver(me, x)
 
 <span class="k">            else</span>
 
-                <span class="c">!p is the search direction</span>
+                <span class="c">! next step, using the specified method:</span>
+                <span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">linesearch</span><span class="p">(</span><span class="n">xold</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">fjac</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">fvec</span><span class="p">)</span>
 
-                <span class="c">! note: the valid step_mode was checked in the initialize routine.</span>
-                <span class="k">select case</span> <span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">step_mode</span><span class="p">)</span>
-
-                <span class="k">case</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c">!just use the specified alpha (0,1]</span>
-
-                    <span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">simple_step</span><span class="p">(</span><span class="n">xold</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">fvec</span><span class="p">)</span>
-
-                <span class="k">case</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="c">! backtracking line search</span>
-
-                    <span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">backtracking_linesearch</span><span class="p">(</span><span class="n">xold</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">fjac</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">fvec</span><span class="p">)</span>
-
-                <span class="k">case</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c">! use a minimizer to find the min between alpha_min and alpha_max</span>
-
-                    <span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">exact_linesearch</span><span class="p">(</span><span class="n">xold</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">fvec</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">f</span><span class="p">)</span>
-
-                <span class="k">case</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-                    <span class="c">! compute the function at a specified number of points</span>
-                    <span class="c">! and then just choose the one with the lowest f</span>
-
-                    <span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">fixed_point_linesearch</span><span class="p">(</span><span class="n">xold</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">n_intervals</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">fvec</span><span class="p">)</span>
-
-                <span class="k">case</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-                    <span class="c">! trust region method ...</span>
-
-                    <span class="k">error stop</span> <span class="s1">&#39;trust region method not yet implemented&#39;</span>
-
-                <span class="k">case </span><span class="n">default</span>    <span class="c">!invalid option</span>
-                    <span class="k">error stop</span> <span class="s1">&#39;Error: invalid step_mode in nlesolver&#39;</span>
-                <span class="k">end select</span>
-
-                <span class="c">!keep track of the number of steps in the &quot;uphill&quot; direction:</span>
+                <span class="c">! keep track of the number of steps in the &quot;uphill&quot; direction:</span>
                 <span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="o">&gt;</span><span class="n">fold</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">                    </span><span class="n">n_uphill</span> <span class="o">=</span> <span class="n">n_uphill</span> <span class="o">+</span> <span class="mi">1</span>
                 <span class="k">else</span>
