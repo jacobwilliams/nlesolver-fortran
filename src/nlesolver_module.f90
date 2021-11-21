@@ -61,8 +61,8 @@
         real(wp)    :: tolx             = 1.0e-8_wp     !! convergence tolerance for `x`
         real(wp)    :: c                = 0.5_wp        !! backtracking linesearch parameter (0,1)
         real(wp)    :: tau              = 0.5_wp        !! backtracking linesearch parameter (0,1)
-        real(wp)    :: fmin_tol         = 1.0e-5_wp     !! tolerance for "exact" linesearch
-        integer     :: n_intervals      = 3             !! number of intervals for fixed point linesearch
+        real(wp)    :: fmin_tol         = 1.0e-5_wp     !! tolerance for "exact" linesearch (`step_mode=3`)
+        integer     :: n_intervals      = 3             !! number of intervals for fixed point linesearch (`step_mode=4`)
         logical     :: use_broyden      = .false.       !! if true, a Broyden update is used
                                                         !! rather than computing the Jacobian
                                                         !! at every step. The `grad` function is
@@ -236,7 +236,7 @@
 !  Constructor for the class.
 
     subroutine initialize_nlesolver_variables(me,&
-                    n,m,max_iter,tol,alpha,alpha_min,alpha_max,tolx,&
+                    n,m,max_iter,tol,alpha,alpha_min,alpha_max,tolx,fmin_tol,&
                     use_broyden,broyden_update_n,step_mode,func,grad,&
                     export_iteration,user_input_check,&
                     verbose,iunit,n_uphill_max,n_intervals )
@@ -261,6 +261,7 @@
     real(wp),intent(in),optional      :: alpha_min          !! (0,1]
     real(wp),intent(in),optional      :: alpha_max          !! (0,1]
     real(wp),intent(in),optional      :: tolx               !! convergence tolerance for changes in `x`
+    real(wp),intent(in),optional      :: fmin_tol           !! convergence tolerance for [[fmin]] (used when `step_mode=3`)
     logical,intent(in),optional       :: use_broyden        !! use a Broyden update (default is False)
     integer,intent(in),optional       :: broyden_update_n   !! For Broyden mode, update the full Jacobian
                                                             !! at most every this many iterations (must be >1)
@@ -301,6 +302,7 @@
     if (present(iunit))            me%iunit            = iunit
     if (present(n_uphill_max))     me%n_uphill_max     = abs(n_uphill_max)
     if (present(n_intervals))      me%n_intervals      = max(abs(n_intervals),1)
+    if (present(fmin_tol))         me%fmin_tol         = abs(fmin_tol)
 
     if (present(export_iteration)) me%export_iteration  => export_iteration
     if (present(user_input_check)) me%user_input_check  => user_input_check

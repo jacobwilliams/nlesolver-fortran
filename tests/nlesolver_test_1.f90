@@ -26,6 +26,11 @@
     integer :: f_evals
     integer :: i
     character(len=:),allocatable :: description
+    real(wp) :: fmin_tol
+
+    fmin_tol = 1.0e-2_wp ! don't need a tight tol for this
+    n_intervals = 2
+    alpha = 1.0_wp
 
     write(*,*) ''
     do i = 1, 8
@@ -33,58 +38,43 @@
         select case (i)
         case(1)
             step_mode = 1
-            alpha = 1.0_wp
             use_broyden = .false.
             f_evals = 0
-            n_intervals = 2
             description = 'Constant alpha'
         case(2)
             step_mode = 1
-            alpha = 1.0_wp
             use_broyden = .true.
             f_evals = 0
-            n_intervals = 2
             description = 'Constant alpha + broyden'
         case(3)
             step_mode = 2
-            alpha = 1.0_wp
             use_broyden = .false.
             f_evals = 0
-            n_intervals = 2
             description = 'Backtracking line search'
         case(4)
             step_mode = 2
-            alpha = 1.0_wp
             use_broyden = .true.
             f_evals = 0
-            n_intervals = 2
             description = 'Backtracking line search + broyden'
         case(5)
             step_mode = 3
-            alpha = 1.0_wp
             use_broyden = .false.
             f_evals = 0
-            n_intervals = 2
             description = 'Exact line search'
         case(6)
             step_mode = 3
-            alpha = 1.0_wp
             use_broyden = .true.
             f_evals = 0
             description = 'Exact line search + broyden'
         case(7)
             step_mode = 4
-            alpha = 1.0_wp
             use_broyden = .false.
             f_evals = 0
-            n_intervals = 2
             description = 'Fixed point search'
         case(8)
             step_mode = 4
-            alpha = 1.0_wp
             use_broyden = .true.
             f_evals = 0
-            n_intervals = 2
             description = 'Fixed point search + broyden'
         case default
             error stop 'invalid case'
@@ -104,6 +94,7 @@
                                 use_broyden = use_broyden,&
                                 export_iteration = export,&
                                 n_intervals = n_intervals, &
+                                fmin_tol = fmin_tol, &
                                 verbose = verbose)
         call solver%status(istat, message)
         write(*,'(I3,1X,A)') istat, message
