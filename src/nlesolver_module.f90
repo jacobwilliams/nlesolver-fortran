@@ -806,25 +806,25 @@
     alpha_min = fmin(func_for_fmin,me%alpha_min,me%alpha_max,me%fmin_tol)
 
     x = xold + p * alpha_min
-
-    ! note that this is slightly inefficient, since we are evaluating
-    ! the function again here. really we should keep track of fvec and f
-    ! during the minimization process and return the ones that have already
-    ! been computed.
-    call me%func(x,fvec)
-    f = norm2(fvec)
+    if (all(x==xnew)) then
+        ! already computed in the func
+    else
+        call me%func(x,fvec)
+        f = norm2(fvec)
+    end if
 
 contains
 
-    function func_for_fmin(alpha) result(f)
+    real(wp) function func_for_fmin(alpha)
     !! function for [[fmin]]
     implicit none
     real(wp),intent(in) :: alpha !! indep variable
-    real(wp) :: f !! function value to be minimized
 
     xnew = xold + p * alpha
     call me%func(xnew,fvec)
-    f = norm2(fvec)
+    func_for_fmin = norm2(fvec) ! return result
+
+    f = func_for_fmin ! just in case this is the solution
 
     end function func_for_fmin
 
