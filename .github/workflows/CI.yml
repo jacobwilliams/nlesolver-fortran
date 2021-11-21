@@ -49,6 +49,7 @@ jobs:
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${GCC_V} 100 \
         --slave /usr/bin/gfortran gfortran /usr/bin/gfortran-${GCC_V} \
         --slave /usr/bingcov gcov /usr/bin/gcov-${GCC_V}
+        sudo apt-get install -y libblas-dev liblapack-dev
 
     - name: Compile
       run: fpm build --profile release
