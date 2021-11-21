@@ -526,7 +526,7 @@
                     call me%set_status(istat = 1, string = 'Required accuracy achieved')
                     exit
 
-                elseif ( norm2(x-xold) <= me%tolx ) then
+                elseif ( maxval(abs(x-xold)) <= me%tolx ) then
 
                     call me%set_status(istat = 2, string = 'Solution cannot be improved')
                     exit
@@ -719,17 +719,17 @@
     integer    :: i                  !! counter
     real(wp)   :: slope              !! local slope of the function of `alpha` along the search direction used for line search
     logical    :: min_alpha_reached  !! if the minimum step size is reached during the line search
-    real(wp)   :: alpha_mid          !! midpoint `alpha` for the line search
-    real(wp)   :: fmid               !! `f` value for linesearch
+    real(wp)   :: alpha              !! `alpha` for the line search
+    real(wp)   :: ftmp               !! `f` value for linesearch
     real(wp)   :: t                  !! used for line search
-    real(wp),dimension(:),allocatable :: gradf      !! line search obectivej function gradient vector
-    real(wp),dimension(:),allocatable :: x_mid      !! `x` value for linesearch
-    real(wp),dimension(:),allocatable :: fvec_mid   !! `fvec` value for linesearch
+    real(wp),dimension(:),allocatable :: gradf      !! line search objective function gradient vector
+    real(wp),dimension(:),allocatable :: xtmp       !! `x` value for linesearch
+    real(wp),dimension(:),allocatable :: fvectmp    !! `fvec` value for linesearch
 
     ! allocate arrays:
     allocate(gradf(me%n))
-    allocate(x_mid(me%n))
-    allocate(fvec_mid(me%m))
+    allocate(xtmp(me%n))
+    allocate(fvectmp(me%m))
 
     ! compute the gradient of the function to be minimized
     ! (which in this case is 1/2 the norm of fvec). Use the chain
@@ -743,25 +743,25 @@
 
     ! perform the line search:
     min_alpha_reached = .false.
-    alpha_mid = me%alpha_max  ! start with the largest step
+    alpha = me%alpha_max  ! start with the largest step
     do
 
-        x_mid = xold + p * alpha_mid
-        call me%func(x_mid,fvec_mid)
-        fmid = norm2(fvec_mid)
+        xtmp = xold + p * alpha
+        call me%func(xtmp,fvectmp)
+        ftmp = norm2(fvectmp)
 
-        if ((f - fmid >= alpha_mid*t) .or. min_alpha_reached) then
+        if ((f - ftmp >= alpha*t) .or. min_alpha_reached) then
             ! Armijo-Goldstein condition is satisfied
             ! (or the min step has been reached)
-            x    = x_mid
-            fvec = fvec_mid
-            f    = fmid
+            x    = xtmp
+            fvec = fvectmp
+            f    = ftmp
             exit
         end if
-        alpha_mid = alpha_mid * me%tau ! reduce step size
+        alpha = alpha * me%tau ! reduce step size
 
-        if (alpha_mid<=me%alpha_min) then
-            alpha_mid = me%alpha_min
+        if (alpha<=me%alpha_min) then
+            alpha = me%alpha_min
             min_alpha_reached = .true. ! will stop on the next step
         end if
 
