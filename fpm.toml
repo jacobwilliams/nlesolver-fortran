@@ -1,0 +1,24 @@
+name = "nlesolver-fortran"
+author = "Jacob Williams"
+copyright  = "Copyright (c) 2021, Jacob Williams"
+license = "BSD-3"
+description = "Nonlinear Equation Solver with Modern Fortran"
+homepage = "https://github.com/jacobwilliams/nlesolver-fortran"
+keywords = ["nle solver"]
+
+[build]
+auto-executables = false
+auto-examples = false
+auto-tests = false
+
+[library]
+source-dir = "src"
+
+[install]
+library = true
+
+[[test]]
+name = "nlesolver_test_1"
+link = ["lapack"]
+source-dir = "tests"
+main = "nlesolver_test_1.f90"
