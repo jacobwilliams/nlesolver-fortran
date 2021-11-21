@@ -10,6 +10,7 @@ keywords = ["nle solver"]
 auto-executables = false
 auto-examples = false
 auto-tests = false
+link = ["lapack", "blas"]
 
 [library]
 source-dir = "src"
@@ -19,6 +20,5 @@ library = true
 
 [[test]]
 name = "nlesolver_test_1"
-link = ["lapack", "blas"]
 source-dir = "tests"
 main = "nlesolver_test_1.f90"
