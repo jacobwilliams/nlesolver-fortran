@@ -136,7 +136,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title="<p>100.0% of total for derived types.</p>Including implementation: 304 statements, 100.0% of total for derived types.">34 statements</a>
+    title="<p>100.0% of total for derived types.</p>Including implementation: 318 statements, 100.0% of total for derived types.">34 statements</a>
      </li> 
      
      
@@ -792,7 +792,7 @@ to allow where the value of <code>f</code> increases</p></td>
           
     
     <h3>
-private subroutine <a href='../proc/initialize_nlesolver_variables.html'>initialize_nlesolver_variables</a>(me, n, m, max_iter, tol, alpha, alpha_min, alpha_max, tolx, fmin_tol, use_broyden, broyden_update_n, step_mode, func, grad, export_iteration, user_input_check, verbose, iunit, n_uphill_max, n_intervals)
+private subroutine <a href='../proc/initialize_nlesolver_variables.html'>initialize_nlesolver_variables</a>(me, n, m, max_iter, tol, alpha, alpha_min, alpha_max, tolx, fmin_tol, backtrack_c, backtrack_tau, use_broyden, broyden_update_n, step_mode, func, grad, export_iteration, user_input_check, verbose, iunit, n_uphill_max, n_intervals)
     
     
    
@@ -906,7 +906,7 @@ private subroutine <a href='../proc/initialize_nlesolver_variables.html'>initial
   <td>optional</td>
   
   <td></td><td>::</td>
-  <td><strong>alpha</strong></td><td><p>(0,1]</p></td>
+  <td><strong>alpha</strong></td><td><p>constant step length for <code>step_mode=1</code> (0,1]</p></td>
   
 </tr>
 
@@ -921,7 +921,7 @@ private subroutine <a href='../proc/initialize_nlesolver_variables.html'>initial
   <td>optional</td>
   
   <td></td><td>::</td>
-  <td><strong>alpha_min</strong></td><td><p>(0,1]</p></td>
+  <td><strong>alpha_min</strong></td><td><p>minimum step length (0,1]</p></td>
   
 </tr>
 
@@ -936,7 +936,7 @@ private subroutine <a href='../proc/initialize_nlesolver_variables.html'>initial
   <td>optional</td>
   
   <td></td><td>::</td>
-  <td><strong>alpha_max</strong></td><td><p>(0,1]</p></td>
+  <td><strong>alpha_max</strong></td><td><p>maximum step length (0,1]</p></td>
   
 </tr>
 
@@ -967,6 +967,36 @@ private subroutine <a href='../proc/initialize_nlesolver_variables.html'>initial
   
   <td></td><td>::</td>
   <td><strong>fmin_tol</strong></td><td><p>convergence tolerance for <a href="../proc/fmin.html">fmin</a> (used when <code>step_mode=3</code>)</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>backtrack_c</strong></td><td><p>backtracking linesearch parameter (0,1)</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=wp),</td>
+  <td>intent(in),</td>
+  <td>optional</td>
+  
+  <td></td><td>::</td>
+  <td><strong>backtrack_tau</strong></td><td><p>backtracking linesearch parameter (0,1)</p></td>
   
 </tr>
 
