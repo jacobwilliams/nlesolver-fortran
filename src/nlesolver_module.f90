@@ -703,6 +703,9 @@
 !*****************************************************************************************
 !>
 !  Backtracking line search.
+!
+!### See also
+!  * [Backtracking line search](https://en.wikipedia.org/wiki/Backtracking_line_search)
 
     subroutine backtracking_linesearch(me,xold,p,fjac,x,f,fvec)
 
