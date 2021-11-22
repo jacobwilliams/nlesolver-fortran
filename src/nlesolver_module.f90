@@ -734,12 +734,16 @@
     ! compute the gradient of the function to be minimized
     ! (which in this case is 1/2 the norm of fvec). Use the chain
     ! rule and the Jacobian matrix already computed.
-
     do i=1,me%n
         gradf(i) = dot_product(fvec,fjac(:,i))
     end do
     slope = dot_product(p, gradf)
     t = -me%c * slope
+
+    if (me%verbose) then
+        write(me%iunit,'(1P,*(A,1X,E16.6))') '        slope    = ', slope
+        write(me%iunit,'(1P,*(A,1X,E16.6))') '        t        = ', t
+    end if
 
     ! perform the line search:
     min_alpha_reached = .false.
@@ -750,7 +754,19 @@
         call me%func(xtmp,fvectmp)
         ftmp = norm2(fvectmp)
 
-        if ((f - ftmp >= alpha*t) .or. min_alpha_reached) then
+        if (me%verbose) then
+            write(me%iunit,'(1P,*(A,1X,E16.6))')          '        alpha    = ', alpha,    ' f       = ', ftmp
+            if (f - ftmp >= alpha*t) then
+                write(me%iunit,'(1P,2(A,1X,E16.6),1X,A)') '        f - ftmp = ', f - ftmp, ' alpha*t = ', alpha*t, ' [ACCEPTED]'
+            else
+                write(me%iunit,'(1P,*(A,1X,E16.6))')      '        f - ftmp = ', f - ftmp, ' alpha*t = ', alpha*t
+            end if
+        end if
+
+        if ((f - 0.5_wp * ftmp >= alpha*t) .or. min_alpha_reached) then
+            if (min_alpha_reached) then
+                write(me%iunit,'(A)') '        Minimum alpha reached'
+            end if
             ! Armijo-Goldstein condition is satisfied
             ! (or the min step has been reached)
             x    = xtmp
@@ -798,6 +814,8 @@
 
     ! find the minimum value of f in the range of alphas:
     alpha_min = fmin(func_for_fmin,me%alpha_min,me%alpha_max,me%fmin_tol)
+
+    if (me%verbose) write(me%iunit,'(1P,*(A,1X,E16.6))') '        alpha_min = ', alpha_min
 
     x = xold + p * alpha_min
     if (all(x==xnew)) then

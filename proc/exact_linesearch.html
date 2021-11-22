@@ -136,7 +136,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 5.3% of total for procedures.">29 statements</a>
+    title=" 5.3% of total for procedures.">30 statements</a>
      </li> 
      
      
@@ -532,6 +532,8 @@ find the minimum value of <code>f(x)</code> between
 
     <span class="c">! find the minimum value of f in the range of alphas:</span>
     <span class="n">alpha_min</span> <span class="o">=</span> <span class="n">fmin</span><span class="p">(</span><span class="n">func_for_fmin</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">alpha_min</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">alpha_max</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">fmin_tol</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">verbose</span><span class="p">)</span> <span class="k">write</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">iunit</span><span class="p">,</span><span class="s1">&#39;(1P,*(A,1X,E16.6))&#39;</span><span class="p">)</span> <span class="s1">&#39;        alpha_min = &#39;</span><span class="p">,</span> <span class="n">alpha_min</span>
 
     <span class="n">x</span> <span class="o">=</span> <span class="n">xold</span> <span class="o">+</span> <span class="n">p</span> <span class="o">*</span> <span class="n">alpha_min</span>
     <span class="k">if</span> <span class="p">(</span><span class="k">all</span><span class="p">(</span><span class="n">x</span><span class="o">==</span><span class="n">xnew</span><span class="p">))</span> <span class="k">then</span>
