@@ -209,6 +209,8 @@
 !  * -9   -- Error: Out of memory
 !  * -10  -- Error: function routine is not associated
 !  * -11  -- Error: gradient routine is not associated
+!  * -12  -- Error: backtracking linesearch c must be in range (0, 1)
+!  * -13  -- Error: backtracking linesearch tau must be in range (0, 1)
 !  * -999 -- Error: class has not been initialized
 !  * 0    -- Class successfully initialized in [[nlesolver_type:initialize]]
 !  * 1    -- Required accuracy achieved
@@ -243,6 +245,7 @@
 
     subroutine initialize_nlesolver_variables(me,&
                     n,m,max_iter,tol,alpha,alpha_min,alpha_max,tolx,fmin_tol,&
+                    backtrack_c,backtrack_tau,&
                     use_broyden,broyden_update_n,step_mode,func,grad,&
                     export_iteration,user_input_check,&
                     verbose,iunit,n_uphill_max,n_intervals )
@@ -262,11 +265,13 @@
                                                             !!  * 2 = backtracking linesearch (between `alpha_min` and `alpha_max`)
                                                             !!  * 3 = exact linesearch (between `alpha_min` and `alpha_max`)
                                                             !!  * 4 = evaluate function at specified fixed points  (between `alpha_min` and `alpha_max`)
-    real(wp),intent(in),optional      :: alpha              !! (0,1]
-    real(wp),intent(in),optional      :: alpha_min          !! (0,1]
-    real(wp),intent(in),optional      :: alpha_max          !! (0,1]
+    real(wp),intent(in),optional      :: alpha              !! constant step length for `step_mode=1` (0,1]
+    real(wp),intent(in),optional      :: alpha_min          !! minimum step length (0,1]
+    real(wp),intent(in),optional      :: alpha_max          !! maximum step length (0,1]
     real(wp),intent(in),optional      :: tolx               !! convergence tolerance for changes in `x`
     real(wp),intent(in),optional      :: fmin_tol           !! convergence tolerance for [[fmin]] (used when `step_mode=3`)
+    real(wp),intent(in),optional      :: backtrack_c        !! backtracking linesearch parameter (0,1)
+    real(wp),intent(in),optional      :: backtrack_tau      !! backtracking linesearch parameter (0,1)
     logical,intent(in),optional       :: use_broyden        !! use a Broyden update (default is False)
     integer,intent(in),optional       :: broyden_update_n   !! For Broyden mode, update the full Jacobian
                                                             !! at most every this many iterations (must be >1)
@@ -305,7 +310,7 @@
             me%linesearch => backtracking_linesearch
         case(3) ! = exact linesearch (between `alpha_min` and `alpha_max`)
             me%linesearch => exact_linesearch
-        case(4) ! = evaluate function at specified fixed points  (between `alpha_min` and `alpha_max`)
+        case(4) ! = evaluate function at specified fixed points (between `alpha_min` and `alpha_max`)
             me%linesearch => fixed_point_linesearch
         case default
             status_ok = .false.
@@ -316,22 +321,24 @@
         me%linesearch => simple_step
     end if
 
-    if (present(alpha))            me%alpha            = abs(alpha)
-    if (present(alpha_min))        me%alpha_min        = abs(alpha_min)
-    if (present(alpha_max))        me%alpha_max        = abs(alpha_max)
-    if (present(tolx))             me%tolx             = abs(tolx)
-    if (present(use_broyden))      me%use_broyden      = use_broyden
-    if (present(broyden_update_n)) me%broyden_update_n = abs(broyden_update_n)
-    if (present(verbose))          me%verbose          = verbose
-    if (present(iunit))            me%iunit            = iunit
-    if (present(n_uphill_max))     me%n_uphill_max     = abs(n_uphill_max)
-    if (present(n_intervals))      me%n_intervals      = max(abs(n_intervals),1)
-    if (present(fmin_tol))         me%fmin_tol         = abs(fmin_tol)
+    if (present(alpha))             me%alpha             = abs(alpha)
+    if (present(alpha_min))         me%alpha_min         = abs(alpha_min)
+    if (present(alpha_max))         me%alpha_max         = abs(alpha_max)
+    if (present(tolx))              me%tolx              = abs(tolx)
+    if (present(backtrack_c))       me%c                 = abs(backtrack_c)
+    if (present(backtrack_tau))     me%tau               = abs(backtrack_tau)
+    if (present(use_broyden))       me%use_broyden       = use_broyden
+    if (present(broyden_update_n))  me%broyden_update_n  = abs(broyden_update_n)
+    if (present(verbose))           me%verbose           = verbose
+    if (present(iunit))             me%iunit             = iunit
+    if (present(n_uphill_max))      me%n_uphill_max      = abs(n_uphill_max)
+    if (present(n_intervals))       me%n_intervals       = max(abs(n_intervals),1)
+    if (present(fmin_tol))          me%fmin_tol          = abs(fmin_tol)
 
     if (present(export_iteration)) me%export_iteration  => export_iteration
     if (present(user_input_check)) me%user_input_check  => user_input_check
 
-    !error checks:
+    ! error checks:
     if (me%alpha<zero .or. me%alpha>one) then
         status_ok = .false.
         call me%set_status(istat = -1, string = 'Error: invalid alpha:',r=me%alpha)
@@ -350,6 +357,16 @@
     if (me%alpha_max<=me%alpha_min) then
         status_ok = .false.
         call me%set_status(istat = -4, string = 'Error: alpha_min must be < alpha_max')
+        return
+    end if
+    if (me%c<zero .or. me%c>one) then
+        status_ok = .false.
+        call me%set_status(istat = -12, string = 'Error: backtracking linesearch c must be in range (0, 1):',r=me%c)
+        return
+    end if
+    if (me%tau<zero .or. me%tau>one) then
+        status_ok = .false.
+        call me%set_status(istat = -13, string = 'Error: backtracking linesearch tau must be in range (0, 1):',r=me%tau)
         return
     end if
 
