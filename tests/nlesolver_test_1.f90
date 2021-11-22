@@ -123,7 +123,7 @@
         f(1) = x(1)**2 + x(2) - 0.1_wp
         f(2) = x(2) + 0.2_wp
 
-        ! root is [0.3, -0.2]
+        ! root is 5.477226E-01  -2.000000E-01
 
     end subroutine func
 
@@ -137,10 +137,10 @@
         f_evals = f_evals + 2   ! to approximate forward diff derivatives
 
         g(1,1) = 2.0_wp * x(1)  !df(1)/dx
-        g(2,1) = 0.0_wp  !df(2)/dx
+        g(2,1) = 0.0_wp         !df(2)/dx
 
-        g(1,2) = 1.0_wp  !df(1)/dy
-        g(2,2) = 1.0_wp  !df(2)/dy
+        g(1,2) = 1.0_wp         !df(1)/dy
+        g(2,2) = 1.0_wp         !df(2)/dy
 
     end subroutine grad
 
