@@ -30,7 +30,7 @@ A work in progress.
 
 ### License
 
- * The NLESolver-Fortran source code and related files and documentation are distributed under a permissive free software [license](https://github.com/jacobwilliams/nlesolver-fortran/blob/master/LICENSE.txt) (BSD-3).
+ * The NLESolver-Fortran source code and related files and documentation are distributed under a permissive free software [license](https://github.com/jacobwilliams/nlesolver-fortran/blob/master/LICENSE) (BSD-3).
 
 ### See also
 
