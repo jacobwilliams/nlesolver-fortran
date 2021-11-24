@@ -220,8 +220,7 @@ private subroutine fixed_point_linesearch(me, xold, p, fjac, x, f, fvec)
 
     
     <p>A simple search that just evaluates the function at a specified
- number of points and picks the one with the minimum function value.</p>
-<p>alpha_min + alpha_max + n-1 points</p>
+number of points and picks the one with the minimum function value.</p>
     
 
     <h3>Arguments</h3>
@@ -430,7 +429,7 @@ private subroutine fixed_point_linesearch(me, xold, p, fjac, x, f, fvec)
     <span class="kt">integer</span> <span class="kd">::</span> <span class="n">n</span> <span class="c">!! number of steps to divide the interval</span>
 
     <span class="n">n</span> <span class="o">=</span> <span class="n">me</span><span class="p">%</span><span class="n">n_intervals</span>
-    <span class="n">n_points</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span> <span class="c">!! alpha_min + alpha_max + n-1 points</span>
+    <span class="n">n_points</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span> <span class="c">! alpha_min + alpha_max + n-1 points</span>
 
     <span class="k">allocate</span><span class="p">(</span><span class="n">alphas_to_try</span><span class="p">(</span><span class="n">n_points</span><span class="p">))</span>
     <span class="k">allocate</span><span class="p">(</span><span class="n">x_tmp</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">))</span>

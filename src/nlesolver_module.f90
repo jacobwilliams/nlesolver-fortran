@@ -890,7 +890,7 @@ contains
     integer :: n !! number of steps to divide the interval
 
     n = me%n_intervals
-    n_points = 2 + max(abs(n-1),1) !! alpha_min + alpha_max + n-1 points
+    n_points = 2 + max(abs(n-1),1) ! alpha_min + alpha_max + n-1 points
 
     allocate(alphas_to_try(n_points))
     allocate(x_tmp(me%n))

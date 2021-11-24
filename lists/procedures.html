@@ -134,7 +134,7 @@ find the minimum value of <code>f(x)</code> between
 <code>x = xold + p * alpha_max</code>.</p><a href="../proc/exact_linesearch.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
 			 
 			   <tr><td><a href='../proc/fixed_point_linesearch.html'>fixed_point_linesearch</a></td><td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td><td>Subroutine</td><td><p>A simple search that just evaluates the function at a specified
- number of points and picks the one with the minimum function value.</p><a href="../proc/fixed_point_linesearch.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
+number of points and picks the one with the minimum function value.</p></td></tr>
 			 
 			   <tr><td><a href='../proc/fmin.html'>fmin</a></td><td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td><td>Function</td><td><p>An approximation x to the point where f attains a minimum on
   the interval (ax,bx) is determined.</p><a href="../proc/fmin.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
@@ -163,12 +163,12 @@ find the minimum value of <code>f(x)</code> between
 <g id="call~~graph~~CallGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 364)">
 <title>call~~graph~~CallGraph</title>
 <polygon fill="white" stroke="transparent" points="-4,4 -4,-364 286,-364 286,4 -4,4"/>
-<!-- proc~set_status -->
+<!-- proc~fmin -->
 <g id="call~~graph~~CallGraph_node1" class="node">
-<title>proc~set_status</title>
-<g id="a_call~~graph~~CallGraph_node1"><a xlink:href=".././proc/set_status.html" xlink:title="set_status">
-<polygon fill="#d9534f" stroke="#d9534f" points="115,-24 50,-24 50,0 115,0 115,-24"/>
-<text text-anchor="middle" x="82.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">set_status</text>
+<title>proc~fmin</title>
+<g id="a_call~~graph~~CallGraph_node1"><a xlink:href=".././proc/fmin.html" xlink:title="fmin">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="268.5,-24 214.5,-24 214.5,0 268.5,0 268.5,-24"/>
+<text text-anchor="middle" x="241.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">fmin</text>
 </a>
 </g>
 </g>
@@ -181,62 +181,62 @@ find the minimum value of <code>f(x)</code> between
 </a>
 </g>
 </g>
-<!-- proc~fmin -->
+<!-- proc~set_status -->
 <g id="call~~graph~~CallGraph_node3" class="node">
-<title>proc~fmin</title>
-<g id="a_call~~graph~~CallGraph_node3"><a xlink:href=".././proc/fmin.html" xlink:title="fmin">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="268.5,-108 214.5,-108 214.5,-84 268.5,-84 268.5,-108"/>
-<text text-anchor="middle" x="241.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">fmin</text>
+<title>proc~set_status</title>
+<g id="a_call~~graph~~CallGraph_node3"><a xlink:href=".././proc/set_status.html" xlink:title="set_status">
+<polygon fill="#d9534f" stroke="#d9534f" points="115,-108 50,-108 50,-84 115,-84 115,-108"/>
+<text text-anchor="middle" x="82.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">set_status</text>
 </a>
 </g>
-</g>
-<!-- proc~exact_linesearch -->
-<g id="call~~graph~~CallGraph_node4" class="node">
-<title>proc~exact_linesearch</title>
-<g id="a_call~~graph~~CallGraph_node4"><a xlink:href=".././proc/exact_linesearch.html" xlink:title="exact_linesearch">
-<polygon fill="#d9534f" stroke="#d9534f" points="133,-108 32,-108 32,-84 133,-84 133,-108"/>
-<text text-anchor="middle" x="82.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exact_linesearch</text>
-</a>
-</g>
-</g>
-<!-- proc~exact_linesearch&#45;&gt;proc~fmin -->
-<g id="call~~graph~~CallGraph_edge1" class="edge">
-<title>proc~exact_linesearch&#45;&gt;proc~fmin</title>
-<path fill="none" stroke="#000000" d="M133.18,-96C156.23,-96 183.14,-96 204.24,-96"/>
-<polygon fill="#000000" stroke="#000000" points="204.4,-99.5 214.4,-96 204.4,-92.5 204.4,-99.5"/>
 </g>
 <!-- proc~simple_step -->
-<g id="call~~graph~~CallGraph_node5" class="node">
+<g id="call~~graph~~CallGraph_node4" class="node">
 <title>proc~simple_step</title>
-<g id="a_call~~graph~~CallGraph_node5"><a xlink:href=".././proc/simple_step.html" xlink:title="simple_step">
+<g id="a_call~~graph~~CallGraph_node4"><a xlink:href=".././proc/simple_step.html" xlink:title="simple_step">
 <polygon fill="#d9534f" stroke="#d9534f" points="120.5,-150 44.5,-150 44.5,-126 120.5,-126 120.5,-150"/>
 <text text-anchor="middle" x="82.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">simple_step</text>
 </a>
 </g>
 </g>
 <!-- proc~nlesolver_solver -->
-<g id="call~~graph~~CallGraph_node6" class="node">
+<g id="call~~graph~~CallGraph_node5" class="node">
 <title>proc~nlesolver_solver</title>
-<g id="a_call~~graph~~CallGraph_node6"><a xlink:href=".././proc/nlesolver_solver.html" xlink:title="nlesolver_solver">
+<g id="a_call~~graph~~CallGraph_node5"><a xlink:href=".././proc/nlesolver_solver.html" xlink:title="nlesolver_solver">
 <polygon fill="#d9534f" stroke="#d9534f" points="132,-192 33,-192 33,-168 132,-168 132,-192"/>
 <text text-anchor="middle" x="82.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_solver</text>
 </a>
 </g>
 </g>
 <!-- proc~linear_solver -->
-<g id="call~~graph~~CallGraph_node7" class="node">
+<g id="call~~graph~~CallGraph_node6" class="node">
 <title>proc~linear_solver</title>
-<g id="a_call~~graph~~CallGraph_node7"><a xlink:href=".././proc/linear_solver.html" xlink:title="linear_solver">
+<g id="a_call~~graph~~CallGraph_node6"><a xlink:href=".././proc/linear_solver.html" xlink:title="linear_solver">
 <polygon fill="#d9534f" stroke="#d9534f" points="282,-192 201,-192 201,-168 282,-168 282,-192"/>
 <text text-anchor="middle" x="241.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">linear_solver</text>
 </a>
 </g>
 </g>
 <!-- proc~nlesolver_solver&#45;&gt;proc~linear_solver -->
-<g id="call~~graph~~CallGraph_edge2" class="edge">
+<g id="call~~graph~~CallGraph_edge1" class="edge">
 <title>proc~nlesolver_solver&#45;&gt;proc~linear_solver</title>
 <path fill="none" stroke="#000000" d="M132.32,-180C150.92,-180 172.14,-180 190.83,-180"/>
 <polygon fill="#000000" stroke="#000000" points="190.92,-183.5 200.92,-180 190.92,-176.5 190.92,-183.5"/>
+</g>
+<!-- proc~exact_linesearch -->
+<g id="call~~graph~~CallGraph_node7" class="node">
+<title>proc~exact_linesearch</title>
+<g id="a_call~~graph~~CallGraph_node7"><a xlink:href=".././proc/exact_linesearch.html" xlink:title="exact_linesearch">
+<polygon fill="#d9534f" stroke="#d9534f" points="133,-24 32,-24 32,0 133,0 133,-24"/>
+<text text-anchor="middle" x="82.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exact_linesearch</text>
+</a>
+</g>
+</g>
+<!-- proc~exact_linesearch&#45;&gt;proc~fmin -->
+<g id="call~~graph~~CallGraph_edge2" class="edge">
+<title>proc~exact_linesearch&#45;&gt;proc~fmin</title>
+<path fill="none" stroke="#000000" d="M133.18,-12C156.23,-12 183.14,-12 204.24,-12"/>
+<polygon fill="#000000" stroke="#000000" points="204.4,-15.5 214.4,-12 204.4,-8.5 204.4,-15.5"/>
 </g>
 <!-- proc~get_status -->
 <g id="call~~graph~~CallGraph_node8" class="node">
