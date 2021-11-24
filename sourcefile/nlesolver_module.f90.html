@@ -328,7 +328,7 @@
 <a id="ln-55" name="ln-55"></a>        <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">c</span>                <span class="o">=</span> <span class="mf">0.5_wp</span>        <span class="c">!! backtracking linesearch parameter (0,1)</span>
 <a id="ln-56" name="ln-56"></a>        <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">tau</span>              <span class="o">=</span> <span class="mf">0.5_wp</span>        <span class="c">!! backtracking linesearch parameter (0,1)</span>
 <a id="ln-57" name="ln-57"></a>        <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">fmin_tol</span>         <span class="o">=</span> <span class="mf">1.0e-5_wp</span>     <span class="c">!! tolerance for &quot;exact&quot; linesearch</span>
-<a id="ln-58" name="ln-58"></a>        <span class="kt">integer</span>     <span class="kd">::</span> <span class="n">n_intervals</span>      <span class="o">=</span> <span class="mi">3</span>             <span class="c">!! number of intervals for fixed point linesearch</span>
+<a id="ln-58" name="ln-58"></a>        <span class="kt">integer</span>     <span class="kd">::</span> <span class="n">n_intervals</span>      <span class="o">=</span> <span class="mi">2</span>             <span class="c">!! number of intervals for fixed point linesearch</span>
 <a id="ln-59" name="ln-59"></a>        <span class="kt">logical</span>     <span class="kd">::</span> <span class="n">use_broyden</span>      <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span>       <span class="c">!! if true, a Broyden update is used</span>
 <a id="ln-60" name="ln-60"></a>                                                        <span class="c">!! rather than computing the Jacobian</span>
 <a id="ln-61" name="ln-61"></a>                                                        <span class="c">!! at every step. The `grad` function is</span>
@@ -1162,222 +1162,226 @@
 <a id="ln-889" name="ln-889"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">step_size</span> <span class="c">!! step size for `alpha`</span>
 <a id="ln-890" name="ln-890"></a>    <span class="kt">integer</span> <span class="kd">::</span> <span class="n">n</span> <span class="c">!! number of steps to divide the interval</span>
 <a id="ln-891" name="ln-891"></a>
-<a id="ln-892" name="ln-892"></a>    <span class="n">n</span> <span class="o">=</span> <span class="n">me</span><span class="p">%</span><span class="n">n_intervals</span>
-<a id="ln-893" name="ln-893"></a>    <span class="n">n_points</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span> <span class="c">! alpha_min + alpha_max + n-1 points</span>
-<a id="ln-894" name="ln-894"></a>
-<a id="ln-895" name="ln-895"></a>    <span class="k">allocate</span><span class="p">(</span><span class="n">alphas_to_try</span><span class="p">(</span><span class="n">n_points</span><span class="p">))</span>
-<a id="ln-896" name="ln-896"></a>    <span class="k">allocate</span><span class="p">(</span><span class="n">x_tmp</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">))</span>
-<a id="ln-897" name="ln-897"></a>    <span class="k">allocate</span><span class="p">(</span><span class="n">fvec_tmp</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">))</span>
+<a id="ln-892" name="ln-892"></a>    <span class="c">! 1 o-----------o</span>
+<a id="ln-893" name="ln-893"></a>    <span class="c">! 2 o-----o-----o</span>
+<a id="ln-894" name="ln-894"></a>    <span class="c">! 3 o---o---o---o</span>
+<a id="ln-895" name="ln-895"></a>
+<a id="ln-896" name="ln-896"></a>    <span class="n">n</span> <span class="o">=</span> <span class="n">me</span><span class="p">%</span><span class="n">n_intervals</span>
+<a id="ln-897" name="ln-897"></a>    <span class="n">n_points</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
 <a id="ln-898" name="ln-898"></a>
-<a id="ln-899" name="ln-899"></a>    <span class="n">step_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">alpha_max</span> <span class="o">-</span> <span class="n">me</span><span class="p">%</span><span class="n">alpha_min</span><span class="p">)</span> <span class="o">/</span> <span class="kt">real</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">wp</span><span class="p">)</span>
-<a id="ln-900" name="ln-900"></a>
-<a id="ln-901" name="ln-901"></a>    <span class="c">! compute the alphas:</span>
-<a id="ln-902" name="ln-902"></a>    <span class="n">alphas_to_try</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">me</span><span class="p">%</span><span class="n">alpha_min</span>
-<a id="ln-903" name="ln-903"></a>    <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n</span>
-<a id="ln-904" name="ln-904"></a>        <span class="n">alphas_to_try</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">alphas_to_try</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">step_size</span>
-<a id="ln-905" name="ln-905"></a>    <span class="k">end do</span>
-<a id="ln-906" name="ln-906"></a><span class="k">    </span><span class="n">alphas_to_try</span><span class="p">(</span><span class="n">n_points</span><span class="p">)</span> <span class="o">=</span> <span class="n">me</span><span class="p">%</span><span class="n">alpha_max</span>
-<a id="ln-907" name="ln-907"></a>
-<a id="ln-908" name="ln-908"></a>    <span class="c">! now compute the functions at these alphas:</span>
-<a id="ln-909" name="ln-909"></a>    <span class="n">f</span> <span class="o">=</span> <span class="n">big</span>
-<a id="ln-910" name="ln-910"></a>    <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_points</span>
+<a id="ln-899" name="ln-899"></a>    <span class="k">allocate</span><span class="p">(</span><span class="n">alphas_to_try</span><span class="p">(</span><span class="n">n_points</span><span class="p">))</span>
+<a id="ln-900" name="ln-900"></a>    <span class="k">allocate</span><span class="p">(</span><span class="n">x_tmp</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">))</span>
+<a id="ln-901" name="ln-901"></a>    <span class="k">allocate</span><span class="p">(</span><span class="n">fvec_tmp</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">))</span>
+<a id="ln-902" name="ln-902"></a>
+<a id="ln-903" name="ln-903"></a>    <span class="n">step_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">alpha_max</span> <span class="o">-</span> <span class="n">me</span><span class="p">%</span><span class="n">alpha_min</span><span class="p">)</span> <span class="o">/</span> <span class="kt">real</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">wp</span><span class="p">)</span>
+<a id="ln-904" name="ln-904"></a>
+<a id="ln-905" name="ln-905"></a>    <span class="c">! compute the alphas:</span>
+<a id="ln-906" name="ln-906"></a>    <span class="n">alphas_to_try</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">me</span><span class="p">%</span><span class="n">alpha_min</span>
+<a id="ln-907" name="ln-907"></a>    <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n</span>
+<a id="ln-908" name="ln-908"></a>        <span class="n">alphas_to_try</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">alphas_to_try</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">step_size</span>
+<a id="ln-909" name="ln-909"></a>    <span class="k">end do</span>
+<a id="ln-910" name="ln-910"></a><span class="k">    </span><span class="n">alphas_to_try</span><span class="p">(</span><span class="n">n_points</span><span class="p">)</span> <span class="o">=</span> <span class="n">me</span><span class="p">%</span><span class="n">alpha_max</span>
 <a id="ln-911" name="ln-911"></a>
-<a id="ln-912" name="ln-912"></a>        <span class="n">x_tmp</span> <span class="o">=</span> <span class="n">xold</span> <span class="o">+</span> <span class="n">p</span> <span class="o">*</span> <span class="n">alphas_to_try</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-<a id="ln-913" name="ln-913"></a>
-<a id="ln-914" name="ln-914"></a>        <span class="c">! evaluate the function at tthis point:</span>
-<a id="ln-915" name="ln-915"></a>        <span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">func</span><span class="p">(</span><span class="n">x_tmp</span><span class="p">,</span><span class="n">fvec_tmp</span><span class="p">)</span>
-<a id="ln-916" name="ln-916"></a>        <span class="n">f_tmp</span> <span class="o">=</span> <span class="nb">norm2</span><span class="p">(</span><span class="n">fvec_tmp</span><span class="p">)</span>
+<a id="ln-912" name="ln-912"></a>    <span class="c">! now compute the functions at these alphas:</span>
+<a id="ln-913" name="ln-913"></a>    <span class="n">f</span> <span class="o">=</span> <span class="n">big</span>
+<a id="ln-914" name="ln-914"></a>    <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_points</span>
+<a id="ln-915" name="ln-915"></a>
+<a id="ln-916" name="ln-916"></a>        <span class="n">x_tmp</span> <span class="o">=</span> <span class="n">xold</span> <span class="o">+</span> <span class="n">p</span> <span class="o">*</span> <span class="n">alphas_to_try</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 <a id="ln-917" name="ln-917"></a>
-<a id="ln-918" name="ln-918"></a>        <span class="k">if</span> <span class="p">(</span><span class="n">f_tmp</span><span class="o">&lt;=</span><span class="n">f</span><span class="p">)</span> <span class="k">then</span> <span class="c">! new best point</span>
-<a id="ln-919" name="ln-919"></a>            <span class="n">x</span> <span class="o">=</span> <span class="n">x_tmp</span>
-<a id="ln-920" name="ln-920"></a>            <span class="n">f</span> <span class="o">=</span> <span class="n">f_tmp</span>
-<a id="ln-921" name="ln-921"></a>            <span class="n">fvec</span> <span class="o">=</span> <span class="n">fvec_tmp</span>
-<a id="ln-922" name="ln-922"></a>        <span class="k">end if</span>
-<a id="ln-923" name="ln-923"></a>
-<a id="ln-924" name="ln-924"></a><span class="k">    end do</span>
-<a id="ln-925" name="ln-925"></a>
-<a id="ln-926" name="ln-926"></a><span class="k">    end subroutine </span><span class="n">fixed_point_linesearch</span>
-<a id="ln-927" name="ln-927"></a><span class="c">!*****************************************************************************************</span>
-<a id="ln-928" name="ln-928"></a>
-<a id="ln-929" name="ln-929"></a><span class="c">!*****************************************************************************************</span>
-<a id="ln-930" name="ln-930"></a><span class="c">!&gt;</span>
-<a id="ln-931" name="ln-931"></a><span class="c">!  An approximation x to the point where f attains a minimum on</span>
-<a id="ln-932" name="ln-932"></a><span class="c">!  the interval (ax,bx) is determined.</span>
-<a id="ln-933" name="ln-933"></a><span class="c">!</span>
-<a id="ln-934" name="ln-934"></a><span class="c">!  the method used is a combination of golden section search and</span>
-<a id="ln-935" name="ln-935"></a><span class="c">!  successive parabolic interpolation. convergence is never much slower</span>
-<a id="ln-936" name="ln-936"></a><span class="c">!  than that for a fibonacci search. if f has a continuous second</span>
-<a id="ln-937" name="ln-937"></a><span class="c">!  derivative which is positive at the minimum (which is not at ax or</span>
-<a id="ln-938" name="ln-938"></a><span class="c">!  bx), then convergence is superlinear, and usually of the order of</span>
-<a id="ln-939" name="ln-939"></a><span class="c">!  about 1.324.</span>
-<a id="ln-940" name="ln-940"></a><span class="c">!</span>
-<a id="ln-941" name="ln-941"></a><span class="c">!  the function f is never evaluated at two points closer together</span>
-<a id="ln-942" name="ln-942"></a><span class="c">!  than `eps*abs(fmin) + (tol/3)`, where `eps` is approximately the square</span>
-<a id="ln-943" name="ln-943"></a><span class="c">!  root of the relative machine precision. if `f` is a unimodal</span>
-<a id="ln-944" name="ln-944"></a><span class="c">!  function and the computed values of `f` are always unimodal when</span>
-<a id="ln-945" name="ln-945"></a><span class="c">!  separated by at least `eps*abs(x) + (tol/3)`, then fmin approximates</span>
-<a id="ln-946" name="ln-946"></a><span class="c">!  the abcissa of the global minimum of `f` on the interval `ax,bx` with</span>
-<a id="ln-947" name="ln-947"></a><span class="c">!  an error less than `3*eps*abs(fmin) + tol`. if `f` is not unimodal,</span>
-<a id="ln-948" name="ln-948"></a><span class="c">!  then fmin may approximate a local, but perhaps non-global, minimum to</span>
-<a id="ln-949" name="ln-949"></a><span class="c">!  the same accuracy.</span>
-<a id="ln-950" name="ln-950"></a><span class="c">!</span>
-<a id="ln-951" name="ln-951"></a><span class="c">!### Reference</span>
-<a id="ln-952" name="ln-952"></a><span class="c">!  * this function subprogram is a slightly modified version of the</span>
-<a id="ln-953" name="ln-953"></a><span class="c">!    algol 60 procedure localmin given in richard brent, algorithms for</span>
-<a id="ln-954" name="ln-954"></a><span class="c">!    minimization without derivatives, prentice - hall, inc. (1973).</span>
-<a id="ln-955" name="ln-955"></a><span class="c">!</span>
-<a id="ln-956" name="ln-956"></a><span class="c">!### See also</span>
-<a id="ln-957" name="ln-957"></a><span class="c">!  * [fmin from Netlib](http://www.netlib.org/fmm/fmin.f)</span>
-<a id="ln-958" name="ln-958"></a>
-<a id="ln-959" name="ln-959"></a>    <span class="k">function </span><span class="n">fmin</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="p">,</span><span class="n">bx</span><span class="p">,</span><span class="n">tol</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">xmin</span><span class="p">)</span>
-<a id="ln-960" name="ln-960"></a>
-<a id="ln-961" name="ln-961"></a>    <span class="k">implicit none</span>
+<a id="ln-918" name="ln-918"></a>        <span class="c">! evaluate the function at tthis point:</span>
+<a id="ln-919" name="ln-919"></a>        <span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">func</span><span class="p">(</span><span class="n">x_tmp</span><span class="p">,</span><span class="n">fvec_tmp</span><span class="p">)</span>
+<a id="ln-920" name="ln-920"></a>        <span class="n">f_tmp</span> <span class="o">=</span> <span class="nb">norm2</span><span class="p">(</span><span class="n">fvec_tmp</span><span class="p">)</span>
+<a id="ln-921" name="ln-921"></a>
+<a id="ln-922" name="ln-922"></a>        <span class="k">if</span> <span class="p">(</span><span class="n">f_tmp</span><span class="o">&lt;=</span><span class="n">f</span><span class="p">)</span> <span class="k">then</span> <span class="c">! new best point</span>
+<a id="ln-923" name="ln-923"></a>            <span class="n">x</span> <span class="o">=</span> <span class="n">x_tmp</span>
+<a id="ln-924" name="ln-924"></a>            <span class="n">f</span> <span class="o">=</span> <span class="n">f_tmp</span>
+<a id="ln-925" name="ln-925"></a>            <span class="n">fvec</span> <span class="o">=</span> <span class="n">fvec_tmp</span>
+<a id="ln-926" name="ln-926"></a>        <span class="k">end if</span>
+<a id="ln-927" name="ln-927"></a>
+<a id="ln-928" name="ln-928"></a><span class="k">    end do</span>
+<a id="ln-929" name="ln-929"></a>
+<a id="ln-930" name="ln-930"></a><span class="k">    end subroutine </span><span class="n">fixed_point_linesearch</span>
+<a id="ln-931" name="ln-931"></a><span class="c">!*****************************************************************************************</span>
+<a id="ln-932" name="ln-932"></a>
+<a id="ln-933" name="ln-933"></a><span class="c">!*****************************************************************************************</span>
+<a id="ln-934" name="ln-934"></a><span class="c">!&gt;</span>
+<a id="ln-935" name="ln-935"></a><span class="c">!  An approximation x to the point where f attains a minimum on</span>
+<a id="ln-936" name="ln-936"></a><span class="c">!  the interval (ax,bx) is determined.</span>
+<a id="ln-937" name="ln-937"></a><span class="c">!</span>
+<a id="ln-938" name="ln-938"></a><span class="c">!  the method used is a combination of golden section search and</span>
+<a id="ln-939" name="ln-939"></a><span class="c">!  successive parabolic interpolation. convergence is never much slower</span>
+<a id="ln-940" name="ln-940"></a><span class="c">!  than that for a fibonacci search. if f has a continuous second</span>
+<a id="ln-941" name="ln-941"></a><span class="c">!  derivative which is positive at the minimum (which is not at ax or</span>
+<a id="ln-942" name="ln-942"></a><span class="c">!  bx), then convergence is superlinear, and usually of the order of</span>
+<a id="ln-943" name="ln-943"></a><span class="c">!  about 1.324.</span>
+<a id="ln-944" name="ln-944"></a><span class="c">!</span>
+<a id="ln-945" name="ln-945"></a><span class="c">!  the function f is never evaluated at two points closer together</span>
+<a id="ln-946" name="ln-946"></a><span class="c">!  than `eps*abs(fmin) + (tol/3)`, where `eps` is approximately the square</span>
+<a id="ln-947" name="ln-947"></a><span class="c">!  root of the relative machine precision. if `f` is a unimodal</span>
+<a id="ln-948" name="ln-948"></a><span class="c">!  function and the computed values of `f` are always unimodal when</span>
+<a id="ln-949" name="ln-949"></a><span class="c">!  separated by at least `eps*abs(x) + (tol/3)`, then fmin approximates</span>
+<a id="ln-950" name="ln-950"></a><span class="c">!  the abcissa of the global minimum of `f` on the interval `ax,bx` with</span>
+<a id="ln-951" name="ln-951"></a><span class="c">!  an error less than `3*eps*abs(fmin) + tol`. if `f` is not unimodal,</span>
+<a id="ln-952" name="ln-952"></a><span class="c">!  then fmin may approximate a local, but perhaps non-global, minimum to</span>
+<a id="ln-953" name="ln-953"></a><span class="c">!  the same accuracy.</span>
+<a id="ln-954" name="ln-954"></a><span class="c">!</span>
+<a id="ln-955" name="ln-955"></a><span class="c">!### Reference</span>
+<a id="ln-956" name="ln-956"></a><span class="c">!  * this function subprogram is a slightly modified version of the</span>
+<a id="ln-957" name="ln-957"></a><span class="c">!    algol 60 procedure localmin given in richard brent, algorithms for</span>
+<a id="ln-958" name="ln-958"></a><span class="c">!    minimization without derivatives, prentice - hall, inc. (1973).</span>
+<a id="ln-959" name="ln-959"></a><span class="c">!</span>
+<a id="ln-960" name="ln-960"></a><span class="c">!### See also</span>
+<a id="ln-961" name="ln-961"></a><span class="c">!  * [fmin from Netlib](http://www.netlib.org/fmm/fmin.f)</span>
 <a id="ln-962" name="ln-962"></a>
-<a id="ln-963" name="ln-963"></a><span class="k">    abstract interface</span>
-<a id="ln-964" name="ln-964"></a><span class="k">        function </span><span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-<a id="ln-965" name="ln-965"></a>        <span class="k">import</span> <span class="kd">::</span> <span class="n">wp</span>
-<a id="ln-966" name="ln-966"></a>        <span class="k">implicit none</span>
-<a id="ln-967" name="ln-967"></a><span class="k">        </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">x</span>
-<a id="ln-968" name="ln-968"></a>        <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">f</span>
-<a id="ln-969" name="ln-969"></a>        <span class="k">end function </span><span class="n">func</span>
-<a id="ln-970" name="ln-970"></a>    <span class="k">end interface</span>
-<a id="ln-971" name="ln-971"></a>
-<a id="ln-972" name="ln-972"></a><span class="k">    procedure</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>     <span class="kd">::</span> <span class="n">f</span>    <span class="c">!! the function to minimize</span>
-<a id="ln-973" name="ln-973"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ax</span>   <span class="c">!! left endpoint of initial interval</span>
-<a id="ln-974" name="ln-974"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">bx</span>   <span class="c">!! right endpoint of initial interval</span>
-<a id="ln-975" name="ln-975"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">tol</span>  <span class="c">!! desired length of the interval of</span>
-<a id="ln-976" name="ln-976"></a>                                <span class="c">!! uncertainty of the final result (&gt;=0)</span>
-<a id="ln-977" name="ln-977"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span>            <span class="kd">::</span> <span class="n">xmin</span> <span class="c">!! abcissa approximating the point where</span>
-<a id="ln-978" name="ln-978"></a>                                <span class="c">!! f attains a minimum</span>
-<a id="ln-979" name="ln-979"></a>
-<a id="ln-980" name="ln-980"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">xm</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">tol1</span><span class="p">,</span><span class="n">tol2</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">w</span>
-<a id="ln-981" name="ln-981"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">fu</span><span class="p">,</span><span class="n">fv</span><span class="p">,</span><span class="n">fw</span><span class="p">,</span><span class="n">fx</span><span class="p">,</span><span class="n">x</span>
-<a id="ln-982" name="ln-982"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span> <span class="kd">::</span> <span class="nb">abs</span><span class="p">,</span><span class="nb">sqrt</span><span class="p">,</span><span class="nb">sign</span>
+<a id="ln-963" name="ln-963"></a>    <span class="k">function </span><span class="n">fmin</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">ax</span><span class="p">,</span><span class="n">bx</span><span class="p">,</span><span class="n">tol</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">xmin</span><span class="p">)</span>
+<a id="ln-964" name="ln-964"></a>
+<a id="ln-965" name="ln-965"></a>    <span class="k">implicit none</span>
+<a id="ln-966" name="ln-966"></a>
+<a id="ln-967" name="ln-967"></a><span class="k">    abstract interface</span>
+<a id="ln-968" name="ln-968"></a><span class="k">        function </span><span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">result</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<a id="ln-969" name="ln-969"></a>        <span class="k">import</span> <span class="kd">::</span> <span class="n">wp</span>
+<a id="ln-970" name="ln-970"></a>        <span class="k">implicit none</span>
+<a id="ln-971" name="ln-971"></a><span class="k">        </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">x</span>
+<a id="ln-972" name="ln-972"></a>        <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">f</span>
+<a id="ln-973" name="ln-973"></a>        <span class="k">end function </span><span class="n">func</span>
+<a id="ln-974" name="ln-974"></a>    <span class="k">end interface</span>
+<a id="ln-975" name="ln-975"></a>
+<a id="ln-976" name="ln-976"></a><span class="k">    procedure</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>     <span class="kd">::</span> <span class="n">f</span>    <span class="c">!! the function to minimize</span>
+<a id="ln-977" name="ln-977"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ax</span>   <span class="c">!! left endpoint of initial interval</span>
+<a id="ln-978" name="ln-978"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">bx</span>   <span class="c">!! right endpoint of initial interval</span>
+<a id="ln-979" name="ln-979"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">tol</span>  <span class="c">!! desired length of the interval of</span>
+<a id="ln-980" name="ln-980"></a>                                <span class="c">!! uncertainty of the final result (&gt;=0)</span>
+<a id="ln-981" name="ln-981"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span>            <span class="kd">::</span> <span class="n">xmin</span> <span class="c">!! abcissa approximating the point where</span>
+<a id="ln-982" name="ln-982"></a>                                <span class="c">!! f attains a minimum</span>
 <a id="ln-983" name="ln-983"></a>
-<a id="ln-984" name="ln-984"></a><span class="nb">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">parameter</span> <span class="kd">::</span> <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="mf">3.0_wp</span><span class="o">-</span><span class="nb">sqrt</span><span class="p">(</span><span class="mf">5.0_wp</span><span class="p">))</span><span class="o">/</span><span class="mf">2.0_wp</span>  <span class="c">!! squared inverse of golden ratio</span>
-<a id="ln-985" name="ln-985"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">parameter</span> <span class="kd">::</span> <span class="n">half</span> <span class="o">=</span> <span class="mf">0.5_wp</span>
-<a id="ln-986" name="ln-986"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">parameter</span> <span class="kd">::</span> <span class="n">sqrteps</span> <span class="o">=</span> <span class="nb">sqrt</span><span class="p">(</span><span class="nb">epsilon</span><span class="p">(</span><span class="mf">1.0_wp</span><span class="p">))</span>
+<a id="ln-984" name="ln-984"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">xm</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">tol1</span><span class="p">,</span><span class="n">tol2</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">w</span>
+<a id="ln-985" name="ln-985"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">fu</span><span class="p">,</span><span class="n">fv</span><span class="p">,</span><span class="n">fw</span><span class="p">,</span><span class="n">fx</span><span class="p">,</span><span class="n">x</span>
+<a id="ln-986" name="ln-986"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span> <span class="kd">::</span> <span class="nb">abs</span><span class="p">,</span><span class="nb">sqrt</span><span class="p">,</span><span class="nb">sign</span>
 <a id="ln-987" name="ln-987"></a>
-<a id="ln-988" name="ln-988"></a>    <span class="c">! initialization</span>
-<a id="ln-989" name="ln-989"></a>
-<a id="ln-990" name="ln-990"></a>    <span class="n">a</span> <span class="o">=</span> <span class="n">ax</span>
-<a id="ln-991" name="ln-991"></a>    <span class="n">b</span> <span class="o">=</span> <span class="n">bx</span>
-<a id="ln-992" name="ln-992"></a>    <span class="n">v</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">c</span><span class="o">*</span><span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span>
-<a id="ln-993" name="ln-993"></a>    <span class="n">w</span> <span class="o">=</span> <span class="n">v</span>
-<a id="ln-994" name="ln-994"></a>    <span class="n">x</span> <span class="o">=</span> <span class="n">v</span>
-<a id="ln-995" name="ln-995"></a>    <span class="n">e</span> <span class="o">=</span> <span class="n">zero</span>
-<a id="ln-996" name="ln-996"></a>    <span class="n">fx</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<a id="ln-997" name="ln-997"></a>    <span class="n">fv</span> <span class="o">=</span> <span class="n">fx</span>
-<a id="ln-998" name="ln-998"></a>    <span class="n">fw</span> <span class="o">=</span> <span class="n">fx</span>
-<a id="ln-999" name="ln-999"></a>
-<a id="ln-1000" name="ln-1000"></a>    <span class="k">do</span>    <span class="c">!  main loop starts here</span>
-<a id="ln-1001" name="ln-1001"></a>
-<a id="ln-1002" name="ln-1002"></a>        <span class="n">xm</span> <span class="o">=</span> <span class="n">half</span><span class="o">*</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
-<a id="ln-1003" name="ln-1003"></a>        <span class="n">tol1</span> <span class="o">=</span> <span class="n">sqrteps</span><span class="o">*</span><span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">tol</span><span class="o">/</span><span class="mf">3.0_wp</span>
-<a id="ln-1004" name="ln-1004"></a>        <span class="n">tol2</span> <span class="o">=</span> <span class="n">two</span><span class="o">*</span><span class="n">tol1</span>
+<a id="ln-988" name="ln-988"></a><span class="nb">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">parameter</span> <span class="kd">::</span> <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="mf">3.0_wp</span><span class="o">-</span><span class="nb">sqrt</span><span class="p">(</span><span class="mf">5.0_wp</span><span class="p">))</span><span class="o">/</span><span class="mf">2.0_wp</span>  <span class="c">!! squared inverse of golden ratio</span>
+<a id="ln-989" name="ln-989"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">parameter</span> <span class="kd">::</span> <span class="n">half</span> <span class="o">=</span> <span class="mf">0.5_wp</span>
+<a id="ln-990" name="ln-990"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">parameter</span> <span class="kd">::</span> <span class="n">sqrteps</span> <span class="o">=</span> <span class="nb">sqrt</span><span class="p">(</span><span class="nb">epsilon</span><span class="p">(</span><span class="mf">1.0_wp</span><span class="p">))</span>
+<a id="ln-991" name="ln-991"></a>
+<a id="ln-992" name="ln-992"></a>    <span class="c">! initialization</span>
+<a id="ln-993" name="ln-993"></a>
+<a id="ln-994" name="ln-994"></a>    <span class="n">a</span> <span class="o">=</span> <span class="n">ax</span>
+<a id="ln-995" name="ln-995"></a>    <span class="n">b</span> <span class="o">=</span> <span class="n">bx</span>
+<a id="ln-996" name="ln-996"></a>    <span class="n">v</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">c</span><span class="o">*</span><span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span>
+<a id="ln-997" name="ln-997"></a>    <span class="n">w</span> <span class="o">=</span> <span class="n">v</span>
+<a id="ln-998" name="ln-998"></a>    <span class="n">x</span> <span class="o">=</span> <span class="n">v</span>
+<a id="ln-999" name="ln-999"></a>    <span class="n">e</span> <span class="o">=</span> <span class="n">zero</span>
+<a id="ln-1000" name="ln-1000"></a>    <span class="n">fx</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<a id="ln-1001" name="ln-1001"></a>    <span class="n">fv</span> <span class="o">=</span> <span class="n">fx</span>
+<a id="ln-1002" name="ln-1002"></a>    <span class="n">fw</span> <span class="o">=</span> <span class="n">fx</span>
+<a id="ln-1003" name="ln-1003"></a>
+<a id="ln-1004" name="ln-1004"></a>    <span class="k">do</span>    <span class="c">!  main loop starts here</span>
 <a id="ln-1005" name="ln-1005"></a>
-<a id="ln-1006" name="ln-1006"></a>        <span class="c">!  check stopping criterion</span>
-<a id="ln-1007" name="ln-1007"></a>
-<a id="ln-1008" name="ln-1008"></a>        <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">xm</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">tol2</span> <span class="o">-</span> <span class="n">half</span><span class="o">*</span><span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)))</span> <span class="k">exit</span>
+<a id="ln-1006" name="ln-1006"></a>        <span class="n">xm</span> <span class="o">=</span> <span class="n">half</span><span class="o">*</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span>
+<a id="ln-1007" name="ln-1007"></a>        <span class="n">tol1</span> <span class="o">=</span> <span class="n">sqrteps</span><span class="o">*</span><span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">tol</span><span class="o">/</span><span class="mf">3.0_wp</span>
+<a id="ln-1008" name="ln-1008"></a>        <span class="n">tol2</span> <span class="o">=</span> <span class="n">two</span><span class="o">*</span><span class="n">tol1</span>
 <a id="ln-1009" name="ln-1009"></a>
-<a id="ln-1010" name="ln-1010"></a>        <span class="c">! is golden-section necessary</span>
+<a id="ln-1010" name="ln-1010"></a>        <span class="c">!  check stopping criterion</span>
 <a id="ln-1011" name="ln-1011"></a>
-<a id="ln-1012" name="ln-1012"></a>        <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">tol1</span><span class="p">)</span> <span class="k">then</span>
+<a id="ln-1012" name="ln-1012"></a>        <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">xm</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">tol2</span> <span class="o">-</span> <span class="n">half</span><span class="o">*</span><span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)))</span> <span class="k">exit</span>
 <a id="ln-1013" name="ln-1013"></a>
-<a id="ln-1014" name="ln-1014"></a>            <span class="c">!  a golden-section step</span>
+<a id="ln-1014" name="ln-1014"></a>        <span class="c">! is golden-section necessary</span>
 <a id="ln-1015" name="ln-1015"></a>
-<a id="ln-1016" name="ln-1016"></a>            <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="n">xm</span><span class="p">)</span> <span class="k">then</span>
-<a id="ln-1017" name="ln-1017"></a><span class="k">                </span><span class="n">e</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">x</span>
-<a id="ln-1018" name="ln-1018"></a>            <span class="k">else</span>
-<a id="ln-1019" name="ln-1019"></a><span class="k">                </span><span class="n">e</span> <span class="o">=</span> <span class="n">b</span> <span class="o">-</span> <span class="n">x</span>
-<a id="ln-1020" name="ln-1020"></a>            <span class="k">end if</span>
-<a id="ln-1021" name="ln-1021"></a><span class="k">            </span><span class="n">d</span> <span class="o">=</span> <span class="n">c</span><span class="o">*</span><span class="n">e</span>
-<a id="ln-1022" name="ln-1022"></a>
-<a id="ln-1023" name="ln-1023"></a>        <span class="k">else</span>
-<a id="ln-1024" name="ln-1024"></a>
-<a id="ln-1025" name="ln-1025"></a>            <span class="c">!  fit parabola</span>
+<a id="ln-1016" name="ln-1016"></a>        <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">tol1</span><span class="p">)</span> <span class="k">then</span>
+<a id="ln-1017" name="ln-1017"></a>
+<a id="ln-1018" name="ln-1018"></a>            <span class="c">!  a golden-section step</span>
+<a id="ln-1019" name="ln-1019"></a>
+<a id="ln-1020" name="ln-1020"></a>            <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="n">xm</span><span class="p">)</span> <span class="k">then</span>
+<a id="ln-1021" name="ln-1021"></a><span class="k">                </span><span class="n">e</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">x</span>
+<a id="ln-1022" name="ln-1022"></a>            <span class="k">else</span>
+<a id="ln-1023" name="ln-1023"></a><span class="k">                </span><span class="n">e</span> <span class="o">=</span> <span class="n">b</span> <span class="o">-</span> <span class="n">x</span>
+<a id="ln-1024" name="ln-1024"></a>            <span class="k">end if</span>
+<a id="ln-1025" name="ln-1025"></a><span class="k">            </span><span class="n">d</span> <span class="o">=</span> <span class="n">c</span><span class="o">*</span><span class="n">e</span>
 <a id="ln-1026" name="ln-1026"></a>
-<a id="ln-1027" name="ln-1027"></a>            <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">w</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">fx</span> <span class="o">-</span> <span class="n">fv</span><span class="p">)</span>
-<a id="ln-1028" name="ln-1028"></a>            <span class="n">q</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">v</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">fx</span> <span class="o">-</span> <span class="n">fw</span><span class="p">)</span>
-<a id="ln-1029" name="ln-1029"></a>            <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">v</span><span class="p">)</span><span class="o">*</span><span class="n">q</span> <span class="o">-</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">w</span><span class="p">)</span><span class="o">*</span><span class="n">r</span>
-<a id="ln-1030" name="ln-1030"></a>            <span class="n">q</span> <span class="o">=</span> <span class="n">two</span><span class="o">*</span><span class="p">(</span><span class="n">q</span> <span class="o">-</span> <span class="n">r</span><span class="p">)</span>
-<a id="ln-1031" name="ln-1031"></a>            <span class="k">if</span> <span class="p">(</span><span class="n">q</span> <span class="o">&gt;</span> <span class="n">zero</span><span class="p">)</span> <span class="n">p</span> <span class="o">=</span> <span class="o">-</span><span class="n">p</span>
-<a id="ln-1032" name="ln-1032"></a>            <span class="n">q</span> <span class="o">=</span>  <span class="nb">abs</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
-<a id="ln-1033" name="ln-1033"></a>            <span class="n">r</span> <span class="o">=</span> <span class="n">e</span>
-<a id="ln-1034" name="ln-1034"></a>            <span class="n">e</span> <span class="o">=</span> <span class="n">d</span>
-<a id="ln-1035" name="ln-1035"></a>
-<a id="ln-1036" name="ln-1036"></a>            <span class="c">!  is parabola acceptable</span>
-<a id="ln-1037" name="ln-1037"></a>
-<a id="ln-1038" name="ln-1038"></a>            <span class="k">if</span> <span class="p">((</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">half</span><span class="o">*</span><span class="n">q</span><span class="o">*</span><span class="n">r</span><span class="p">))</span> <span class="p">.</span><span class="nb">or</span><span class="p">.</span> <span class="p">(</span><span class="n">p</span> <span class="o">&lt;=</span> <span class="n">q</span><span class="o">*</span><span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">x</span><span class="p">))</span> <span class="p">.</span><span class="nb">or</span><span class="p">.</span> <span class="p">(</span><span class="n">p</span> <span class="o">&gt;=</span> <span class="n">q</span><span class="o">*</span><span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">x</span><span class="p">)))</span> <span class="k">then</span>
+<a id="ln-1027" name="ln-1027"></a>        <span class="k">else</span>
+<a id="ln-1028" name="ln-1028"></a>
+<a id="ln-1029" name="ln-1029"></a>            <span class="c">!  fit parabola</span>
+<a id="ln-1030" name="ln-1030"></a>
+<a id="ln-1031" name="ln-1031"></a>            <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">w</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">fx</span> <span class="o">-</span> <span class="n">fv</span><span class="p">)</span>
+<a id="ln-1032" name="ln-1032"></a>            <span class="n">q</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">v</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">fx</span> <span class="o">-</span> <span class="n">fw</span><span class="p">)</span>
+<a id="ln-1033" name="ln-1033"></a>            <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">v</span><span class="p">)</span><span class="o">*</span><span class="n">q</span> <span class="o">-</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">w</span><span class="p">)</span><span class="o">*</span><span class="n">r</span>
+<a id="ln-1034" name="ln-1034"></a>            <span class="n">q</span> <span class="o">=</span> <span class="n">two</span><span class="o">*</span><span class="p">(</span><span class="n">q</span> <span class="o">-</span> <span class="n">r</span><span class="p">)</span>
+<a id="ln-1035" name="ln-1035"></a>            <span class="k">if</span> <span class="p">(</span><span class="n">q</span> <span class="o">&gt;</span> <span class="n">zero</span><span class="p">)</span> <span class="n">p</span> <span class="o">=</span> <span class="o">-</span><span class="n">p</span>
+<a id="ln-1036" name="ln-1036"></a>            <span class="n">q</span> <span class="o">=</span>  <span class="nb">abs</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+<a id="ln-1037" name="ln-1037"></a>            <span class="n">r</span> <span class="o">=</span> <span class="n">e</span>
+<a id="ln-1038" name="ln-1038"></a>            <span class="n">e</span> <span class="o">=</span> <span class="n">d</span>
 <a id="ln-1039" name="ln-1039"></a>
-<a id="ln-1040" name="ln-1040"></a>                <span class="c">!  a golden-section step</span>
+<a id="ln-1040" name="ln-1040"></a>            <span class="c">!  is parabola acceptable</span>
 <a id="ln-1041" name="ln-1041"></a>
-<a id="ln-1042" name="ln-1042"></a>                <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="n">xm</span><span class="p">)</span> <span class="k">then</span>
-<a id="ln-1043" name="ln-1043"></a><span class="k">                    </span><span class="n">e</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">x</span>
-<a id="ln-1044" name="ln-1044"></a>                <span class="k">else</span>
-<a id="ln-1045" name="ln-1045"></a><span class="k">                    </span><span class="n">e</span> <span class="o">=</span> <span class="n">b</span> <span class="o">-</span> <span class="n">x</span>
-<a id="ln-1046" name="ln-1046"></a>                <span class="k">end if</span>
-<a id="ln-1047" name="ln-1047"></a><span class="k">                </span><span class="n">d</span> <span class="o">=</span> <span class="n">c</span><span class="o">*</span><span class="n">e</span>
-<a id="ln-1048" name="ln-1048"></a>
-<a id="ln-1049" name="ln-1049"></a>            <span class="k">else</span>
-<a id="ln-1050" name="ln-1050"></a>
-<a id="ln-1051" name="ln-1051"></a>                <span class="c">!  a parabolic interpolation step</span>
+<a id="ln-1042" name="ln-1042"></a>            <span class="k">if</span> <span class="p">((</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">half</span><span class="o">*</span><span class="n">q</span><span class="o">*</span><span class="n">r</span><span class="p">))</span> <span class="p">.</span><span class="nb">or</span><span class="p">.</span> <span class="p">(</span><span class="n">p</span> <span class="o">&lt;=</span> <span class="n">q</span><span class="o">*</span><span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">x</span><span class="p">))</span> <span class="p">.</span><span class="nb">or</span><span class="p">.</span> <span class="p">(</span><span class="n">p</span> <span class="o">&gt;=</span> <span class="n">q</span><span class="o">*</span><span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">x</span><span class="p">)))</span> <span class="k">then</span>
+<a id="ln-1043" name="ln-1043"></a>
+<a id="ln-1044" name="ln-1044"></a>                <span class="c">!  a golden-section step</span>
+<a id="ln-1045" name="ln-1045"></a>
+<a id="ln-1046" name="ln-1046"></a>                <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="n">xm</span><span class="p">)</span> <span class="k">then</span>
+<a id="ln-1047" name="ln-1047"></a><span class="k">                    </span><span class="n">e</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">x</span>
+<a id="ln-1048" name="ln-1048"></a>                <span class="k">else</span>
+<a id="ln-1049" name="ln-1049"></a><span class="k">                    </span><span class="n">e</span> <span class="o">=</span> <span class="n">b</span> <span class="o">-</span> <span class="n">x</span>
+<a id="ln-1050" name="ln-1050"></a>                <span class="k">end if</span>
+<a id="ln-1051" name="ln-1051"></a><span class="k">                </span><span class="n">d</span> <span class="o">=</span> <span class="n">c</span><span class="o">*</span><span class="n">e</span>
 <a id="ln-1052" name="ln-1052"></a>
-<a id="ln-1053" name="ln-1053"></a>                <span class="n">d</span> <span class="o">=</span> <span class="n">p</span><span class="o">/</span><span class="n">q</span>
-<a id="ln-1054" name="ln-1054"></a>                <span class="n">u</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">d</span>
-<a id="ln-1055" name="ln-1055"></a>
-<a id="ln-1056" name="ln-1056"></a>                <span class="c">!  f must not be evaluated too close to ax or bx</span>
-<a id="ln-1057" name="ln-1057"></a>
-<a id="ln-1058" name="ln-1058"></a>                <span class="k">if</span> <span class="p">(((</span><span class="n">u</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">tol2</span><span class="p">)</span> <span class="p">.</span><span class="nb">or</span><span class="p">.</span> <span class="p">((</span><span class="n">b</span> <span class="o">-</span> <span class="n">u</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">tol2</span><span class="p">))</span> <span class="n">d</span> <span class="o">=</span> <span class="nb">sign</span><span class="p">(</span><span class="n">tol1</span><span class="p">,</span> <span class="n">xm</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span>
+<a id="ln-1053" name="ln-1053"></a>            <span class="k">else</span>
+<a id="ln-1054" name="ln-1054"></a>
+<a id="ln-1055" name="ln-1055"></a>                <span class="c">!  a parabolic interpolation step</span>
+<a id="ln-1056" name="ln-1056"></a>
+<a id="ln-1057" name="ln-1057"></a>                <span class="n">d</span> <span class="o">=</span> <span class="n">p</span><span class="o">/</span><span class="n">q</span>
+<a id="ln-1058" name="ln-1058"></a>                <span class="n">u</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">d</span>
 <a id="ln-1059" name="ln-1059"></a>
-<a id="ln-1060" name="ln-1060"></a>            <span class="k">end if</span>
+<a id="ln-1060" name="ln-1060"></a>                <span class="c">!  f must not be evaluated too close to ax or bx</span>
 <a id="ln-1061" name="ln-1061"></a>
-<a id="ln-1062" name="ln-1062"></a><span class="k">        end if</span>
+<a id="ln-1062" name="ln-1062"></a>                <span class="k">if</span> <span class="p">(((</span><span class="n">u</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">tol2</span><span class="p">)</span> <span class="p">.</span><span class="nb">or</span><span class="p">.</span> <span class="p">((</span><span class="n">b</span> <span class="o">-</span> <span class="n">u</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">tol2</span><span class="p">))</span> <span class="n">d</span> <span class="o">=</span> <span class="nb">sign</span><span class="p">(</span><span class="n">tol1</span><span class="p">,</span> <span class="n">xm</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span>
 <a id="ln-1063" name="ln-1063"></a>
-<a id="ln-1064" name="ln-1064"></a>        <span class="c">!  f must not be evaluated too close to x</span>
+<a id="ln-1064" name="ln-1064"></a>            <span class="k">end if</span>
 <a id="ln-1065" name="ln-1065"></a>
-<a id="ln-1066" name="ln-1066"></a>        <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">tol1</span><span class="p">)</span> <span class="k">then</span>
-<a id="ln-1067" name="ln-1067"></a><span class="k">            </span><span class="n">u</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">d</span>
-<a id="ln-1068" name="ln-1068"></a>        <span class="k">else</span>
-<a id="ln-1069" name="ln-1069"></a><span class="k">            </span><span class="n">u</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="nb">sign</span><span class="p">(</span><span class="n">tol1</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
-<a id="ln-1070" name="ln-1070"></a>        <span class="k">end if</span>
-<a id="ln-1071" name="ln-1071"></a><span class="k">        </span><span class="n">fu</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
-<a id="ln-1072" name="ln-1072"></a>
-<a id="ln-1073" name="ln-1073"></a>        <span class="c">!  update a, b, v, w, and x</span>
-<a id="ln-1074" name="ln-1074"></a>
-<a id="ln-1075" name="ln-1075"></a>        <span class="k">if</span> <span class="p">(</span><span class="n">fu</span> <span class="o">&lt;=</span> <span class="n">fx</span><span class="p">)</span> <span class="k">then</span>
-<a id="ln-1076" name="ln-1076"></a><span class="k">            if</span> <span class="p">(</span><span class="n">u</span> <span class="o">&gt;=</span> <span class="n">x</span><span class="p">)</span> <span class="n">a</span> <span class="o">=</span> <span class="n">x</span>
-<a id="ln-1077" name="ln-1077"></a>            <span class="k">if</span> <span class="p">(</span><span class="n">u</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">)</span> <span class="n">b</span> <span class="o">=</span> <span class="n">x</span>
-<a id="ln-1078" name="ln-1078"></a>            <span class="n">v</span> <span class="o">=</span> <span class="n">w</span>
-<a id="ln-1079" name="ln-1079"></a>            <span class="n">fv</span> <span class="o">=</span> <span class="n">fw</span>
-<a id="ln-1080" name="ln-1080"></a>            <span class="n">w</span> <span class="o">=</span> <span class="n">x</span>
-<a id="ln-1081" name="ln-1081"></a>            <span class="n">fw</span> <span class="o">=</span> <span class="n">fx</span>
-<a id="ln-1082" name="ln-1082"></a>            <span class="n">x</span> <span class="o">=</span> <span class="n">u</span>
-<a id="ln-1083" name="ln-1083"></a>            <span class="n">fx</span> <span class="o">=</span> <span class="n">fu</span>
-<a id="ln-1084" name="ln-1084"></a>        <span class="k">else</span>
-<a id="ln-1085" name="ln-1085"></a><span class="k">            if</span> <span class="p">(</span><span class="n">u</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">)</span> <span class="n">a</span> <span class="o">=</span> <span class="n">u</span>
-<a id="ln-1086" name="ln-1086"></a>            <span class="k">if</span> <span class="p">(</span><span class="n">u</span> <span class="o">&gt;=</span> <span class="n">x</span><span class="p">)</span> <span class="n">b</span> <span class="o">=</span> <span class="n">u</span>
-<a id="ln-1087" name="ln-1087"></a>            <span class="k">if</span> <span class="p">(</span><span class="n">fu</span> <span class="o">&lt;=</span> <span class="n">fw</span> <span class="p">.</span><span class="nb">or</span><span class="p">.</span> <span class="n">w</span> <span class="o">==</span> <span class="n">x</span><span class="p">)</span> <span class="k">then</span>
-<a id="ln-1088" name="ln-1088"></a><span class="k">                </span><span class="n">v</span> <span class="o">=</span> <span class="n">w</span>
-<a id="ln-1089" name="ln-1089"></a>                <span class="n">fv</span> <span class="o">=</span> <span class="n">fw</span>
-<a id="ln-1090" name="ln-1090"></a>                <span class="n">w</span> <span class="o">=</span> <span class="n">u</span>
-<a id="ln-1091" name="ln-1091"></a>                <span class="n">fw</span> <span class="o">=</span> <span class="n">fu</span>
-<a id="ln-1092" name="ln-1092"></a>            <span class="k">else if</span> <span class="p">(</span><span class="n">fu</span> <span class="o">&lt;=</span> <span class="n">fv</span> <span class="p">.</span><span class="nb">or</span><span class="p">.</span> <span class="n">v</span> <span class="o">==</span> <span class="n">x</span> <span class="p">.</span><span class="nb">or</span><span class="p">.</span> <span class="n">v</span> <span class="o">==</span> <span class="n">w</span> <span class="p">)</span> <span class="k">then</span>
-<a id="ln-1093" name="ln-1093"></a><span class="k">                </span><span class="n">v</span> <span class="o">=</span> <span class="n">u</span>
-<a id="ln-1094" name="ln-1094"></a>                <span class="n">fv</span> <span class="o">=</span> <span class="n">fu</span>
-<a id="ln-1095" name="ln-1095"></a>            <span class="k">end if</span>
-<a id="ln-1096" name="ln-1096"></a><span class="k">        end if</span>
-<a id="ln-1097" name="ln-1097"></a>
-<a id="ln-1098" name="ln-1098"></a><span class="k">    end do</span>    <span class="c">!  end of main loop</span>
-<a id="ln-1099" name="ln-1099"></a>
-<a id="ln-1100" name="ln-1100"></a>    <span class="n">xmin</span> <span class="o">=</span> <span class="n">x</span>
+<a id="ln-1066" name="ln-1066"></a><span class="k">        end if</span>
+<a id="ln-1067" name="ln-1067"></a>
+<a id="ln-1068" name="ln-1068"></a>        <span class="c">!  f must not be evaluated too close to x</span>
+<a id="ln-1069" name="ln-1069"></a>
+<a id="ln-1070" name="ln-1070"></a>        <span class="k">if</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">tol1</span><span class="p">)</span> <span class="k">then</span>
+<a id="ln-1071" name="ln-1071"></a><span class="k">            </span><span class="n">u</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">d</span>
+<a id="ln-1072" name="ln-1072"></a>        <span class="k">else</span>
+<a id="ln-1073" name="ln-1073"></a><span class="k">            </span><span class="n">u</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="nb">sign</span><span class="p">(</span><span class="n">tol1</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+<a id="ln-1074" name="ln-1074"></a>        <span class="k">end if</span>
+<a id="ln-1075" name="ln-1075"></a><span class="k">        </span><span class="n">fu</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+<a id="ln-1076" name="ln-1076"></a>
+<a id="ln-1077" name="ln-1077"></a>        <span class="c">!  update a, b, v, w, and x</span>
+<a id="ln-1078" name="ln-1078"></a>
+<a id="ln-1079" name="ln-1079"></a>        <span class="k">if</span> <span class="p">(</span><span class="n">fu</span> <span class="o">&lt;=</span> <span class="n">fx</span><span class="p">)</span> <span class="k">then</span>
+<a id="ln-1080" name="ln-1080"></a><span class="k">            if</span> <span class="p">(</span><span class="n">u</span> <span class="o">&gt;=</span> <span class="n">x</span><span class="p">)</span> <span class="n">a</span> <span class="o">=</span> <span class="n">x</span>
+<a id="ln-1081" name="ln-1081"></a>            <span class="k">if</span> <span class="p">(</span><span class="n">u</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">)</span> <span class="n">b</span> <span class="o">=</span> <span class="n">x</span>
+<a id="ln-1082" name="ln-1082"></a>            <span class="n">v</span> <span class="o">=</span> <span class="n">w</span>
+<a id="ln-1083" name="ln-1083"></a>            <span class="n">fv</span> <span class="o">=</span> <span class="n">fw</span>
+<a id="ln-1084" name="ln-1084"></a>            <span class="n">w</span> <span class="o">=</span> <span class="n">x</span>
+<a id="ln-1085" name="ln-1085"></a>            <span class="n">fw</span> <span class="o">=</span> <span class="n">fx</span>
+<a id="ln-1086" name="ln-1086"></a>            <span class="n">x</span> <span class="o">=</span> <span class="n">u</span>
+<a id="ln-1087" name="ln-1087"></a>            <span class="n">fx</span> <span class="o">=</span> <span class="n">fu</span>
+<a id="ln-1088" name="ln-1088"></a>        <span class="k">else</span>
+<a id="ln-1089" name="ln-1089"></a><span class="k">            if</span> <span class="p">(</span><span class="n">u</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">)</span> <span class="n">a</span> <span class="o">=</span> <span class="n">u</span>
+<a id="ln-1090" name="ln-1090"></a>            <span class="k">if</span> <span class="p">(</span><span class="n">u</span> <span class="o">&gt;=</span> <span class="n">x</span><span class="p">)</span> <span class="n">b</span> <span class="o">=</span> <span class="n">u</span>
+<a id="ln-1091" name="ln-1091"></a>            <span class="k">if</span> <span class="p">(</span><span class="n">fu</span> <span class="o">&lt;=</span> <span class="n">fw</span> <span class="p">.</span><span class="nb">or</span><span class="p">.</span> <span class="n">w</span> <span class="o">==</span> <span class="n">x</span><span class="p">)</span> <span class="k">then</span>
+<a id="ln-1092" name="ln-1092"></a><span class="k">                </span><span class="n">v</span> <span class="o">=</span> <span class="n">w</span>
+<a id="ln-1093" name="ln-1093"></a>                <span class="n">fv</span> <span class="o">=</span> <span class="n">fw</span>
+<a id="ln-1094" name="ln-1094"></a>                <span class="n">w</span> <span class="o">=</span> <span class="n">u</span>
+<a id="ln-1095" name="ln-1095"></a>                <span class="n">fw</span> <span class="o">=</span> <span class="n">fu</span>
+<a id="ln-1096" name="ln-1096"></a>            <span class="k">else if</span> <span class="p">(</span><span class="n">fu</span> <span class="o">&lt;=</span> <span class="n">fv</span> <span class="p">.</span><span class="nb">or</span><span class="p">.</span> <span class="n">v</span> <span class="o">==</span> <span class="n">x</span> <span class="p">.</span><span class="nb">or</span><span class="p">.</span> <span class="n">v</span> <span class="o">==</span> <span class="n">w</span> <span class="p">)</span> <span class="k">then</span>
+<a id="ln-1097" name="ln-1097"></a><span class="k">                </span><span class="n">v</span> <span class="o">=</span> <span class="n">u</span>
+<a id="ln-1098" name="ln-1098"></a>                <span class="n">fv</span> <span class="o">=</span> <span class="n">fu</span>
+<a id="ln-1099" name="ln-1099"></a>            <span class="k">end if</span>
+<a id="ln-1100" name="ln-1100"></a><span class="k">        end if</span>
 <a id="ln-1101" name="ln-1101"></a>
-<a id="ln-1102" name="ln-1102"></a>    <span class="k">end function </span><span class="n">fmin</span>
-<a id="ln-1103" name="ln-1103"></a><span class="c">!*****************************************************************************************</span>
-<a id="ln-1104" name="ln-1104"></a>
-<a id="ln-1105" name="ln-1105"></a><span class="c">!******************************************************************************************************</span>
-<a id="ln-1106" name="ln-1106"></a><span class="k">end module </span><span class="n">nlesolver_module</span>
-<a id="ln-1107" name="ln-1107"></a><span class="c">!******************************************************************************************************</span>
+<a id="ln-1102" name="ln-1102"></a><span class="k">    end do</span>    <span class="c">!  end of main loop</span>
+<a id="ln-1103" name="ln-1103"></a>
+<a id="ln-1104" name="ln-1104"></a>    <span class="n">xmin</span> <span class="o">=</span> <span class="n">x</span>
+<a id="ln-1105" name="ln-1105"></a>
+<a id="ln-1106" name="ln-1106"></a>    <span class="k">end function </span><span class="n">fmin</span>
+<a id="ln-1107" name="ln-1107"></a><span class="c">!*****************************************************************************************</span>
+<a id="ln-1108" name="ln-1108"></a>
+<a id="ln-1109" name="ln-1109"></a><span class="c">!******************************************************************************************************</span>
+<a id="ln-1110" name="ln-1110"></a><span class="k">end module </span><span class="n">nlesolver_module</span>
+<a id="ln-1111" name="ln-1111"></a><span class="c">!******************************************************************************************************</span>
 </pre></div>
 
     </section>

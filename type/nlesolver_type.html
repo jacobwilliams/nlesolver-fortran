@@ -585,7 +585,7 @@
   
   <td>private</td>
   <td></td><td>::</td>
-  <td><strong>n_intervals</strong></td><td> =</td><td>3</td><td><p>number of intervals for fixed point linesearch</p></td>
+  <td><strong>n_intervals</strong></td><td> =</td><td>2</td><td><p>number of intervals for fixed point linesearch</p></td>
   
 </tr>
 
@@ -1607,7 +1607,7 @@ private subroutine <a href='../proc/set_status.html'>set_status</a>(me, istat, s
         <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">c</span>                <span class="o">=</span> <span class="mf">0.5_wp</span>        <span class="c">!! backtracking linesearch parameter (0,1)</span>
         <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">tau</span>              <span class="o">=</span> <span class="mf">0.5_wp</span>        <span class="c">!! backtracking linesearch parameter (0,1)</span>
         <span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span>    <span class="kd">::</span> <span class="n">fmin_tol</span>         <span class="o">=</span> <span class="mf">1.0e-5_wp</span>     <span class="c">!! tolerance for &quot;exact&quot; linesearch</span>
-        <span class="kt">integer</span>     <span class="kd">::</span> <span class="n">n_intervals</span>      <span class="o">=</span> <span class="mi">3</span>             <span class="c">!! number of intervals for fixed point linesearch</span>
+        <span class="kt">integer</span>     <span class="kd">::</span> <span class="n">n_intervals</span>      <span class="o">=</span> <span class="mi">2</span>             <span class="c">!! number of intervals for fixed point linesearch</span>
         <span class="kt">logical</span>     <span class="kd">::</span> <span class="n">use_broyden</span>      <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span>       <span class="c">!! if true, a Broyden update is used</span>
                                                         <span class="c">!! rather than computing the Jacobian</span>
                                                         <span class="c">!! at every step. The `grad` function is</span>
