@@ -55,7 +55,7 @@
         real(wp)    :: c                = 0.5_wp        !! backtracking linesearch parameter (0,1)
         real(wp)    :: tau              = 0.5_wp        !! backtracking linesearch parameter (0,1)
         real(wp)    :: fmin_tol         = 1.0e-5_wp     !! tolerance for "exact" linesearch
-        integer     :: n_intervals      = 3             !! number of intervals for fixed point linesearch
+        integer     :: n_intervals      = 2             !! number of intervals for fixed point linesearch
         logical     :: use_broyden      = .false.       !! if true, a Broyden update is used
                                                         !! rather than computing the Jacobian
                                                         !! at every step. The `grad` function is
@@ -889,8 +889,12 @@ contains
     real(wp) :: step_size !! step size for `alpha`
     integer :: n !! number of steps to divide the interval
 
+    ! 1 o-----------o
+    ! 2 o-----o-----o
+    ! 3 o---o---o---o
+
     n = me%n_intervals
-    n_points = 2 + max(abs(n-1),1) ! alpha_min + alpha_max + n-1 points
+    n_points = n + 1
 
     allocate(alphas_to_try(n_points))
     allocate(x_tmp(me%n))
