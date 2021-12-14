@@ -469,7 +469,7 @@ private subroutine backtracking_linesearch(me, xold, p, fjac, x, f, fvec)
             <span class="k">end if</span>
 <span class="k">        end if</span>
 
-<span class="k">        if</span> <span class="p">((</span><span class="n">f</span> <span class="o">-</span> <span class="mf">0.5_wp</span> <span class="o">*</span> <span class="n">ftmp</span> <span class="o">&gt;=</span> <span class="n">alpha</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="p">.</span><span class="nb">or</span><span class="p">.</span> <span class="n">min_alpha_reached</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">        if</span> <span class="p">(((</span><span class="n">f</span> <span class="o">-</span> <span class="n">ftmp</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0_wp</span> <span class="o">&gt;=</span> <span class="n">alpha</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="p">.</span><span class="nb">or</span><span class="p">.</span> <span class="n">min_alpha_reached</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">            if</span> <span class="p">(</span><span class="n">min_alpha_reached</span><span class="p">)</span> <span class="k">then</span>
 <span class="k">                write</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">iunit</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span> <span class="s1">&#39;        Minimum alpha reached&#39;</span>
             <span class="k">end if</span>
