@@ -783,7 +783,7 @@
             end if
         end if
 
-        if ((f - 0.5_wp * ftmp >= alpha*t) .or. min_alpha_reached) then
+        if (((f - ftmp) / 2.0_wp >= alpha*t) .or. min_alpha_reached) then
             if (min_alpha_reached) then
                 write(me%iunit,'(A)') '        Minimum alpha reached'
             end if
