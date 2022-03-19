@@ -33,7 +33,12 @@ fpm build --profile release
 fpm test --profile release
 ```
 
-Note that LAPACK is required to build.
+To use `nlesolver` within your fpm project, add the following to your `fpm.toml` file:
+```toml
+[dependencies]
+fmin = { git="https://github.com/jacobwilliams/nlesolver-fortran.git" }
+
+Note that LAPACK is required to build. The [fmin](https://github.com/jacobwilliams/fmin) library is also a dependency (which will be automatically downloaded by fpm).
 
 ### Documentation
 
