@@ -4,8 +4,7 @@
 
     program nlesolver_test_1
 
-    use nlesolver_module
-    use iso_fortran_env, only: wp => real64, output_unit
+    use nlesolver_module, wp => nlesolver_rk
 
     implicit none
 

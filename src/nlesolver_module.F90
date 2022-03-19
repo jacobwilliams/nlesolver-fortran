@@ -22,14 +22,39 @@
 !
 !@todo add an `istat` output to func and grad, for user stopping
 !      or to take a smaller stop (if istat>0 take a smaller step, if istat<0 abort)
+!
+!@note The default real kind (`wp`) can be
+!      changed using optional preprocessor flags.
+!      This library was built with real kind:
+#ifdef REAL32
+!      `real(kind=real32)` [4 bytes]
+#elif REAL64
+!      `real(kind=real64)` [8 bytes]
+#elif REAL128
+!      `real(kind=real128)` [16 bytes]
+#else
+!      `real(kind=real64)` [8 bytes]
+#endif
 
     module nlesolver_module
 
-    use iso_fortran_env, only: wp => real64, output_unit
+    use iso_fortran_env
 
     implicit none
 
     private
+
+#ifdef REAL32
+    integer,parameter,public :: nlesolver_rk = real32   !! real kind used by this module [4 bytes]
+#elif REAL64
+    integer,parameter,public :: nlesolver_rk = real64   !! real kind used by this module [8 bytes]
+#elif REAL128
+    integer,parameter,public :: nlesolver_rk = real128  !! real kind used by this module [16 bytes]
+#else
+    integer,parameter,public :: nlesolver_rk = real64   !! real kind used by this module [8 bytes]
+#endif
+
+    integer,parameter :: wp = nlesolver_rk  !! local copy of `nlesolver_rk` with a shorter name
 
     real(wp),parameter :: zero = 0.0_wp
     real(wp),parameter :: one  = 1.0_wp
