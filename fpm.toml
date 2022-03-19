@@ -1,6 +1,6 @@
 name = "nlesolver-fortran"
 author = "Jacob Williams"
-copyright  = "Copyright (c) 2021, Jacob Williams"
+copyright  = "Copyright (c) 2021-2022, Jacob Williams"
 license = "BSD-3"
 description = "Nonlinear Equation Solver with Modern Fortran"
 homepage = "https://github.com/jacobwilliams/nlesolver-fortran"
@@ -14,6 +14,9 @@ link = ["lapack", "blas"]
 
 [library]
 source-dir = "src"
+
+[dependencies]
+fmin = { git="https://github.com/jacobwilliams/fmin.git", tag="1.1.0" }
 
 [install]
 library = true
