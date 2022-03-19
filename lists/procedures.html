@@ -4,24 +4,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-   
    <meta name="description" content="Nonlinear Equation Solver with Modern Fortran">
-    
     <meta name="author" content="Jacob Williams" >
     <link rel="icon" href="../favicon.png">
 
-    <title>
-All Procedures &ndash; nlesolver-fortran
+    <title>All Procedures &ndash; nlesolver-fortran
 </title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
     <link href="../css/font-awesome.min.css" rel="stylesheet">
     <link href="../css/local.css" rel="stylesheet">
-    
     <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
-    
-    
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -50,58 +44,27 @@ All Procedures &ndash; nlesolver-fortran
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-        
             <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
               <a href="#" class="dropdown-toggle"
               data-toggle="dropdown" role="button"
               aria-haspopup="true"
      aria-expanded="false">Contents <span class="caret"></span></a>
         <ul class="dropdown-menu">
-          
-              
             <li><a href="../sourcefile/nlesolver_module.f90.html">Source File</a></li>
-        
-        
-        
             <li><a href="../lists/modules.html">Modules</a></li>
-        
-            
-                                
             <li><a href="../lists/procedures.html">Procedures</a></li>
-        
-        
             <li><a href="../lists/absint.html">Abstract Interfaces</a></li>
-               
-            <li><a href="../lists/types.html">Derived Types</a></li>
-        
-               
-        
-        
+                   <li><a href="../lists/types.html">Derived Types</a></li>
+       
             </ul>
         
             </li>
-
-
 <li class="visible-xs hidden-sm visible-lg"><a href="../sourcefile/nlesolver_module.f90.html">Source File</a></li>
-
-
-
 <li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
-
-
-
 <li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
-
-
 <li class="visible-xs hidden-sm visible-lg"><a href="../lists/absint.html">Abstract Interfaces</a></li>
-                             
-<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
-
-
-
-
+                             <li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
           </ul>
-        
         <form action="../search.html" class="navbar-form navbar-right" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
@@ -110,47 +73,33 @@ All Procedures &ndash; nlesolver-fortran
         <button type="submit" class="btn btn-default">Submit</button>
 -->
         </form>
-        
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
     <div class="container">
-    
       <div class="row">
         <div class="col-lg-12" id='text'>
 			 <h1>Procedures</h1>
 			 <table class="table table-striped">
 			 <thead><tr><th>Procedure</th><th>Location</th><th>Procedure Type</th><th>Description</th></tr></thead>
 			 <tbody>
-			 
 			   <tr><td><a href='../proc/backtracking_linesearch.html'>backtracking_linesearch</a></td><td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td><td>Subroutine</td><td><p>Backtracking line search.</p><a href="../proc/backtracking_linesearch.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			 
 			   <tr><td><a href='../proc/destroy_nlesolver_variables.html'>destroy_nlesolver_variables</a></td><td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td><td>Subroutine</td><td><p>Destructor</p></td></tr>
-			 
 			   <tr><td><a href='../proc/exact_linesearch.html'>exact_linesearch</a></td><td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td><td>Subroutine</td><td><p>An exact linesearch that uses a derivative-free minimizer to
 find the minimum value of <code>f(x)</code> between
 <code>x = xold + p * alpha_min</code> and
 <code>x = xold + p * alpha_max</code>.</p><a href="../proc/exact_linesearch.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			 
 			   <tr><td><a href='../proc/fixed_point_linesearch.html'>fixed_point_linesearch</a></td><td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td><td>Subroutine</td><td><p>A simple search that just evaluates the function at a specified
 number of points and picks the one with the minimum function value.</p></td></tr>
-			 
 			   <tr><td><a href='../proc/fmin.html'>fmin</a></td><td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td><td>Function</td><td><p>An approximation x to the point where f attains a minimum on
   the interval (ax,bx) is determined.</p><a href="../proc/fmin.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			 
 			   <tr><td><a href='../proc/get_status.html'>get_status</a></td><td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td><td>Subroutine</td><td><p>Return the status code and message from the <a href="../type/nlesolver_type.html">nlesolver_type</a> class.</p><a href="../proc/get_status.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			 
 			   <tr><td><a href='../proc/initialize_nlesolver_variables.html'>initialize_nlesolver_variables</a></td><td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td><td>Subroutine</td><td><p>Constructor for the class.</p></td></tr>
-			 
 			   <tr><td><a href='../proc/linear_solver.html'>linear_solver</a></td><td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td><td>Subroutine</td><td><p>Solve the linear system: <script type="math/tex"> Ax = b </script>, using a dense, direct method.</p><a href="../proc/linear_solver.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
-			 
 			   <tr><td><a href='../proc/nlesolver_solver.html'>nlesolver_solver</a></td><td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td><td>Subroutine</td><td><p>Main solver.</p></td></tr>
-			 
 			   <tr><td><a href='../proc/set_status.html'>set_status</a></td><td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td><td>Subroutine</td><td><p>Set status flag and message.</p></td></tr>
-			 
 			   <tr><td><a href='../proc/simple_step.html'>simple_step</a></td><td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td><td>Subroutine</td><td><p>Take a simple step in the search direction of <code>p * alpha</code>.</p></td></tr>
-			 
 			 </tbody></table>
              <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
@@ -172,63 +121,57 @@ number of points and picks the one with the minimum function value.</p></td></tr
 </a>
 </g>
 </g>
-<!-- proc~linear_solver -->
+<!-- proc~destroy_nlesolver_variables -->
 <g id="call~~graph~~CallGraph_node2" class="node">
-<title>proc~linear_solver</title>
-<g id="a_call~~graph~~CallGraph_node2"><a xlink:href=".././proc/linear_solver.html" xlink:title="linear_solver">
-<polygon fill="#d9534f" stroke="#d9534f" points="282,-66 201,-66 201,-42 282,-42 282,-66"/>
-<text text-anchor="middle" x="241.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">linear_solver</text>
+<title>proc~destroy_nlesolver_variables</title>
+<g id="a_call~~graph~~CallGraph_node2"><a xlink:href=".././proc/destroy_nlesolver_variables.html" xlink:title="destroy_nlesolver_variables">
+<polygon fill="#d9534f" stroke="#d9534f" points="162.5,-66 2.5,-66 2.5,-42 162.5,-42 162.5,-66"/>
+<text text-anchor="middle" x="82.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">destroy_nlesolver_variables</text>
 </a>
 </g>
 </g>
-<!-- proc~destroy_nlesolver_variables -->
+<!-- proc~fmin -->
 <g id="call~~graph~~CallGraph_node3" class="node">
-<title>proc~destroy_nlesolver_variables</title>
-<g id="a_call~~graph~~CallGraph_node3"><a xlink:href=".././proc/destroy_nlesolver_variables.html" xlink:title="destroy_nlesolver_variables">
-<polygon fill="#d9534f" stroke="#d9534f" points="162.5,-108 2.5,-108 2.5,-84 162.5,-84 162.5,-108"/>
-<text text-anchor="middle" x="82.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">destroy_nlesolver_variables</text>
+<title>proc~fmin</title>
+<g id="a_call~~graph~~CallGraph_node3"><a xlink:href=".././proc/fmin.html" xlink:title="fmin">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="268.5,-108 214.5,-108 214.5,-84 268.5,-84 268.5,-108"/>
+<text text-anchor="middle" x="241.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">fmin</text>
+</a>
+</g>
+</g>
+<!-- proc~simple_step -->
+<g id="call~~graph~~CallGraph_node4" class="node">
+<title>proc~simple_step</title>
+<g id="a_call~~graph~~CallGraph_node4"><a xlink:href=".././proc/simple_step.html" xlink:title="simple_step">
+<polygon fill="#d9534f" stroke="#d9534f" points="120.5,-150 44.5,-150 44.5,-126 120.5,-126 120.5,-150"/>
+<text text-anchor="middle" x="82.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">simple_step</text>
 </a>
 </g>
 </g>
 <!-- proc~initialize_nlesolver_variables -->
-<g id="call~~graph~~CallGraph_node4" class="node">
-<title>proc~initialize_nlesolver_variables</title>
-<g id="a_call~~graph~~CallGraph_node4"><a xlink:href=".././proc/initialize_nlesolver_variables.html" xlink:title="initialize_nlesolver_variables">
-<polygon fill="#d9534f" stroke="#d9534f" points="165,-150 0,-150 0,-126 165,-126 165,-150"/>
-<text text-anchor="middle" x="82.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">initialize_nlesolver_variables</text>
-</a>
-</g>
-</g>
-<!-- proc~nlesolver_solver -->
 <g id="call~~graph~~CallGraph_node5" class="node">
-<title>proc~nlesolver_solver</title>
-<g id="a_call~~graph~~CallGraph_node5"><a xlink:href=".././proc/nlesolver_solver.html" xlink:title="nlesolver_solver">
-<polygon fill="#d9534f" stroke="#d9534f" points="132,-66 33,-66 33,-42 132,-42 132,-66"/>
-<text text-anchor="middle" x="82.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_solver</text>
+<title>proc~initialize_nlesolver_variables</title>
+<g id="a_call~~graph~~CallGraph_node5"><a xlink:href=".././proc/initialize_nlesolver_variables.html" xlink:title="initialize_nlesolver_variables">
+<polygon fill="#d9534f" stroke="#d9534f" points="165,-192 0,-192 0,-168 165,-168 165,-192"/>
+<text text-anchor="middle" x="82.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">initialize_nlesolver_variables</text>
 </a>
 </g>
-</g>
-<!-- proc~nlesolver_solver&#45;&gt;proc~linear_solver -->
-<g id="call~~graph~~CallGraph_edge1" class="edge">
-<title>proc~nlesolver_solver&#45;&gt;proc~linear_solver</title>
-<path fill="none" stroke="#000000" d="M132.32,-54C150.92,-54 172.14,-54 190.83,-54"/>
-<polygon fill="#000000" stroke="#000000" points="190.92,-57.5 200.92,-54 190.92,-50.5 190.92,-57.5"/>
 </g>
 <!-- proc~set_status -->
 <g id="call~~graph~~CallGraph_node6" class="node">
 <title>proc~set_status</title>
 <g id="a_call~~graph~~CallGraph_node6"><a xlink:href=".././proc/set_status.html" xlink:title="set_status">
-<polygon fill="#d9534f" stroke="#d9534f" points="115,-192 50,-192 50,-168 115,-168 115,-192"/>
-<text text-anchor="middle" x="82.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">set_status</text>
+<polygon fill="#d9534f" stroke="#d9534f" points="115,-234 50,-234 50,-210 115,-210 115,-234"/>
+<text text-anchor="middle" x="82.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">set_status</text>
 </a>
 </g>
 </g>
-<!-- proc~backtracking_linesearch -->
+<!-- proc~linear_solver -->
 <g id="call~~graph~~CallGraph_node7" class="node">
-<title>proc~backtracking_linesearch</title>
-<g id="a_call~~graph~~CallGraph_node7"><a xlink:href=".././proc/backtracking_linesearch.html" xlink:title="backtracking_linesearch">
-<polygon fill="#d9534f" stroke="#d9534f" points="153.5,-234 11.5,-234 11.5,-210 153.5,-210 153.5,-234"/>
-<text text-anchor="middle" x="82.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">backtracking_linesearch</text>
+<title>proc~linear_solver</title>
+<g id="a_call~~graph~~CallGraph_node7"><a xlink:href=".././proc/linear_solver.html" xlink:title="linear_solver">
+<polygon fill="#d9534f" stroke="#d9534f" points="282,-276 201,-276 201,-252 282,-252 282,-276"/>
+<text text-anchor="middle" x="241.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">linear_solver</text>
 </a>
 </g>
 </g>
@@ -236,41 +179,47 @@ number of points and picks the one with the minimum function value.</p></td></tr
 <g id="call~~graph~~CallGraph_node8" class="node">
 <title>proc~exact_linesearch</title>
 <g id="a_call~~graph~~CallGraph_node8"><a xlink:href=".././proc/exact_linesearch.html" xlink:title="exact_linesearch">
-<polygon fill="#d9534f" stroke="#d9534f" points="133,-276 32,-276 32,-252 133,-252 133,-276"/>
-<text text-anchor="middle" x="82.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exact_linesearch</text>
-</a>
-</g>
-</g>
-<!-- proc~fmin -->
-<g id="call~~graph~~CallGraph_node10" class="node">
-<title>proc~fmin</title>
-<g id="a_call~~graph~~CallGraph_node10"><a xlink:href=".././proc/fmin.html" xlink:title="fmin">
-<polygon fill="#d94e8f" stroke="#d94e8f" points="268.5,-276 214.5,-276 214.5,-252 268.5,-252 268.5,-276"/>
-<text text-anchor="middle" x="241.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">fmin</text>
+<polygon fill="#d9534f" stroke="#d9534f" points="133,-108 32,-108 32,-84 133,-84 133,-108"/>
+<text text-anchor="middle" x="82.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exact_linesearch</text>
 </a>
 </g>
 </g>
 <!-- proc~exact_linesearch&#45;&gt;proc~fmin -->
-<g id="call~~graph~~CallGraph_edge2" class="edge">
+<g id="call~~graph~~CallGraph_edge1" class="edge">
 <title>proc~exact_linesearch&#45;&gt;proc~fmin</title>
-<path fill="none" stroke="#000000" d="M133.18,-264C156.23,-264 183.14,-264 204.24,-264"/>
-<polygon fill="#000000" stroke="#000000" points="204.4,-267.5 214.4,-264 204.4,-260.5 204.4,-267.5"/>
+<path fill="none" stroke="#000000" d="M133.18,-96C156.23,-96 183.14,-96 204.24,-96"/>
+<polygon fill="#000000" stroke="#000000" points="204.4,-99.5 214.4,-96 204.4,-92.5 204.4,-99.5"/>
+</g>
+<!-- proc~nlesolver_solver -->
+<g id="call~~graph~~CallGraph_node9" class="node">
+<title>proc~nlesolver_solver</title>
+<g id="a_call~~graph~~CallGraph_node9"><a xlink:href=".././proc/nlesolver_solver.html" xlink:title="nlesolver_solver">
+<polygon fill="#d9534f" stroke="#d9534f" points="132,-276 33,-276 33,-252 132,-252 132,-276"/>
+<text text-anchor="middle" x="82.5" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_solver</text>
+</a>
+</g>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;proc~linear_solver -->
+<g id="call~~graph~~CallGraph_edge2" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;proc~linear_solver</title>
+<path fill="none" stroke="#000000" d="M132.32,-264C150.92,-264 172.14,-264 190.83,-264"/>
+<polygon fill="#000000" stroke="#000000" points="190.92,-267.5 200.92,-264 190.92,-260.5 190.92,-267.5"/>
 </g>
 <!-- proc~fixed_point_linesearch -->
-<g id="call~~graph~~CallGraph_node9" class="node">
+<g id="call~~graph~~CallGraph_node10" class="node">
 <title>proc~fixed_point_linesearch</title>
-<g id="a_call~~graph~~CallGraph_node9"><a xlink:href=".././proc/fixed_point_linesearch.html" xlink:title="fixed_point_linesearch">
+<g id="a_call~~graph~~CallGraph_node10"><a xlink:href=".././proc/fixed_point_linesearch.html" xlink:title="fixed_point_linesearch">
 <polygon fill="#d9534f" stroke="#d9534f" points="148,-318 17,-318 17,-294 148,-294 148,-318"/>
 <text text-anchor="middle" x="82.5" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">fixed_point_linesearch</text>
 </a>
 </g>
 </g>
-<!-- proc~simple_step -->
+<!-- proc~backtracking_linesearch -->
 <g id="call~~graph~~CallGraph_node11" class="node">
-<title>proc~simple_step</title>
-<g id="a_call~~graph~~CallGraph_node11"><a xlink:href=".././proc/simple_step.html" xlink:title="simple_step">
-<polygon fill="#d9534f" stroke="#d9534f" points="120.5,-360 44.5,-360 44.5,-336 120.5,-336 120.5,-360"/>
-<text text-anchor="middle" x="82.5" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">simple_step</text>
+<title>proc~backtracking_linesearch</title>
+<g id="a_call~~graph~~CallGraph_node11"><a xlink:href=".././proc/backtracking_linesearch.html" xlink:title="backtracking_linesearch">
+<polygon fill="#d9534f" stroke="#d9534f" points="153.5,-360 11.5,-360 11.5,-336 153.5,-336 153.5,-360"/>
+<text text-anchor="middle" x="82.5" y="-345.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">backtracking_linesearch</text>
 </a>
 </g>
 </g>
@@ -337,21 +286,18 @@ number of points and picks the one with the minimum function value.</p></td></tr
     </div></div></div></div>
         </div>
       </div>
-
     <hr>    
     </div> <!-- /container -->
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-6"><p>nlesolver-fortran was developed by Jacob Williams<br>&copy; 2021 
-                                          </p>
+        <div class="col-xs-6 col-md-6"><p>nlesolver-fortran was developed by Jacob Williams<br>&copy; 2022 
+</p>
         </div>
         <div class="col-xs-6 col-md-6">
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
-            
-            
           </p>
         </div>
       </div>
@@ -379,14 +325,11 @@ number of points and picks the one with the minimum function value.</p></td></tr
         extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
       });
     </script>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
     
     <script src="../tipuesearch/tipuesearch_content.js"></script>
     <script src="../tipuesearch/tipuesearch_set.js"></script>
     <script src="../tipuesearch/tipuesearch.js"></script>
-    
     
   </body>
 </html>
