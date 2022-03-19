@@ -121,10 +121,11 @@
 fpm test --profile release
 </code></pre></div>
 
-<p>To use <code>nlesolver</code> within your fpm project, add the following to your <code>fpm.toml</code> file:
-```toml
-[dependencies]
-fmin = { git="https://github.com/jacobwilliams/nlesolver-fortran.git" }</p>
+<p>To use <code>nlesolver</code> within your fpm project, add the following to your <code>fpm.toml</code> file:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">[dependencies]</span><span class="w"></span>
+<span class="n">fmin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">git</span><span class="o">=</span><span class="s">&quot;https://github.com/jacobwilliams/nlesolver-fortran.git&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
 <p>Note that LAPACK is required to build. The <a href="https://github.com/jacobwilliams/fmin">fmin</a> library is also a dependency (which will be automatically downloaded by fpm).</p>
 <h3>Documentation</h3>
 <ul>
