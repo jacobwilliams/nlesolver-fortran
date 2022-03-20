@@ -121,6 +121,37 @@
 fpm test --profile release
 </code></pre></div>
 
+<p>By default, the library is built with double precision (<code>real64</code>) real values. Explicitly specifying the real kind can be done using the following preprocessor flags:</p>
+<table>
+<thead>
+<tr>
+<th>Preprocessor flag</th>
+<th>Kind</th>
+<th>Number of bytes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>REAL32</code></td>
+<td><code>real(kind=real32)</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td><code>REAL64</code></td>
+<td><code>real(kind=real64)</code></td>
+<td>8</td>
+</tr>
+<tr>
+<td><code>REAL128</code></td>
+<td><code>real(kind=real128)</code></td>
+<td>16</td>
+</tr>
+</tbody>
+</table>
+<p>For example, to build a single precision version of the library, use:</p>
+<div class="codehilite"><pre><span></span><code>fpm build --profile release --flag &quot;-DREAL32&quot;
+</code></pre></div>
+
 <p>To use <code>nlesolver</code> within your fpm project, add the following to your <code>fpm.toml</code> file:</p>
 <div class="codehilite"><pre><span></span><code><span class="k">[dependencies]</span><span class="w"></span>
 <span class="n">fmin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">git</span><span class="o">=</span><span class="s">&quot;https://github.com/jacobwilliams/nlesolver-fortran.git&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
