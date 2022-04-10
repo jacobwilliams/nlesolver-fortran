@@ -10,8 +10,9 @@ A work in progress.
 ### Status
 
 [![CI Status](https://github.com/jacobwilliams/nlesolver-fortran/actions/workflows/CI.yml/badge.svg)](https://github.com/jacobwilliams/nlesolver-fortran/actions)
-[![GitHub release](https://img.shields.io/github/release/jacobwilliams/nlesolver-fortran.svg?style=plastic)](https://github.com/jacobwilliams/nlesolver-fortran/releases/latest)
-[![codecov](https://codecov.io/gh/jacobwilliams/nlesolver-fortran/branch/master/graph/badge.svg?token=43HK33CSMY)](https://codecov.io/gh/jacobwilliams/nlesolver-fortran)
+[![GitHub release](https://img.shields.io/github/release/jacobwilliams/nlesolver-fortran.svg)](https://github.com/jacobwilliams/nlesolver-fortran/releases/latest)
+[![codecov](https://codecov.io/gh/jacobwilliams/nlesolver-fortran/branch/master/graph/badge.svg)](https://codecov.io/gh/jacobwilliams/nlesolver-fortran)
+[![last-commit](https://img.shields.io/github/last-commit/jacobwilliams/nlesolver-fortran)](https://github.com/jacobwilliams/nlesolver-fortran/commits/master)
 
 ### Features
 
