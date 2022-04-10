@@ -54,7 +54,14 @@ fpm build --profile release --flag "-DREAL32"
 To use `nlesolver` within your fpm project, add the following to your `fpm.toml` file:
 ```toml
 [dependencies]
-fmin = { git="https://github.com/jacobwilliams/nlesolver-fortran.git" }
+nlesolver-fortran = { git="https://github.com/jacobwilliams/nlesolver-fortran.git" }
+```
+
+Or to use a specific version:
+
+```toml
+[dependencies]
+nlesolver-fortran = { git="https://github.com/jacobwilliams/nlesolver-fortran.git", tag="1.1.0" }
 ```
 
 Note that LAPACK is required to build. The [fmin](https://github.com/jacobwilliams/fmin) library is also a dependency (which will be automatically downloaded by fpm).
@@ -69,4 +76,4 @@ Note that LAPACK is required to build. The [fmin](https://github.com/jacobwillia
 
 ### See also
 
-  * [MINPACK](https://github.com/jacobwilliams/minpack)
+  * [MINPACK](https://github.com/fortran-lang/minpack)
