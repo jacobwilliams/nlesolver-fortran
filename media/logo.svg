@@ -8,8 +8,8 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="63.657536mm"
-   height="12.337569mm"
-   viewBox="0 0 63.657536 12.337569"
+   height="7.9854546mm"
+   viewBox="0 0 63.657536 7.9854544"
    version="1.1"
    id="svg8"
    inkscape:version="1.0.2 (e86c8708, 2021-01-15)"
@@ -80,19 +80,6 @@
          style="stop-color:#ffffff;stop-opacity:1"
          offset="1" />
     </linearGradient>
-    <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter911"
-       x="-0.00011999999"
-       width="1.00024"
-       y="-0.00012000001"
-       height="1.00024">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="6.4722201e-05"
-         id="feGaussianBlur913" />
-    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -101,9 +88,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.1388845"
-     inkscape:cx="63.580441"
-     inkscape:cy="10.968729"
+     inkscape:zoom="2.9116043"
+     inkscape:cx="99.076612"
+     inkscape:cy="10.086089"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -133,7 +120,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-139.89843,-155.9508)">
+     transform="translate(-139.89843,-158.49129)">
     <rect
        style="fill:#734f96;fill-opacity:1;stroke:#000000;stroke-width:0.265;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect3876"
@@ -142,43 +129,6 @@
        x="140.03093"
        y="158.62379"
        ry="1.4358538" />
-    <path
-       id="path1307"
-       style="fill:none;stroke:#000000;stroke-width:1.00157;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 178.59178,73.960073 c 15.17519,-7.823382 27.83627,-20.686759 35.09611,-29.089611"
-       transform="matrix(0.26458333,0,0,0.26458333,140.4698,146.79573)" />
-    <path
-       id="path1300"
-       style="fill:none;stroke:#000000;stroke-width:1.00157;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 130.18186,73.961005 c 16.7477,10.410352 33.75168,7.555942 48.40992,-9.31e-4"
-       transform="matrix(0.26458333,0,0,0.26458333,140.4698,146.79573)" />
-    <path
-       id="path1298"
-       style="fill:none;stroke:#000000;stroke-width:1.00157;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 99.245676,44.659469 c 4.632604,3.302093 9.301054,7.775401 13.957634,13.636833 5.56032,6.999004 11.25447,12.10662 16.97855,15.664703"
-       transform="matrix(0.26458333,0,0,0.26458333,140.4698,146.79573)" />
-    <path
-       id="path1296"
-       style="fill:none;stroke:#000000;stroke-width:1.00157;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 52.514147,44.611296 c 13.586384,-8.49528 29.923057,-11.932797 46.731529,0.04817"
-       transform="matrix(0.26458333,0,0,0.26458333,140.4698,146.79573)" />
-    <path
-       id="path1294"
-       style="fill:none;stroke:#000000;stroke-width:1.00157;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 23.232969,73.578059 C 29.228612,65.260683 39.635835,52.663831 52.514145,44.611294"
-       transform="matrix(0.26458333,0,0,0.26458333,140.4698,146.79573)" />
-    <ellipse
-       style="fill:#734f96;fill-opacity:1;stroke:none;stroke-width:0.705556;stroke-linejoin:round;paint-order:stroke fill markers;filter:url(#filter911)"
-       id="path905"
-       cx="160.79993"
-       cy="156.59818"
-       rx="0.64722204"
-       ry="0.64722198" />
-    <path
-       id="path1217"
-       style="fill:none;stroke:#734f96;stroke-width:1.00157;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1Send)"
-       d="m 76.221822,36.906887 c 5.39354,-0.0569 10.964567,1.107852 16.623638,3.900965"
-       transform="matrix(0.26458333,0,0,0.26458333,140.4698,146.79573)" />
     <text
        xml:space="preserve"
        style="font-size:6.37145px;line-height:1.25;font-family:'Clarendon BT';-inkscape-font-specification:'Clarendon BT';fill:#ffffff;fill-opacity:1;stroke-width:0.372806"
