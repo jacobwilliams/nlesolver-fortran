@@ -157,7 +157,12 @@ fpm test --profile release
 
 <p>To use <code>nlesolver</code> within your fpm project, add the following to your <code>fpm.toml</code> file:</p>
 <div class="codehilite"><pre><span></span><code><span class="k">[dependencies]</span><span class="w"></span>
-<span class="n">fmin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">git</span><span class="o">=</span><span class="s">&quot;https://github.com/jacobwilliams/nlesolver-fortran.git&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="n">nlesolver-fortran</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">git</span><span class="o">=</span><span class="s">&quot;https://github.com/jacobwilliams/nlesolver-fortran.git&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>Or to use a specific version:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">[dependencies]</span><span class="w"></span>
+<span class="n">nlesolver-fortran</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">git</span><span class="o">=</span><span class="s">&quot;https://github.com/jacobwilliams/nlesolver-fortran.git&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">tag</span><span class="o">=</span><span class="s">&quot;1.1.0&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
 </code></pre></div>
 
 <p>Note that LAPACK is required to build. The <a href="https://github.com/jacobwilliams/fmin">fmin</a> library is also a dependency (which will be automatically downloaded by fpm).</p>
@@ -171,7 +176,7 @@ fpm test --profile release
 </ul>
 <h3>See also</h3>
 <ul>
-<li><a href="https://github.com/jacobwilliams/minpack">MINPACK</a></li>
+<li><a href="https://github.com/fortran-lang/minpack">MINPACK</a></li>
 </ul>
         </div>
         <div class="col-md-4">
