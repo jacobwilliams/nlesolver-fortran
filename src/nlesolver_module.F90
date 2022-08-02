@@ -278,7 +278,7 @@
 
     implicit none
 
-    class(nlesolver_type),intent(out) :: me
+    class(nlesolver_type),intent(inout) :: me
     integer,intent(in)                :: n                  !! number of optimization variables
     integer,intent(in)                :: m                  !! number of constraints
     integer,intent(in)                :: max_iter           !! maximum number of iterations
