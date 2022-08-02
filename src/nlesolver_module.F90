@@ -314,8 +314,6 @@
 
     logical :: status_ok !! true if there were no errors
 
-    !initialize:
-    call me%destroy()
     status_ok = .true.
 
     !required:
