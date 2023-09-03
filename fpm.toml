@@ -9,7 +9,7 @@ keywords = ["nle solver"]
 [build]
 auto-executables = false
 auto-examples = false
-auto-tests = false
+auto-tests = true
 link = ["lapack", "blas"]
 
 [library]
@@ -17,11 +17,7 @@ source-dir = "src"
 
 [dependencies]
 fmin = { git="https://github.com/jacobwilliams/fmin.git", tag="1.1.0" }
+LSQR = { git="https://github.com/jacobwilliams/LSQR", tag="1.0.0" }
 
 [install]
 library = true
-
-[[test]]
-name = "nlesolver_test_1"
-source-dir = "tests"
-main = "nlesolver_test_1.f90"

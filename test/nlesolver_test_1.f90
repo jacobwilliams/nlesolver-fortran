@@ -32,6 +32,10 @@
     alpha = 1.0_wp
 
     write(*,*) ''
+    write(*,*) '***********************'
+    write(*,*) '* nlesolver_test_1    *'
+    write(*,*) '***********************'
+    write(*,*) ''
     do i = 1, 8
 
         select case (i)
