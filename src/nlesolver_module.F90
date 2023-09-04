@@ -687,7 +687,7 @@
             case (3)
                 ! use lusol solver
                 call solve(me%n,me%m,me%n_nonzeros,me%irow,me%icol,fjac_sparse,rhs,p,info)
-                info = 0 ! just a test
+                !info = 0 ! just a test
             end select
 
             ! check for errors:
