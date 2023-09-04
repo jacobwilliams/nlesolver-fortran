@@ -106,6 +106,7 @@
                                       !!
                                       !! * 1 - assume dense (use dense solver)
                                       !! * 2 - assume sparse (use LSQR sparse solver).
+                                      !! * 3 - assume sparse (use LUSOL sparse solver).
         integer :: n_nonzeros = -1 !! number of nonzero Jacobian elements (used for `sparsity_mode > 1`)
         integer,dimension(:),allocatable :: irow !! sparsity pattern nonzero elements row indices.
         integer,dimension(:),allocatable :: icol !! sparsity pattern nonzero elements column indices
@@ -355,8 +356,9 @@
                                                  !! * 1 - assume dense (use dense solver)
                                                  !!   Must specify `grad` for this mode.
                                                  !! * 2 - assume sparse (use LSQR sparse solver).
-                                                 !!   Must also specify `grad_sparse` and the `irow` and `icol`
-                                                 !!   sparsity pattern for this mode.
+                                                 !! * 3 - assume sparse (use LUSOL sparse solver).
+                                                 !! Must also specify `grad_sparse` and the `irow` and `icol`
+                                                 !! sparsity pattern for `mode>1`.
     integer,dimension(:),intent(in),optional :: irow !! sparsity pattern nonzero elements row indices.
                                                      !! must be specified with `icol` and be the same length (`n_nonzeros`).
     integer,dimension(:),intent(in),optional :: icol !! sparsity pattern nonzero elements column indices
@@ -501,7 +503,8 @@
 
     subroutine nlesolver_solver(me,x)
 
-    use lsqr_module, only: lsqr_solver_ez
+    use lsqr_module,     only: lsqr_solver_ez
+    use lusol_ez_module, only: solve
 
     implicit none
 
@@ -640,11 +643,12 @@
                 prev_fvec = fvec
             else
                 ! compute the jacobian:
-                if (me%sparsity_mode==1) then
+                select case (me%sparsity_mode)
+                case (1)
                     call me%grad(x,fjac)
-                else
+                case (2:)
                     call me%grad_sparse(x,fjac_sparse)
-                end if
+                end select
                 recompute_jac = .false.  ! for broyden
                 broyden_counter = 0
             end if
@@ -654,10 +658,11 @@
 
             ! compute the search direction p by solving linear system:
             rhs = -fvec ! RHS of the linear system
-            if (me%sparsity_mode==1) then
+            select case (me%sparsity_mode)
+            case (1)
                 ! use dense solver
                 call linear_solver(me%m,me%n,fjac,rhs,p,info)
-            else
+            case (2)
                 ! initialize the LSQR sparse solver
                 call sparse_solver%initialize(me%m,me%n,fjac_sparse,me%irow,me%icol,&
                                               atol   = me%atol, &
@@ -679,7 +684,10 @@
                 case default
                     info = 0
                 end select
-            end if
+            case (3)
+                ! use lusol solver
+                call solve(me%n,me%m,me%n_nonzeros,me%irow,me%icol,fjac_sparse,rhs,p,info)
+            end select
 
             ! check for errors:
             if (info /= 0) then
