@@ -106,7 +106,7 @@
                                 n_intervals = n_intervals, &
                                 fmin_tol = fmin_tol, &
                                 verbose = verbose,&
-                                sparsity_mode = 2,&
+                                sparsity_mode = 3,&
                                 irow = irow,&
                                 icol = icol)
         call solver%status(istat, message)
