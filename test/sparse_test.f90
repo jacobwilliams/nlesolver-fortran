@@ -54,7 +54,6 @@
             f_evals = 0
             description = 'Constant alpha + broyden'
         case(3)
-            cycle ! not yet supported
             step_mode = 2
             use_broyden = .false.
             f_evals = 0

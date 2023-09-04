@@ -185,7 +185,7 @@
             logical,intent(out)                 :: user_stop
         end subroutine wait_func
 
-        subroutine linesearch_func(me,xold,p,fjac,x,f,fvec)
+        subroutine linesearch_func(me,xold,p,x,f,fvec,fjac,fjac_sparse)
             !! line search method. Note that not all inputs/outputs are
             !! used by all methods.
             import :: wp,nlesolver_type
@@ -193,12 +193,13 @@
             class(nlesolver_type),intent(inout) :: me
             real(wp),dimension(me%n),intent(in) :: xold      !! previous value of `x`
             real(wp),dimension(me%n),intent(in) :: p         !! search direction
-            real(wp),dimension(me%m,me%n),intent(in) :: fjac !! jacobian matrix
             real(wp),dimension(me%n),intent(out) :: x        !! new `x`
             real(wp),intent(inout) :: f                      !! input: current magnitude of `fvec`,
                                                              !! output: new value of `f`
             real(wp),dimension(me%m),intent(inout) :: fvec   !! input: current function vector,
                                                              !! output: new function vector
+            real(wp),dimension(:,:),intent(in),optional :: fjac !! jacobian matrix [dense]
+            real(wp),dimension(:),intent(in),optional :: fjac_sparse !! jacobian matrix [sparse]
         end subroutine linesearch_func
 
     end interface
@@ -484,11 +485,6 @@
                 call me%set_status(istat = -16, string = 'Error: broyden method not available for sparse solver')
                 return
             end if
-            !....we can add this one later... TODO
-            ! if (associated(me%linesearch, backtracking_linesearch)) then
-            !     call me%set_status(istat = -17, string = 'Error: backtracking linesearch method not available for sparse solver')
-            !     return
-            ! end if
         end if
     end if
 
@@ -562,8 +558,10 @@
     if (alloc_stat==0) allocate(fvec     (me%m)      , stat=alloc_stat)
 
     if (me%sparsity_mode==1) then
+        ! dense
         if (alloc_stat==0) allocate(fjac (me%m,me%n) , stat=alloc_stat)
     else
+        ! sparse
         if (alloc_stat==0) allocate(fjac_sparse (me%n_nonzeros) , stat=alloc_stat)
     end if
 
@@ -692,7 +690,7 @@
             else
 
                 ! next step, using the specified method:
-                call me%linesearch(xold,p,fjac,x,f,fvec)
+                call me%linesearch(xold,p,x,f,fvec,fjac,fjac_sparse)
 
                 ! keep track of the number of steps in the "uphill" direction:
                 if (f>fold) then
@@ -860,17 +858,18 @@
 !>
 !  Take a simple step in the search direction of `p * alpha`.
 
-    subroutine simple_step(me,xold,p,fjac,x,f,fvec)
+    subroutine simple_step(me,xold,p,x,f,fvec,fjac,fjac_sparse)
 
     implicit none
 
     class(nlesolver_type),intent(inout) :: me
     real(wp),dimension(me%n),intent(in) :: xold      !! previous value of `x`
     real(wp),dimension(me%n),intent(in) :: p         !! search direction
-    real(wp),dimension(me%m,me%n),intent(in) :: fjac !! jacobian matrix
     real(wp),dimension(me%n),intent(out) :: x        !! new `x`
     real(wp),intent(inout) :: f                      !! magnitude of `fvec`
     real(wp),dimension(me%m),intent(inout) :: fvec   !! function vector
+    real(wp),dimension(:,:),intent(in),optional :: fjac !! jacobian matrix [dense]
+    real(wp),dimension(:),intent(in),optional :: fjac_sparse !! jacobian matrix [sparse]
 
     x = xold + p * me%alpha
 
@@ -887,18 +886,21 @@
 !
 !### See also
 !  * [Backtracking line search](https://en.wikipedia.org/wiki/Backtracking_line_search)
+!
+!@note Either `fjac` or `fjac_sparse` should be present.
 
-    subroutine backtracking_linesearch(me,xold,p,fjac,x,f,fvec)
+    subroutine backtracking_linesearch(me,xold,p,x,f,fvec,fjac,fjac_sparse)
 
     implicit none
 
     class(nlesolver_type),intent(inout) :: me
     real(wp),dimension(me%n),intent(in) :: xold      !! previous value of `x`
     real(wp),dimension(me%n),intent(in) :: p         !! search direction
-    real(wp),dimension(me%m,me%n),intent(in) :: fjac !! jacobian matrix
     real(wp),dimension(me%n),intent(out) :: x        !! new `x`
     real(wp),intent(inout) :: f                      !! magnitude of `fvec`
     real(wp),dimension(me%m),intent(inout) :: fvec   !! function vector
+    real(wp),dimension(:,:),intent(in),optional :: fjac !! jacobian matrix [dense]
+    real(wp),dimension(:),intent(in),optional :: fjac_sparse !! jacobian matrix [sparse]
 
     integer    :: i                  !! counter
     real(wp)   :: slope              !! local slope of the function of `alpha` along the search direction used for line search
@@ -918,9 +920,17 @@
     ! compute the gradient of the function to be minimized
     ! (which in this case is 1/2 the norm of fvec). Use the chain
     ! rule and the Jacobian matrix already computed.
-    do i=1,me%n
-        gradf(i) = dot_product(fvec,fjac(:,i))                  !todo... need a sparse version of this ...
-    end do
+    if (present(fjac)) then
+        ! dense
+        do i=1,me%n
+            gradf(i) = dot_product(fvec,fjac(:,i))
+        end do
+    else
+        ! sparse
+        do i=1,me%n
+            gradf(i) = dot_product(fvec,pack(fjac_sparse,mask=me%icol==i))
+        end do
+    end if
     slope = dot_product(p, gradf)
     t = -me%c * slope
 
@@ -979,17 +989,18 @@
 !
 !  Usually this is overkill and not necessary, but is here as an option for testing.
 
-    subroutine exact_linesearch(me,xold,p,fjac,x,f,fvec)
+    subroutine exact_linesearch(me,xold,p,x,f,fvec,fjac,fjac_sparse)
 
     implicit none
 
     class(nlesolver_type),intent(inout) :: me
     real(wp),dimension(me%n),intent(in) :: xold      !! previous value of `x`
     real(wp),dimension(me%n),intent(in) :: p         !! search direction
-    real(wp),dimension(me%m,me%n),intent(in) :: fjac !! jacobian matrix
     real(wp),dimension(me%n),intent(out) :: x        !! new `x`
     real(wp),intent(inout) :: f                      !! magnitude of `fvec`
     real(wp),dimension(me%m),intent(inout) :: fvec   !! function vector
+    real(wp),dimension(:,:),intent(in),optional :: fjac !! jacobian matrix [dense]
+    real(wp),dimension(:),intent(in),optional :: fjac_sparse !! jacobian matrix [sparse]
 
     real(wp),dimension(:),allocatable :: xnew !! used in [[func_for_fmin]]
     real(wp) :: alpha_min
@@ -1032,17 +1043,18 @@ contains
 !  A simple search that just evaluates the function at a specified
 !  number of points and picks the one with the minimum function value.
 
-    subroutine fixed_point_linesearch(me,xold,p,fjac,x,f,fvec)
+    subroutine fixed_point_linesearch(me,xold,p,x,f,fvec,fjac,fjac_sparse)
 
     implicit none
 
     class(nlesolver_type),intent(inout) :: me
     real(wp),dimension(me%n),intent(in) :: xold      !! previous value of `x`
     real(wp),dimension(me%n),intent(in) :: p         !! search direction
-    real(wp),dimension(me%m,me%n),intent(in) :: fjac !! jacobian matrix
     real(wp),dimension(me%n),intent(out) :: x        !! new `x`
     real(wp),intent(inout) :: f                      !! magnitude of `fvec`
     real(wp),dimension(me%m),intent(inout) :: fvec   !! function vector
+    real(wp),dimension(:,:),intent(in),optional :: fjac !! jacobian matrix [dense]
+    real(wp),dimension(:),intent(in),optional :: fjac_sparse !! jacobian matrix [sparse]
 
     integer :: i !! counter
     integer :: n_points !! number of points to compute
