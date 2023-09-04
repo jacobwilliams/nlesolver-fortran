@@ -119,6 +119,9 @@
         integer  :: itnlim  = 100   !! max iterations
         integer  :: nout    = 0     !! output unit for printing
 
+        ! LUSOL parameters:
+        integer :: lusol_method = 0
+
         ! dense version:
         procedure(grad_func),pointer :: grad => null() !! user-supplied routine to compute the gradient of the function (dense version)
 
@@ -312,7 +315,8 @@
                     export_iteration,user_input_check,&
                     verbose,iunit,n_uphill_max,n_intervals,&
                     sparsity_mode,irow,icol,&
-                    atol,btol,conlim,itnlim,nout )
+                    atol,btol,conlim,itnlim,nout,&
+                    lusol_method )
 
     implicit none
 
@@ -369,6 +373,7 @@
                                                  !! condition number of the matrix `Abar`.
     integer,intent(in),optional       :: itnlim  !! LSQR: max iterations
     integer,intent(in),optional       :: nout    !! LSQR: output unit for printing
+    integer,intent(in),optional       :: lusol_method
 
     logical :: status_ok !! true if there were no errors
 
@@ -481,6 +486,9 @@
             if (present(itnlim)) me%itnlim = itnlim
             if (present(nout))   me%nout   = nout
 
+            ! LUSOL method
+            if (present(nout)) me%lusol_method = lusol_method
+
             ! now now, some options are not available for sparse mode
             !...see if this is possible in sparse mode... TODO
             if (me%use_broyden) then
@@ -504,7 +512,7 @@
     subroutine nlesolver_solver(me,x)
 
     use lsqr_module,     only: lsqr_solver_ez
-    use lusol_ez_module, only: solve
+    use lusol_ez_module, only: solve, lusol_settings
 
     implicit none
 
@@ -534,6 +542,7 @@
     integer                             :: broyden_counter !! number of times the broyden update has been used
     integer                             :: alloc_stat      !! allocation status flag
     type(lsqr_solver_ez) :: sparse_solver  !! sparse LSQR solver class
+    type(lusol_settings) :: lusol_options
 
     if (me%istat<0) return ! class was not initialized properly
 
@@ -686,8 +695,12 @@
                 end select
             case (3)
                 ! use lusol solver
-                call solve(me%n,me%m,me%n_nonzeros,me%irow,me%icol,fjac_sparse,rhs,p,info)
-                !info = 0 ! just a test
+                lusol_options%method = me%lusol_method
+                    ! 0    =>  TPP: Threshold Partial   Pivoting.
+                    ! 1    =>  TRP: Threshold Rook      Pivoting.
+                    ! 2    =>  TCP: Threshold Complete  Pivoting.
+                call solve(me%n,me%m,me%n_nonzeros,me%irow,me%icol,fjac_sparse,rhs,p,info,&
+                            settings=lusol_options)
             end select
 
             ! check for errors:
