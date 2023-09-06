@@ -118,6 +118,7 @@
                                     !! condition number of the matrix `Abar`.
         integer  :: itnlim  = 100   !! max iterations
         integer  :: nout    = 0     !! output unit for printing
+        real(wp) :: damp    = zero  !! damp parameter for LSQR
 
         ! LUSOL parameters:
         integer :: lusol_method = 0
@@ -315,7 +316,7 @@
                     export_iteration,user_input_check,&
                     verbose,iunit,n_uphill_max,n_intervals,&
                     sparsity_mode,irow,icol,&
-                    atol,btol,conlim,itnlim,nout,&
+                    atol,btol,conlim,damp,itnlim,nout,&
                     lusol_method )
 
     implicit none
@@ -371,6 +372,7 @@
     real(wp),intent(in),optional      :: btol    !! LSQR: relative error in definition of `b`
     real(wp),intent(in),optional      :: conlim  !! LSQR: An upper limit on `cond(Abar)`, the apparent
                                                  !! condition number of the matrix `Abar`.
+    real(wp),intent(in),optional      :: damp    !! LSQR: damp factor
     integer,intent(in),optional       :: itnlim  !! LSQR: max iterations
     integer,intent(in),optional       :: nout    !! LSQR: output unit for printing
     integer,intent(in),optional       :: lusol_method
@@ -483,6 +485,7 @@
             if (present(atol))   me%atol   = atol
             if (present(btol))   me%btol   = btol
             if (present(conlim)) me%conlim = conlim
+            if (present(damp))   me%damp   = damp
             if (present(itnlim)) me%itnlim = itnlim
             if (present(nout))   me%nout   = nout
 
@@ -679,7 +682,7 @@
                                               conlim = me%conlim, &
                                               itnlim = me%itnlim, &
                                               nout   = me%nout)
-                call sparse_solver%solve(rhs,0.0_wp,p,info) ! solve the linear system
+                call sparse_solver%solve(rhs,me%damp,p,info) ! solve the linear system
                 ! check convergence:
                 select case (info)
                 case(4)

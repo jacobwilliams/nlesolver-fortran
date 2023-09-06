@@ -108,7 +108,8 @@
                                 verbose = verbose,&
                                 sparsity_mode = 3,&
                                 irow = irow,&
-                                icol = icol)
+                                icol = icol,&
+                                damp = 1.0_wp)
         call solver%status(istat, message)
         write(*,'(I3,1X,A)') istat, message
         if (istat /= 0) error stop
