@@ -9,6 +9,7 @@ A work in progress.
 
 ### Status
 
+[![Language](https://img.shields.io/badge/-Fortran-734f96?logo=fortran&logoColor=white)](https://github.com/topics/fortran)
 [![CI Status](https://github.com/jacobwilliams/nlesolver-fortran/actions/workflows/CI.yml/badge.svg)](https://github.com/jacobwilliams/nlesolver-fortran/actions)
 [![GitHub release](https://img.shields.io/github/release/jacobwilliams/nlesolver-fortran.svg)](https://github.com/jacobwilliams/nlesolver-fortran/releases/latest)
 [![codecov](https://codecov.io/gh/jacobwilliams/nlesolver-fortran/branch/master/graph/badge.svg)](https://codecov.io/gh/jacobwilliams/nlesolver-fortran)
