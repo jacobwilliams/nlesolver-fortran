@@ -600,7 +600,7 @@ must be specified with <code>icol</code> and be the same length (<code>n_nonzero
             <td>::</td>
             <td><strong>atol</strong></td>
             <td>
-                <p>LSQR: relative error in definition of <code>A</code></p>
+                <p><code>LSQR</code>: relative error in definition of <code>A</code></p>
             </td>
         </tr>
         <tr>
@@ -615,7 +615,7 @@ must be specified with <code>icol</code> and be the same length (<code>n_nonzero
             <td>::</td>
             <td><strong>btol</strong></td>
             <td>
-                <p>LSQR: relative error in definition of <code>b</code></p>
+                <p><code>LSQR</code>: relative error in definition of <code>b</code></p>
             </td>
         </tr>
         <tr>
@@ -630,7 +630,8 @@ must be specified with <code>icol</code> and be the same length (<code>n_nonzero
             <td>::</td>
             <td><strong>conlim</strong></td>
             <td>
-                <p>condition number of the matrix <code>Abar</code>.</p>
+                <p><code>LSQR</code>: An upper limit on <code>cond(Abar)</code>, the apparent
+condition number of the matrix <code>Abar</code>.</p>
             </td>
         </tr>
         <tr>
@@ -645,7 +646,7 @@ must be specified with <code>icol</code> and be the same length (<code>n_nonzero
             <td>::</td>
             <td><strong>damp</strong></td>
             <td>
-                <p>LSQR: damp factor</p>
+                <p><code>LSQR</code>: damp factor</p>
             </td>
         </tr>
         <tr>
@@ -660,7 +661,7 @@ must be specified with <code>icol</code> and be the same length (<code>n_nonzero
             <td>::</td>
             <td><strong>itnlim</strong></td>
             <td>
-                <p>LSQR: max iterations</p>
+                <p><code>LSQR</code>: max iterations</p>
             </td>
         </tr>
         <tr>
@@ -675,7 +676,7 @@ must be specified with <code>icol</code> and be the same length (<code>n_nonzero
             <td>::</td>
             <td><strong>nout</strong></td>
             <td>
-                <p>LSQR: output unit for printing</p>
+                <p><code>LSQR</code>: output unit for printing</p>
             </td>
         </tr>
         <tr>
@@ -893,13 +894,13 @@ implementation in a submodule of an interface in a parent module.
 <span class="w">                                                     </span><span class="c">!! must be specified with `icol` and be the same length (`n_nonzeros`).</span>
 <span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">icol</span><span class="w"> </span><span class="c">!! sparsity pattern nonzero elements column indices</span>
 <span class="w">                                                     </span><span class="c">!! must be specified with `icol` and be the same length (`n_nonzeros`).</span>
-<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">atol</span><span class="w">    </span><span class="c">!! LSQR: relative error in definition of `A`</span>
-<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">btol</span><span class="w">    </span><span class="c">!! LSQR: relative error in definition of `b`</span>
-<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">conlim</span><span class="w">  </span><span class="c">!! LSQR: An upper limit on `cond(Abar)`, the apparent</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">atol</span><span class="w">    </span><span class="c">!! `LSQR`: relative error in definition of `A`</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">btol</span><span class="w">    </span><span class="c">!! `LSQR`: relative error in definition of `b`</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">conlim</span><span class="w">  </span><span class="c">!! `LSQR`: An upper limit on `cond(Abar)`, the apparent</span>
 <span class="w">                                                 </span><span class="c">!! condition number of the matrix `Abar`.</span>
-<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">damp</span><span class="w">    </span><span class="c">!! LSQR: damp factor</span>
-<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">itnlim</span><span class="w">  </span><span class="c">!! LSQR: max iterations</span>
-<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">nout</span><span class="w">    </span><span class="c">!! LSQR: output unit for printing</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">damp</span><span class="w">    </span><span class="c">!! `LSQR`: damp factor</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">itnlim</span><span class="w">  </span><span class="c">!! `LSQR`: max iterations</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">nout</span><span class="w">    </span><span class="c">!! `LSQR`: output unit for printing</span>
 <span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">lusol_method</span>
 
 <span class="w">    </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status_ok</span><span class="w"> </span><span class="c">!! true if there were no errors</span>
