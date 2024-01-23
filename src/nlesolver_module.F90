@@ -97,10 +97,37 @@
         integer     :: istat            = -999          !! latest status message
 
         procedure(func_func),pointer       :: func             => null() !! user-supplied routine to compute the function
-        procedure(grad_func),pointer       :: grad             => null() !! user-supplied routine tocompute the gradient of the function
         procedure(export_func),pointer     :: export_iteration => null() !! user-supplied routine to export iterations
         procedure(wait_func),pointer       :: user_input_check => null() !! user-supplied routine to enable user to stop iterations
         procedure(linesearch_func),pointer :: linesearch       => null() !! line search method (determined by `step_mode` user input in [[nlesolver_type:initialize]])
+
+        ! sparsity options:
+        integer :: sparsity_mode = 1  !! sparsity mode:
+                                      !!
+                                      !! * 1 - assume dense (use dense solver)
+                                      !! * 2 - assume sparse (use LSQR sparse solver).
+                                      !! * 3 - assume sparse (use LUSOL sparse solver).
+        integer :: n_nonzeros = -1 !! number of nonzero Jacobian elements (used for `sparsity_mode > 1`)
+        integer,dimension(:),allocatable :: irow !! sparsity pattern nonzero elements row indices.
+        integer,dimension(:),allocatable :: icol !! sparsity pattern nonzero elements column indices
+
+        ! LSQR parameters:
+        real(wp) :: atol    = zero  !! relative error in definition of `A`
+        real(wp) :: btol    = zero  !! relative error in definition of `b`
+        real(wp) :: conlim  = zero  !! An upper limit on `cond(Abar)`, the apparent
+                                    !! condition number of the matrix `Abar`.
+        integer  :: itnlim  = 100   !! max iterations
+        integer  :: nout    = 0     !! output unit for printing
+        real(wp) :: damp    = zero  !! damp parameter for LSQR
+
+        ! LUSOL parameters:
+        integer :: lusol_method = 0
+
+        ! dense version:
+        procedure(grad_func),pointer :: grad => null() !! user-supplied routine to compute the gradient of the function (dense version)
+
+        ! sparse version:
+        procedure(grad_func_sparse),pointer :: grad_sparse => null() !! user-supplied routine to compute the gradient of the function (sparse version)
 
         contains
 
@@ -128,13 +155,22 @@
         end subroutine func_func
 
         subroutine grad_func(me,x,g)
-            !! compute the gradient of the function (Jacobian):
+            !! compute the gradient of the function (Jacobian). Dense version.
             import :: wp,nlesolver_type
             implicit none
             class(nlesolver_type),intent(inout) :: me
             real(wp),dimension(:),intent(in)    :: x
             real(wp),dimension(:,:),intent(out) :: g
         end subroutine grad_func
+
+        subroutine grad_func_sparse(me,x,g)
+            !! compute the gradient of the function (Jacobian). Sparse version.
+            import :: wp,nlesolver_type
+            implicit none
+            class(nlesolver_type),intent(inout) :: me
+            real(wp),dimension(:),intent(in)  :: x
+            real(wp),dimension(:),intent(out) :: g !! sparse jacobian. length is `n_nonzeros`
+        end subroutine grad_func_sparse
 
         subroutine export_func(me,x,f,iter)
             !! export an iteration:
@@ -154,7 +190,7 @@
             logical,intent(out)                 :: user_stop
         end subroutine wait_func
 
-        subroutine linesearch_func(me,xold,p,fjac,x,f,fvec)
+        subroutine linesearch_func(me,xold,p,x,f,fvec,fjac,fjac_sparse)
             !! line search method. Note that not all inputs/outputs are
             !! used by all methods.
             import :: wp,nlesolver_type
@@ -162,12 +198,13 @@
             class(nlesolver_type),intent(inout) :: me
             real(wp),dimension(me%n),intent(in) :: xold      !! previous value of `x`
             real(wp),dimension(me%n),intent(in) :: p         !! search direction
-            real(wp),dimension(me%m,me%n),intent(in) :: fjac !! jacobian matrix
             real(wp),dimension(me%n),intent(out) :: x        !! new `x`
             real(wp),intent(inout) :: f                      !! input: current magnitude of `fvec`,
                                                              !! output: new value of `f`
             real(wp),dimension(me%m),intent(inout) :: fvec   !! input: current function vector,
                                                              !! output: new function vector
+            real(wp),dimension(:,:),intent(in),optional :: fjac !! jacobian matrix [dense]
+            real(wp),dimension(:),intent(in),optional :: fjac_sparse !! jacobian matrix [sparse]
         end subroutine linesearch_func
 
     end interface
@@ -237,6 +274,8 @@
 !  * -11  -- Error: gradient routine is not associated
 !  * -12  -- Error: backtracking linesearch c must be in range (0, 1)
 !  * -13  -- Error: backtracking linesearch tau must be in range (0, 1)
+!  * -14  -- Error: must specify grad_sparse, irow, and icol for sparsity_mode > 1
+!  * -15  -- Error: irow and icol must be the same length
 !  * -999 -- Error: class has not been initialized
 !  * 0    -- Class successfully initialized in [[nlesolver_type:initialize]]
 !  * 1    -- Required accuracy achieved
@@ -272,9 +311,13 @@
     subroutine initialize_nlesolver_variables(me,&
                     n,m,max_iter,tol,alpha,alpha_min,alpha_max,tolx,fmin_tol,&
                     backtrack_c,backtrack_tau,&
-                    use_broyden,broyden_update_n,step_mode,func,grad,&
+                    use_broyden,broyden_update_n,step_mode,&
+                    func,grad,grad_sparse,&
                     export_iteration,user_input_check,&
-                    verbose,iunit,n_uphill_max,n_intervals )
+                    verbose,iunit,n_uphill_max,n_intervals,&
+                    sparsity_mode,irow,icol,&
+                    atol,btol,conlim,damp,itnlim,nout,&
+                    lusol_method )
 
     implicit none
 
@@ -284,7 +327,8 @@
     integer,intent(in)                :: max_iter           !! maximum number of iterations
     real(wp),intent(in)               :: tol                !! function convergence tolerance
     procedure(func_func)              :: func               !! computes the function vector
-    procedure(grad_func)              :: grad               !! computes the jacobian
+    procedure(grad_func),optional        :: grad            !! computes the jacobian [required for dense mode: `sparsity_mode=1`]
+    procedure(grad_func_sparse),optional :: grad_sparse     !! computes the jacobian [required for sparse mode: `sparsity_mode>1`]
     integer,intent(in),optional       :: step_mode          !! step mode:
                                                             !!
                                                             !!  * 1 = use the specified `alpha` (0,1]
@@ -312,6 +356,27 @@
                                                             !! to allow where the value of `f` increases
     integer,intent(in),optional       :: n_intervals        !! number of intervals for fixed point linesearch
 
+    integer,intent(in),optional :: sparsity_mode !! sparsity mode:
+                                                 !!
+                                                 !! * 1 - assume dense (use dense solver)
+                                                 !!   Must specify `grad` for this mode.
+                                                 !! * 2 - assume sparse (use LSQR sparse solver).
+                                                 !! * 3 - assume sparse (use LUSOL sparse solver).
+                                                 !! Must also specify `grad_sparse` and the `irow` and `icol`
+                                                 !! sparsity pattern for `mode>1`.
+    integer,dimension(:),intent(in),optional :: irow !! sparsity pattern nonzero elements row indices.
+                                                     !! must be specified with `icol` and be the same length (`n_nonzeros`).
+    integer,dimension(:),intent(in),optional :: icol !! sparsity pattern nonzero elements column indices
+                                                     !! must be specified with `icol` and be the same length (`n_nonzeros`).
+    real(wp),intent(in),optional      :: atol    !! LSQR: relative error in definition of `A`
+    real(wp),intent(in),optional      :: btol    !! LSQR: relative error in definition of `b`
+    real(wp),intent(in),optional      :: conlim  !! LSQR: An upper limit on `cond(Abar)`, the apparent
+                                                 !! condition number of the matrix `Abar`.
+    real(wp),intent(in),optional      :: damp    !! LSQR: damp factor
+    integer,intent(in),optional       :: itnlim  !! LSQR: max iterations
+    integer,intent(in),optional       :: nout    !! LSQR: output unit for printing
+    integer,intent(in),optional       :: lusol_method
+
     logical :: status_ok !! true if there were no errors
 
     status_ok = .true.
@@ -322,7 +387,8 @@
     me%max_iter = abs(max_iter)
     me%tol      = abs(tol)
     me%func     => func
-    me%grad     => grad
+    if (present(grad)) me%grad               => grad
+    if (present(grad_sparse)) me%grad_sparse => grad_sparse
 
     !optional:
 
@@ -394,6 +460,47 @@
         return
     end if
 
+    ! initialize:
+    me%n_nonzeros = -1 ! not used
+    if (allocated(me%irow)) deallocate(me%irow)
+    if (allocated(me%icol)) deallocate(me%icol)
+
+    if (present(sparsity_mode)) then
+        me%sparsity_mode = sparsity_mode
+        if (sparsity_mode>1) then ! sparse solver method
+            if (present(irow) .and. present(icol) .and. present(grad_sparse)) then
+                if (size(irow) == size(icol)) then
+                    me%n_nonzeros = size(irow)
+                    me%irow = irow
+                    me%icol = icol
+                else
+                    call me%set_status(istat = -15, string = 'Error: irow and icol must be the same length')
+                    return
+                end if
+            else
+                call me%set_status(istat = -14, string = 'Error: must specify grad_sparse, irow, and icol for sparsity_mode > 1')
+                return
+            end if
+            ! LSQR optional inputs:
+            if (present(atol))   me%atol   = atol
+            if (present(btol))   me%btol   = btol
+            if (present(conlim)) me%conlim = conlim
+            if (present(damp))   me%damp   = damp
+            if (present(itnlim)) me%itnlim = itnlim
+            if (present(nout))   me%nout   = nout
+
+            ! LUSOL method
+            if (present(nout)) me%lusol_method = lusol_method
+
+            ! now now, some options are not available for sparse mode
+            !...see if this is possible in sparse mode... TODO
+            if (me%use_broyden) then
+                call me%set_status(istat = -16, string = 'Error: broyden method not available for sparse solver')
+                return
+            end if
+        end if
+    end if
+
     if (status_ok) then
         call me%set_status(istat = 0, string = 'Class successfully initialized')
     end if
@@ -407,13 +514,17 @@
 
     subroutine nlesolver_solver(me,x)
 
+    use lsqr_module,     only: lsqr_solver_ez
+    use lusol_ez_module, only: solve, lusol_settings
+
     implicit none
 
     class(nlesolver_type),intent(inout) :: me
     real(wp),dimension(:),intent(inout) :: x
 
     real(wp),dimension(:)  ,allocatable :: fvec            !! function vector
-    real(wp),dimension(:,:),allocatable :: fjac            !! jacobian matrix
+    real(wp),dimension(:,:),allocatable :: fjac            !! jacobian matrix [dense]
+    real(wp),dimension(:),  allocatable :: fjac_sparse     !! jacobian matrix [sparse]
     real(wp),dimension(:)  ,allocatable :: rhs             !! linear system right-hand side
     real(wp),dimension(:)  ,allocatable :: p               !! search direction
     real(wp),dimension(:)  ,allocatable :: xold            !! previous value of `x`
@@ -433,6 +544,8 @@
                                                            !! jacobian routine instead
     integer                             :: broyden_counter !! number of times the broyden update has been used
     integer                             :: alloc_stat      !! allocation status flag
+    type(lsqr_solver_ez) :: sparse_solver  !! sparse LSQR solver class
+    type(lusol_settings) :: lusol_options
 
     if (me%istat<0) return ! class was not initialized properly
 
@@ -440,7 +553,11 @@
         call me%set_status(istat = -10, string = 'Error: function routine is not associated')
         return
     end if
-    if (.not. associated(me%grad)) then
+    if (me%sparsity_mode==1 .and. .not. associated(me%grad)) then
+        call me%set_status(istat = -11, string = 'Error: gradient routine is not associated')
+        return
+    end if
+    if (me%sparsity_mode>1 .and. .not. associated(me%grad_sparse)) then
         call me%set_status(istat = -11, string = 'Error: gradient routine is not associated')
         return
     end if
@@ -454,7 +571,15 @@
     ! allocate the arrays:
     alloc_stat = 0
     if (alloc_stat==0) allocate(fvec     (me%m)      , stat=alloc_stat)
-    if (alloc_stat==0) allocate(fjac     (me%m,me%n) , stat=alloc_stat)
+
+    if (me%sparsity_mode==1) then
+        ! dense
+        if (alloc_stat==0) allocate(fjac (me%m,me%n) , stat=alloc_stat)
+    else
+        ! sparse
+        if (alloc_stat==0) allocate(fjac_sparse (me%n_nonzeros) , stat=alloc_stat)
+    end if
+
     if (alloc_stat==0) allocate(rhs      (me%m)      , stat=alloc_stat)
     if (alloc_stat==0) allocate(p        (me%n)      , stat=alloc_stat)
     if (alloc_stat==0) allocate(xold     (me%n)      , stat=alloc_stat)
@@ -525,13 +650,17 @@
                            transpose(delx))/delxmag2
 
                     broyden_counter = broyden_counter + 1
-
                 end if
                 prev_fjac = fjac
                 prev_fvec = fvec
             else
                 ! compute the jacobian:
-                call me%grad(x,fjac)
+                select case (me%sparsity_mode)
+                case (1)
+                    call me%grad(x,fjac)
+                case (2:)
+                    call me%grad_sparse(x,fjac_sparse)
+                end select
                 recompute_jac = .false.  ! for broyden
                 broyden_counter = 0
             end if
@@ -541,7 +670,41 @@
 
             ! compute the search direction p by solving linear system:
             rhs = -fvec ! RHS of the linear system
-            call linear_solver(me%m,me%n,fjac,rhs,p,info)
+            select case (me%sparsity_mode)
+            case (1)
+                ! use dense solver
+                call linear_solver(me%m,me%n,fjac,rhs,p,info)
+            case (2)
+                ! initialize the LSQR sparse solver
+                call sparse_solver%initialize(me%m,me%n,fjac_sparse,me%irow,me%icol,&
+                                              atol   = me%atol, &
+                                              btol   = me%btol, &
+                                              conlim = me%conlim, &
+                                              itnlim = me%itnlim, &
+                                              nout   = me%nout)
+                call sparse_solver%solve(rhs,me%damp,p,info) ! solve the linear system
+                ! check convergence:
+                select case (info)
+                case(4)
+                    call me%set_status(istat = -1004, &
+                                string = 'LSQR Error: The system appears to be ill-conditioned. istop =', i=info)
+                    exit
+                case(5)
+                    call me%set_status(istat = -1005, &
+                                string = 'LSQR Error: The iteration limit was reached. istop =', i=info)
+                    exit
+                case default
+                    info = 0
+                end select
+            case (3)
+                ! use lusol solver
+                lusol_options%method = me%lusol_method
+                    ! 0    =>  TPP: Threshold Partial   Pivoting.
+                    ! 1    =>  TRP: Threshold Rook      Pivoting.
+                    ! 2    =>  TCP: Threshold Complete  Pivoting.
+                call solve(me%n,me%m,me%n_nonzeros,me%irow,me%icol,fjac_sparse,rhs,p,info,&
+                            settings=lusol_options)
+            end select
 
             ! check for errors:
             if (info /= 0) then
@@ -552,7 +715,7 @@
             else
 
                 ! next step, using the specified method:
-                call me%linesearch(xold,p,fjac,x,f,fvec)
+                call me%linesearch(xold,p,x,f,fvec,fjac,fjac_sparse)
 
                 ! keep track of the number of steps in the "uphill" direction:
                 if (f>fold) then
@@ -720,17 +883,18 @@
 !>
 !  Take a simple step in the search direction of `p * alpha`.
 
-    subroutine simple_step(me,xold,p,fjac,x,f,fvec)
+    subroutine simple_step(me,xold,p,x,f,fvec,fjac,fjac_sparse)
 
     implicit none
 
     class(nlesolver_type),intent(inout) :: me
     real(wp),dimension(me%n),intent(in) :: xold      !! previous value of `x`
     real(wp),dimension(me%n),intent(in) :: p         !! search direction
-    real(wp),dimension(me%m,me%n),intent(in) :: fjac !! jacobian matrix
     real(wp),dimension(me%n),intent(out) :: x        !! new `x`
     real(wp),intent(inout) :: f                      !! magnitude of `fvec`
     real(wp),dimension(me%m),intent(inout) :: fvec   !! function vector
+    real(wp),dimension(:,:),intent(in),optional :: fjac !! jacobian matrix [dense]
+    real(wp),dimension(:),intent(in),optional :: fjac_sparse !! jacobian matrix [sparse]
 
     x = xold + p * me%alpha
 
@@ -747,18 +911,21 @@
 !
 !### See also
 !  * [Backtracking line search](https://en.wikipedia.org/wiki/Backtracking_line_search)
+!
+!@note Either `fjac` or `fjac_sparse` should be present.
 
-    subroutine backtracking_linesearch(me,xold,p,fjac,x,f,fvec)
+    subroutine backtracking_linesearch(me,xold,p,x,f,fvec,fjac,fjac_sparse)
 
     implicit none
 
     class(nlesolver_type),intent(inout) :: me
     real(wp),dimension(me%n),intent(in) :: xold      !! previous value of `x`
     real(wp),dimension(me%n),intent(in) :: p         !! search direction
-    real(wp),dimension(me%m,me%n),intent(in) :: fjac !! jacobian matrix
     real(wp),dimension(me%n),intent(out) :: x        !! new `x`
     real(wp),intent(inout) :: f                      !! magnitude of `fvec`
     real(wp),dimension(me%m),intent(inout) :: fvec   !! function vector
+    real(wp),dimension(:,:),intent(in),optional :: fjac !! jacobian matrix [dense]
+    real(wp),dimension(:),intent(in),optional :: fjac_sparse !! jacobian matrix [sparse]
 
     integer    :: i                  !! counter
     real(wp)   :: slope              !! local slope of the function of `alpha` along the search direction used for line search
@@ -778,9 +945,17 @@
     ! compute the gradient of the function to be minimized
     ! (which in this case is 1/2 the norm of fvec). Use the chain
     ! rule and the Jacobian matrix already computed.
-    do i=1,me%n
-        gradf(i) = dot_product(fvec,fjac(:,i))
-    end do
+    if (present(fjac)) then
+        ! dense
+        do i=1,me%n
+            gradf(i) = dot_product(fvec,fjac(:,i))
+        end do
+    else
+        ! sparse
+        do i=1,me%n
+            gradf(i) = dot_product(fvec,pack(fjac_sparse,mask=me%icol==i))
+        end do
+    end if
     slope = dot_product(p, gradf)
     t = -me%c * slope
 
@@ -839,17 +1014,18 @@
 !
 !  Usually this is overkill and not necessary, but is here as an option for testing.
 
-    subroutine exact_linesearch(me,xold,p,fjac,x,f,fvec)
+    subroutine exact_linesearch(me,xold,p,x,f,fvec,fjac,fjac_sparse)
 
     implicit none
 
     class(nlesolver_type),intent(inout) :: me
     real(wp),dimension(me%n),intent(in) :: xold      !! previous value of `x`
     real(wp),dimension(me%n),intent(in) :: p         !! search direction
-    real(wp),dimension(me%m,me%n),intent(in) :: fjac !! jacobian matrix
     real(wp),dimension(me%n),intent(out) :: x        !! new `x`
     real(wp),intent(inout) :: f                      !! magnitude of `fvec`
     real(wp),dimension(me%m),intent(inout) :: fvec   !! function vector
+    real(wp),dimension(:,:),intent(in),optional :: fjac !! jacobian matrix [dense]
+    real(wp),dimension(:),intent(in),optional :: fjac_sparse !! jacobian matrix [sparse]
 
     real(wp),dimension(:),allocatable :: xnew !! used in [[func_for_fmin]]
     real(wp) :: alpha_min
@@ -892,17 +1068,18 @@ contains
 !  A simple search that just evaluates the function at a specified
 !  number of points and picks the one with the minimum function value.
 
-    subroutine fixed_point_linesearch(me,xold,p,fjac,x,f,fvec)
+    subroutine fixed_point_linesearch(me,xold,p,x,f,fvec,fjac,fjac_sparse)
 
     implicit none
 
     class(nlesolver_type),intent(inout) :: me
     real(wp),dimension(me%n),intent(in) :: xold      !! previous value of `x`
     real(wp),dimension(me%n),intent(in) :: p         !! search direction
-    real(wp),dimension(me%m,me%n),intent(in) :: fjac !! jacobian matrix
     real(wp),dimension(me%n),intent(out) :: x        !! new `x`
     real(wp),intent(inout) :: f                      !! magnitude of `fvec`
     real(wp),dimension(me%m),intent(inout) :: fvec   !! function vector
+    real(wp),dimension(:,:),intent(in),optional :: fjac !! jacobian matrix [dense]
+    real(wp),dimension(:),intent(in),optional :: fjac_sparse !! jacobian matrix [sparse]
 
     integer :: i !! counter
     integer :: n_points !! number of points to compute
