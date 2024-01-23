@@ -20,10 +20,7 @@ A work in progress.
   * Is object-oriented.
   * Works with square, under-determined, or over-determined systems.
   * Three different methods to solve the linear system:
-    1. [LAPACK](https://www.netlib.org/lapack/) routines (`dgesv` or `dgels`) for dense systems:
-       * if `n=m`,  uses `dgesv` (LU decomposition)
-       * if `n/=m`, uses `dgels` (if `m>n` uses QR factorization,
-         if `m<n` uses LQ factorization)
+    1. [LAPACK](https://www.netlib.org/lapack/) routines (`dgesv` or `dgels`) for dense systems: If `n=m`, uses `dgesv` (LU decomposition). If `n/=m`, uses `dgels` (if `m>n` uses QR factorization, if `m<n` uses LQ factorization).
     2. [lsqr](https://github.com/jacobwilliams/LSQR) -- a conjugate-gradient type method for solving sparse linear equations and sparse least-squares problems.
     3. [lusol](https://github.com/jacobwilliams/lusol) -- A sparse LU factorization for square and rectangular matrices, with Bartels-Golub-Reid updates for column replacement and other rank-1 modifications.
   * Has a Broyden update option.
