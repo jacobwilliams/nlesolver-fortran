@@ -39,7 +39,9 @@
     module nlesolver_module
 
     use iso_fortran_env
-    use fmin_module, only: fmin
+    use fmin_module,     only: fmin
+    use lsqr_module,     only: lsqr_solver_ez
+    use lusol_ez_module, only: solve, lusol_settings
 
     implicit none
 
@@ -199,10 +201,10 @@
             real(wp),dimension(me%n),intent(in) :: xold      !! previous value of `x`
             real(wp),dimension(me%n),intent(in) :: p         !! search direction
             real(wp),dimension(me%n),intent(out) :: x        !! new `x`
-            real(wp),intent(inout) :: f                      !! input: current magnitude of `fvec`,
-                                                             !! output: new value of `f`
-            real(wp),dimension(me%m),intent(inout) :: fvec   !! input: current function vector,
-                                                             !! output: new function vector
+            real(wp),intent(inout) :: f                      !! * input: current magnitude of `fvec`,
+                                                             !! * output: new value of `f`
+            real(wp),dimension(me%m),intent(inout) :: fvec   !! * input: current function vector,
+                                                             !! * output: new function vector
             real(wp),dimension(:,:),intent(in),optional :: fjac !! jacobian matrix [dense]
             real(wp),dimension(:),intent(in),optional :: fjac_sparse !! jacobian matrix [sparse]
         end subroutine linesearch_func
@@ -368,13 +370,13 @@
                                                      !! must be specified with `icol` and be the same length (`n_nonzeros`).
     integer,dimension(:),intent(in),optional :: icol !! sparsity pattern nonzero elements column indices
                                                      !! must be specified with `icol` and be the same length (`n_nonzeros`).
-    real(wp),intent(in),optional      :: atol    !! LSQR: relative error in definition of `A`
-    real(wp),intent(in),optional      :: btol    !! LSQR: relative error in definition of `b`
-    real(wp),intent(in),optional      :: conlim  !! LSQR: An upper limit on `cond(Abar)`, the apparent
+    real(wp),intent(in),optional      :: atol    !! `LSQR`: relative error in definition of `A`
+    real(wp),intent(in),optional      :: btol    !! `LSQR`: relative error in definition of `b`
+    real(wp),intent(in),optional      :: conlim  !! `LSQR`: An upper limit on `cond(Abar)`, the apparent
                                                  !! condition number of the matrix `Abar`.
-    real(wp),intent(in),optional      :: damp    !! LSQR: damp factor
-    integer,intent(in),optional       :: itnlim  !! LSQR: max iterations
-    integer,intent(in),optional       :: nout    !! LSQR: output unit for printing
+    real(wp),intent(in),optional      :: damp    !! `LSQR`: damp factor
+    integer,intent(in),optional       :: itnlim  !! `LSQR`: max iterations
+    integer,intent(in),optional       :: nout    !! `LSQR`: output unit for printing
     integer,intent(in),optional       :: lusol_method
 
     logical :: status_ok !! true if there were no errors
@@ -513,9 +515,6 @@
 !  Main solver.
 
     subroutine nlesolver_solver(me,x)
-
-    use lsqr_module,     only: lsqr_solver_ez
-    use lusol_ez_module, only: solve, lusol_settings
 
     implicit none
 

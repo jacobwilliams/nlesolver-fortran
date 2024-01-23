@@ -15,7 +15,9 @@ display: public
          private
 source: true
 graph: true
-extra_mods: iso_fortran_env:https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fFORTRAN_005fENV.html
-            fmin_module:https://jacobwilliams.github.io/fmin
+extra_mods: iso_fortran_env: https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fFORTRAN_005fENV.html
+            fmin_module: https://jacobwilliams.github.io/fmin
+            lusol_ez_module: https://jacobwilliams.github.io/lusol
+            lsqr_module: https://jacobwilliams.github.io/LSQR
 
 {!README.md!}
