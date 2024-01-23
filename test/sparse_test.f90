@@ -1,8 +1,8 @@
 !******************************************************************************************************
 !>
-!  Test of a small, square (`n=m`) problem.
+!  Test of a sparse problem.
 
-    program nlesolver_test_1
+    program sparse_test
 
     use nlesolver_module, wp => nlesolver_rk
 
@@ -27,10 +27,17 @@
     character(len=:),allocatable :: description
     real(wp) :: fmin_tol
 
+    integer,dimension(3),parameter :: icol = [1,2,2]
+    integer,dimension(3),parameter :: irow = [1,1,2]
+
     fmin_tol = 1.0e-2_wp ! don't need a tight tol for this
     n_intervals = 2
     alpha = 1.0_wp
 
+    write(*,*) ''
+    write(*,*) '***********************'
+    write(*,*) '* sparse_test         *'
+    write(*,*) '***********************'
     write(*,*) ''
     do i = 1, 8
 
@@ -41,6 +48,7 @@
             f_evals = 0
             description = 'Constant alpha'
         case(2)
+            cycle ! not yet supported
             step_mode = 1
             use_broyden = .true.
             f_evals = 0
@@ -51,6 +59,7 @@
             f_evals = 0
             description = 'Backtracking line search'
         case(4)
+            cycle ! not yet supported
             step_mode = 2
             use_broyden = .true.
             f_evals = 0
@@ -61,6 +70,7 @@
             f_evals = 0
             description = 'Exact line search'
         case(6)
+            cycle ! not yet supported
             step_mode = 3
             use_broyden = .true.
             f_evals = 0
@@ -71,6 +81,7 @@
             f_evals = 0
             description = 'Fixed point search'
         case(8)
+            cycle ! not yet supported
             step_mode = 4
             use_broyden = .true.
             f_evals = 0
@@ -88,13 +99,17 @@
                                 max_iter = max_iter, &
                                 tol = tol, &
                                 func = func, &
-                                grad = grad, &
+                                grad_sparse = grad_sparse, &
                                 step_mode = step_mode,&
                                 use_broyden = use_broyden,&
                                 export_iteration = export,&
                                 n_intervals = n_intervals, &
                                 fmin_tol = fmin_tol, &
-                                verbose = verbose)
+                                verbose = verbose,&
+                                sparsity_mode = 3,&
+                                irow = irow,&
+                                icol = icol,&
+                                damp = 1.0_wp)
         call solver%status(istat, message)
         write(*,'(I3,1X,A)') istat, message
         if (istat /= 0) error stop
@@ -143,6 +158,27 @@
 
     end subroutine grad
 
+    subroutine grad_sparse(me,x,g)
+        !! compute the gradient of the function (Jacobian):
+        implicit none
+        class(nlesolver_type),intent(inout) :: me
+        real(wp),dimension(:),intent(in)    :: x
+        real(wp),dimension(:),intent(out)   :: g
+
+        real(wp),dimension(m,n) :: g_dense
+
+        ! for this example, just convert the dense
+        ! jacobian to the sparse representation
+        call grad(me,x,g_dense)
+
+        g(1) = g_dense(1,1)
+        g(2) = g_dense(1,2)
+        g(3) = g_dense(2,2)
+
+        f_evals = f_evals + 2   ! to approximate forward diff derivatives
+
+    end subroutine grad_sparse
+
     subroutine export(me,x,f,iter)
         !! export an iteration:
         implicit none
@@ -156,5 +192,5 @@
     end subroutine export
 
 !******************************************************************************************************
-    end program nlesolver_test_1
+    end program sparse_test
 !******************************************************************************************************

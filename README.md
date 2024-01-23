@@ -18,15 +18,18 @@ A work in progress.
 
   * Is object-oriented.
   * Works with square, under-determined, or over-determined systems.
-  * Uses LAPACK routines (`dgesv` or `dgels`) to solve the linear system.
-     * if `n=m`,  uses `dgesv` (LU decomposition)
-     * if `n/=m`, uses `dgels` (if `m>n` uses QR factorization,
-       if `m<n` uses LQ factorization)
+  * Three different methods to solve the linear system:
+    1. [LAPACK](https://www.netlib.org/lapack/) routines (`dgesv` or `dgels`) for dense systems:
+       * if `n=m`,  uses `dgesv` (LU decomposition)
+       * if `n/=m`, uses `dgels` (if `m>n` uses QR factorization,
+         if `m<n` uses LQ factorization)
+    2. [lsqr](https://github.com/jacobwilliams/LSQR) -- a conjugate-gradient type method for solving sparse linear equations and sparse least-squares problems.
+    3. [lusol](https://github.com/jacobwilliams/lusol) -- A sparse LU factorization for square and rectangular matrices, with Bartels-Golub-Reid updates for column replacement and other rank-1 modifications.
   * Has a Broyden update option.
   * Has various line search options.
      * use a specified constant step size (0,1]
      * backtracking linesearch method
-     * exact linesearch method using `fmin` minimizer
+     * exact linesearch method using [fmin](https://github.com/jacobwilliams/fmin) minimizer
      * evaluate function at specified fixed points
 
 ### Compiling
@@ -65,7 +68,7 @@ Or to use a specific version:
 nlesolver-fortran = { git="https://github.com/jacobwilliams/nlesolver-fortran.git", tag="1.1.0" }
 ```
 
-Note that LAPACK is required to build. The [fmin](https://github.com/jacobwilliams/fmin) library is also a dependency (which will be automatically downloaded by fpm).
+Note that LAPACK is required to build. The [fmin](https://github.com/jacobwilliams/fmin), [lsqr](https://github.com/jacobwilliams/LSQR), and [lusol](https://github.com/jacobwilliams/lusol) libraries are also dependencies (which will be automatically downloaded by fpm).
 
 ### Documentation
 
@@ -77,4 +80,8 @@ Note that LAPACK is required to build. The [fmin](https://github.com/jacobwillia
 
 ### See also
 
-  * [MINPACK](https://github.com/fortran-lang/minpack)
+  * [MINPACK](https://github.com/fortran-lang/minpack) -- Modernized Minpack: for solving nonlinear equations and nonlinear least squares problems
+  * [LUSOL](https://web.stanford.edu/group/SOL/software/lusol/) Stanford University Systems Optimization Laboratory
+  * [qr_mumps](https://gitlab.com/qr_mumps/qr_mumps) -- a software package for the solution of sparse, linear
+  systems on multicore computers.
+
