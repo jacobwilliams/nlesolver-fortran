@@ -1022,7 +1022,7 @@
         end if
 
         if (((f - ftmp) / 2.0_wp >= alpha*t) .or. min_alpha_reached) then
-            if (min_alpha_reached) then
+            if (me%verbose .and. min_alpha_reached) then
                 write(me%iunit,'(A)') '        Minimum alpha reached'
             end if
             ! Armijo-Goldstein condition is satisfied
