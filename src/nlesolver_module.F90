@@ -123,7 +123,9 @@
         real(wp) :: damp    = zero  !! damp parameter for LSQR
 
         ! LUSOL parameters:
-        integer :: lusol_method = 0
+        integer :: lusol_method = 0 !! * 0 => TPP: Threshold Partial   Pivoting.
+                                    !! * 1 => TRP: Threshold Rook      Pivoting.
+                                    !! * 2 => TCP: Threshold Complete  Pivoting.
 
         ! dense version:
         procedure(grad_func),pointer :: grad => null() !! user-supplied routine to compute the gradient of the function (dense version)
@@ -377,7 +379,11 @@
     real(wp),intent(in),optional      :: damp    !! `LSQR`: damp factor
     integer,intent(in),optional       :: itnlim  !! `LSQR`: max iterations
     integer,intent(in),optional       :: nout    !! `LSQR`: output unit for printing
-    integer,intent(in),optional       :: lusol_method
+    integer,intent(in),optional       :: lusol_method !! `LUSOL` method:
+                                                      !!
+                                                      !! * 0 => TPP: Threshold Partial   Pivoting.
+                                                      !! * 1 => TRP: Threshold Rook      Pivoting.
+                                                      !! * 2 => TCP: Threshold Complete  Pivoting.
 
     logical :: status_ok !! true if there were no errors
 
@@ -738,9 +744,6 @@
             case (3)
                 ! use lusol solver
                 lusol_options%method = me%lusol_method
-                    ! 0    =>  TPP: Threshold Partial   Pivoting.
-                    ! 1    =>  TRP: Threshold Rook      Pivoting.
-                    ! 2    =>  TCP: Threshold Complete  Pivoting.
                 call solve(me%n,me%m,me%n_nonzeros,me%irow,me%icol,fjac_sparse,rhs,p,info,&
                            settings=lusol_options)
             end select
