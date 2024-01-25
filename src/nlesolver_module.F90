@@ -123,7 +123,9 @@
         real(wp) :: damp    = zero  !! damp parameter for LSQR
 
         ! LUSOL parameters:
-        integer :: lusol_method = 0
+        integer :: lusol_method = 0 !! * 0 => TPP: Threshold Partial   Pivoting.
+                                    !! * 1 => TRP: Threshold Rook      Pivoting.
+                                    !! * 2 => TCP: Threshold Complete  Pivoting.
 
         ! dense version:
         procedure(grad_func),pointer :: grad => null() !! user-supplied routine to compute the gradient of the function (dense version)
@@ -377,7 +379,11 @@
     real(wp),intent(in),optional      :: damp    !! `LSQR`: damp factor
     integer,intent(in),optional       :: itnlim  !! `LSQR`: max iterations
     integer,intent(in),optional       :: nout    !! `LSQR`: output unit for printing
-    integer,intent(in),optional       :: lusol_method
+    integer,intent(in),optional       :: lusol_method !! `LUSOL` method:
+                                                      !!
+                                                      !! * 0 => TPP: Threshold Partial   Pivoting.
+                                                      !! * 1 => TRP: Threshold Rook      Pivoting.
+                                                      !! * 2 => TCP: Threshold Complete  Pivoting.
 
     logical :: status_ok !! true if there were no errors
 
@@ -494,12 +500,6 @@
             ! LUSOL method
             if (present(nout)) me%lusol_method = lusol_method
 
-            ! now now, some options are not available for sparse mode
-            !...see if this is possible in sparse mode... TODO
-            if (me%use_broyden) then
-                call me%set_status(istat = -16, string = 'Error: broyden method not available for sparse solver')
-                return
-            end if
         end if
     end if
 
@@ -521,30 +521,34 @@
     class(nlesolver_type),intent(inout) :: me
     real(wp),dimension(:),intent(inout) :: x
 
-    real(wp),dimension(:)  ,allocatable :: fvec            !! function vector
-    real(wp),dimension(:,:),allocatable :: fjac            !! jacobian matrix [dense]
-    real(wp),dimension(:),  allocatable :: fjac_sparse     !! jacobian matrix [sparse]
-    real(wp),dimension(:)  ,allocatable :: rhs             !! linear system right-hand side
-    real(wp),dimension(:)  ,allocatable :: p               !! search direction
-    real(wp),dimension(:)  ,allocatable :: xold            !! previous value of `x`
-    real(wp),dimension(:)  ,allocatable :: prev_fvec       !! previous function vector
-    real(wp),dimension(:,:),allocatable :: prev_fjac       !! previous jacobian matrix
-    real(wp),dimension(:,:),allocatable :: delf            !! used for Broyden (rank 2 for `matmul`)
-    real(wp),dimension(:,:),allocatable :: delx            !! used for Broyden (rank 2 for `matmul`)
-    logical                             :: user_stop       !! user stop button flag
-    integer                             :: info            !! status flag from the [[linear_solver]]
-    integer                             :: iter            !! iteration counter
-    real(wp)                            :: f               !! magnitude of `fvec`
-    real(wp)                            :: fold            !! previous value of `f`
-    integer                             :: n_uphill        !! number of steps taken in the "uphill" direction
-                                                           !! (where `f` is increasing)
-    real(wp)                            :: delxmag2        !! used for Broyden
-    logical                             :: recompute_jac   !! if using Broyden, and we want to call the user
-                                                           !! jacobian routine instead
-    integer                             :: broyden_counter !! number of times the broyden update has been used
-    integer                             :: alloc_stat      !! allocation status flag
+    real(wp),dimension(:)  ,allocatable :: fvec             !! function vector
+    real(wp),dimension(:,:),allocatable :: fjac             !! jacobian matrix [dense]
+    real(wp),dimension(:),  allocatable :: fjac_sparse      !! jacobian matrix [sparse]
+    real(wp),dimension(:),  allocatable :: prev_fjac_sparse !! previous jacobian matrix [sparse]
+    real(wp),dimension(:)  ,allocatable :: rhs              !! linear system right-hand side
+    real(wp),dimension(:)  ,allocatable :: p                !! search direction
+    real(wp),dimension(:)  ,allocatable :: xold             !! previous value of `x`
+    real(wp),dimension(:)  ,allocatable :: prev_fvec        !! previous function vector
+    real(wp),dimension(:,:),allocatable :: prev_fjac        !! previous jacobian matrix
+    real(wp),dimension(:,:),allocatable :: delf             !! used for Broyden (rank 2 for `matmul`)
+    real(wp),dimension(:,:),allocatable :: delx             !! used for Broyden (rank 2 for `matmul`)
+    logical                             :: user_stop        !! user stop button flag
+    integer                             :: info             !! status flag from the [[linear_solver]]
+    integer                             :: iter             !! iteration counter
+    real(wp)                            :: f                !! magnitude of `fvec`
+    real(wp)                            :: fold             !! previous value of `f`
+    integer                             :: n_uphill         !! number of steps taken in the "uphill" direction
+                                                            !! (where `f` is increasing)
+    real(wp)                            :: delxmag2         !! used for Broyden
+    logical                             :: recompute_jac    !! if using Broyden, and we want to call the user
+                                                            !! jacobian routine instead
+    integer                             :: broyden_counter  !! number of times the broyden update has been used
+    integer                             :: alloc_stat       !! allocation status flag
     type(lsqr_solver_ez) :: sparse_solver  !! sparse LSQR solver class
     type(lusol_settings) :: lusol_options
+    integer :: i !! counter
+    integer,dimension(:),allocatable :: idx, index_array !! for sparse indexing
+    character(len=10) :: i_str !! string version of `i` for row string
 
     if (me%istat<0) return ! class was not initialized properly
 
@@ -577,6 +581,7 @@
     else
         ! sparse
         if (alloc_stat==0) allocate(fjac_sparse (me%n_nonzeros) , stat=alloc_stat)
+        if (me%use_broyden .and. alloc_stat==0) allocate(prev_fjac_sparse(me%n_nonzeros) , stat=alloc_stat)
     end if
 
     if (alloc_stat==0) allocate(rhs      (me%m)      , stat=alloc_stat)
@@ -585,7 +590,10 @@
     if (me%use_broyden) then
         ! only need these for broyden:
         if (alloc_stat==0) allocate(prev_fvec(me%m)      , stat=alloc_stat)
-        if (alloc_stat==0) allocate(prev_fjac(me%m,me%n) , stat=alloc_stat)
+        if (me%sparsity_mode/=1 .and. alloc_stat==0) then
+            allocate(prev_fjac(me%m,me%n) , stat=alloc_stat)
+            index_array = [(i, i=1,me%n_nonzeros)] ! an array to index the sparse jacobian elements
+        end if
         if (alloc_stat==0) allocate(delf     (me%m,1)    , stat=alloc_stat)
         if (alloc_stat==0) allocate(delx     (me%n,1)    , stat=alloc_stat)
     end if
@@ -626,7 +634,13 @@
             if (me%use_broyden .and. .not. recompute_jac) then
                 if (iter==1) then
                     ! always compute Jacobian on the first iteration
-                    call me%grad(x,fjac)
+                    !call me%grad(x,fjac)
+                    select case (me%sparsity_mode)
+                    case (1)
+                        call me%grad(x,fjac)
+                    case (2:)
+                        call me%grad_sparse(x,fjac_sparse)
+                    end select
                     broyden_counter = 0
                 else
                     ! and use Broyden update to estimate Jacobian
@@ -635,23 +649,55 @@
                     ! note: fvec was computed the last iteration
                     delx(:,1) = x - xold
                     delf(:,1) = fvec - prev_fvec
-                    delxmag2  = dot_product(delx(:,1),delx(:,1))
 
-                    if (delxmag2 < eps) then
-                        call me%set_status(istat = -8, &
-                                string = 'Error: Divide by zero when computing Broyden update')
-                        exit
+                    if (me%sparsity_mode==1) then ! dense
+
+                        delxmag2 = dot_product(delx(:,1),delx(:,1))
+                        if (delxmag2 < eps) then
+                            call me%set_status(istat = -8, &
+                                    string = 'Error: Divide by zero when computing Broyden update')
+                            exit
+                        end if
+
+                        ! Jacobian estimate:
+                        ! This is the equation from wikipedia : https://en.wikipedia.org/wiki/Broyden%27s_method
+                        fjac = prev_fjac + matmul((delf-matmul(prev_fjac,delx)), transpose(delx)) / delxmag2
+
+                        ! see also: eqn 4 in Schubert, which is different ...
+
+                    else ! using a sparse option
+
+                        ! Just a row-by-row version of the fjac equation above.
+                        ! see L.K. Schubert, 1970
+                        do i = 1, me%m
+
+                            idx = pack(index_array, mask = me%irow==i) ! the nonzero elements in this row
+                            if (size(idx)==0) cycle ! no non-zeros in this row
+
+                            associate (dx => delx(me%icol(idx),:)) ! nonzero x vec for this row
+                                delxmag2 = dot_product(dx(:,1),dx(:,1)) ! only those x's for this row
+                                if (delxmag2 < eps) then
+                                    write(i_str,'(I10)') i
+                                    call me%set_status(istat = -8, &
+                                            string = 'Error: Divide by zero when computing sparse Broyden update for row '//&
+                                            trim(adjustl(i_str)))
+                                    exit
+                                end if
+                                fjac_sparse(idx) = prev_fjac_sparse(idx) + &
+                                        matmul((delf(i,1)-matmul(prev_fjac_sparse(idx),dx)), transpose(dx)) / delxmag2
+                            end associate
+
+                        end do
+
                     end if
-
-                    ! Jacobian estimate:
-                    fjac = prev_fjac + &
-                           matmul((delf-matmul(prev_fjac,delx)),&
-                           transpose(delx))/delxmag2
-
                     broyden_counter = broyden_counter + 1
                 end if
-                prev_fjac = fjac
                 prev_fvec = fvec
+                if (me%sparsity_mode==1) then
+                    prev_fjac = fjac
+                else
+                    prev_fjac_sparse = fjac_sparse
+                end if
             else
                 ! compute the jacobian:
                 select case (me%sparsity_mode)
@@ -698,11 +744,8 @@
             case (3)
                 ! use lusol solver
                 lusol_options%method = me%lusol_method
-                    ! 0    =>  TPP: Threshold Partial   Pivoting.
-                    ! 1    =>  TRP: Threshold Rook      Pivoting.
-                    ! 2    =>  TCP: Threshold Complete  Pivoting.
                 call solve(me%n,me%m,me%n_nonzeros,me%irow,me%icol,fjac_sparse,rhs,p,info,&
-                            settings=lusol_options)
+                           settings=lusol_options)
             end select
 
             ! check for errors:
@@ -982,7 +1025,7 @@
         end if
 
         if (((f - ftmp) / 2.0_wp >= alpha*t) .or. min_alpha_reached) then
-            if (min_alpha_reached) then
+            if (me%verbose .and. min_alpha_reached) then
                 write(me%iunit,'(A)') '        Minimum alpha reached'
             end if
             ! Armijo-Goldstein condition is satisfied

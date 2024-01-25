@@ -48,7 +48,6 @@
             f_evals = 0
             description = 'Constant alpha'
         case(2)
-            cycle ! not yet supported
             step_mode = 1
             use_broyden = .true.
             f_evals = 0
@@ -59,7 +58,6 @@
             f_evals = 0
             description = 'Backtracking line search'
         case(4)
-            cycle ! not yet supported
             step_mode = 2
             use_broyden = .true.
             f_evals = 0
@@ -70,7 +68,6 @@
             f_evals = 0
             description = 'Exact line search'
         case(6)
-            cycle ! not yet supported
             step_mode = 3
             use_broyden = .true.
             f_evals = 0
@@ -81,7 +78,6 @@
             f_evals = 0
             description = 'Fixed point search'
         case(8)
-            cycle ! not yet supported
             step_mode = 4
             use_broyden = .true.
             f_evals = 0

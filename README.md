@@ -76,6 +76,11 @@ Note that LAPACK is required to build. The [fmin](https://github.com/jacobwillia
 
  * The NLESolver-Fortran source code and related files and documentation are distributed under a permissive free software [license](https://github.com/jacobwilliams/nlesolver-fortran/blob/master/LICENSE) (BSD-3).
 
+### References
+
+  * C. G. Broyden, "[A Class of Methods for Solving Nonlinear Simultaneous Equations](https://www.ams.org/journals/mcom/1965-19-092/S0025-5718-1965-0198670-6/S0025-5718-1965-0198670-6.pdf)", Math. Comp. 19 (1965), 577-593
+  * L. K. Schubert, "[Modification of a Quasi-Newton Method for Nonlinear Equations with a Sparse Jacobian](https://www.ams.org/journals/mcom/1970-24-109/S0025-5718-1970-0258276-9/S0025-5718-1970-0258276-9.pdf)", Mathematics of Computation, Vol. 24, No. 109 (Jan., 1970), pp. 27-30.
+
 ### See also
 
   * [MINPACK](https://github.com/fortran-lang/minpack) -- Modernized Minpack: for solving nonlinear equations and nonlinear least squares problems
