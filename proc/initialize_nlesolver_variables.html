@@ -77,7 +77,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title="25.0% of total for procedures.">144 statements</a>
+                 title="23.2% of total for procedures.">140 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -309,7 +309,7 @@
             <td>::</td>
             <td><strong>fmin_tol</strong></td>
             <td>
-                <p>convergence tolerance for <a>fmin</a> (used when <code>step_mode=3</code>)</p>
+                <p>convergence tolerance for <a href="../https:/jacobwilliams.github.io/fmin/proc/fmin.html">fmin</a> (used when <code>step_mode=3</code>)</p>
             </td>
         </tr>
         <tr>
@@ -691,7 +691,12 @@ condition number of the matrix <code>Abar</code>.</p>
             <td>::</td>
             <td><strong>lusol_method</strong></td>
             <td>
-                
+                <p><code>LUSOL</code> method:</p>
+<ul>
+<li>0 =&gt; TPP: Threshold Partial   Pivoting.</li>
+<li>1 =&gt; TRP: Threshold Rook      Pivoting.</li>
+<li>2 =&gt; TCP: Threshold Complete  Pivoting.</li>
+</ul>
             </td>
         </tr>
     </tbody>
@@ -901,7 +906,11 @@ implementation in a submodule of an interface in a parent module.
 <span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">damp</span><span class="w">    </span><span class="c">!! `LSQR`: damp factor</span>
 <span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">itnlim</span><span class="w">  </span><span class="c">!! `LSQR`: max iterations</span>
 <span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">nout</span><span class="w">    </span><span class="c">!! `LSQR`: output unit for printing</span>
-<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">lusol_method</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">lusol_method</span><span class="w"> </span><span class="c">!! `LUSOL` method:</span>
+<span class="w">                                                      </span><span class="c">!!</span>
+<span class="w">                                                      </span><span class="c">!! * 0 =&gt; TPP: Threshold Partial   Pivoting.</span>
+<span class="w">                                                      </span><span class="c">!! * 1 =&gt; TRP: Threshold Rook      Pivoting.</span>
+<span class="w">                                                      </span><span class="c">!! * 2 =&gt; TCP: Threshold Complete  Pivoting.</span>
 
 <span class="w">    </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status_ok</span><span class="w"> </span><span class="c">!! true if there were no errors</span>
 
@@ -1018,13 +1027,7 @@ implementation in a submodule of an interface in a parent module.
 <span class="w">            </span><span class="c">! LUSOL method</span>
 <span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">nout</span><span class="p">))</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">lusol_method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lusol_method</span>
 
-<span class="w">            </span><span class="c">! now now, some options are not available for sparse mode</span>
-<span class="w">            </span><span class="c">!...see if this is possible in sparse mode... TODO</span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">use_broyden</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
-<span class="k">                call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: broyden method not available for sparse solver&#39;</span><span class="p">)</span>
-<span class="w">                </span><span class="k">return</span>
-<span class="k">            end if</span>
-<span class="k">        end if</span>
+<span class="w">        </span><span class="k">end if</span>
 <span class="k">    end if</span>
 
 <span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">status_ok</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
