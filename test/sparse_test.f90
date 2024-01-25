@@ -13,6 +13,22 @@
     integer,parameter :: max_iter = 100
     real(wp),parameter :: tol = 1.0e-8_wp
     logical,parameter :: verbose = .false.
+    integer,dimension(3),parameter :: icol = [1,2,2]
+    integer,dimension(3),parameter :: irow = [1,1,2]
+
+    integer :: f_evals
+
+    call go(2, 'LSQR')
+    call go(3, 'LUSOL')
+    call go(4, 'LSMR')
+
+    contains
+
+    subroutine go(sparsity_mode, mode_name)
+    !! run the tests for the specified sparsity mode
+
+    integer,intent(in) :: sparsity_mode
+    character(len=*),intent(in) :: mode_name !! name of the sparsity mode used
 
     type(nlesolver_type) :: solver
     real(wp) :: alpha
@@ -22,13 +38,9 @@
     integer :: istat !! Integer status code.
     character(len=:),allocatable :: message  !! Text status message
     real(wp),dimension(n) :: x
-    integer :: f_evals
     integer :: i
     character(len=:),allocatable :: description
     real(wp) :: fmin_tol
-
-    integer,dimension(3),parameter :: icol = [1,2,2]
-    integer,dimension(3),parameter :: irow = [1,1,2]
 
     fmin_tol = 1.0e-2_wp ! don't need a tight tol for this
     n_intervals = 2
@@ -36,7 +48,7 @@
 
     write(*,*) ''
     write(*,*) '***********************'
-    write(*,*) '* sparse_test         *'
+    write(*,*) '* sparse_test : '//trim(mode_name)
     write(*,*) '***********************'
     write(*,*) ''
     do i = 1, 8
@@ -94,6 +106,8 @@
                                 m = m, &
                                 max_iter = max_iter, &
                                 tol = tol, &
+                                atol = tol, &
+                                btol = tol, &
                                 func = func, &
                                 grad_sparse = grad_sparse, &
                                 step_mode = step_mode,&
@@ -102,10 +116,10 @@
                                 n_intervals = n_intervals, &
                                 fmin_tol = fmin_tol, &
                                 verbose = verbose,&
-                                sparsity_mode = 3,&
+                                sparsity_mode = sparsity_mode,& ! lsmr
                                 irow = irow,&
                                 icol = icol,&
-                                damp = 1.0_wp)
+                                damp = 0.0_wp)
         call solver%status(istat, message)
         write(*,'(I3,1X,A)') istat, message
         if (istat /= 0) error stop
@@ -119,7 +133,7 @@
 
     end do
 
-    contains
+    end subroutine go
 
     subroutine func(me,x,f)
         !! compute the function

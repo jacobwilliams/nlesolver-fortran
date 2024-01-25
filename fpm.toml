@@ -19,6 +19,7 @@ source-dir = "src"
 fmin = { git="https://github.com/jacobwilliams/fmin.git", tag="1.1.1" }
 LSQR = { git="https://github.com/jacobwilliams/LSQR", tag="1.1.0" }
 lusol = { git="https://github.com/jacobwilliams/lusol", tag="1.0.0" }
+LSMR = { git="https://github.com/jacobwilliams/LSMR" }
 
 [install]
 library = true
