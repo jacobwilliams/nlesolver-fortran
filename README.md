@@ -23,6 +23,7 @@ A work in progress.
     1. [LAPACK](https://www.netlib.org/lapack/) routines (`dgesv` or `dgels`) for dense systems: If `n=m`, uses `dgesv` (LU decomposition). If `n/=m`, uses `dgels` (if `m>n` uses QR factorization, if `m<n` uses LQ factorization).
     2. [lsqr](https://github.com/jacobwilliams/LSQR) -- a conjugate-gradient type method for solving sparse linear equations and sparse least-squares problems.
     3. [lusol](https://github.com/jacobwilliams/lusol) -- A sparse LU factorization for square and rectangular matrices, with Bartels-Golub-Reid updates for column replacement and other rank-1 modifications.
+    4. [lsmr](https://github.com/jacobwilliams/LSMR) -- a conjugate-gradient type method for solving sparse linear equations and sparse least-squares problems
   * Has a Broyden update option.
   * Has various line search options.
      * use a specified constant step size (0,1]
@@ -66,7 +67,7 @@ Or to use a specific version:
 nlesolver-fortran = { git="https://github.com/jacobwilliams/nlesolver-fortran.git", tag="1.1.0" }
 ```
 
-Note that LAPACK is required to build. The [fmin](https://github.com/jacobwilliams/fmin), [lsqr](https://github.com/jacobwilliams/LSQR), and [lusol](https://github.com/jacobwilliams/lusol) libraries are also dependencies (which will be automatically downloaded by fpm).
+Note that LAPACK is required to build. The [fmin](https://github.com/jacobwilliams/fmin), [lsqr](https://github.com/jacobwilliams/LSQR), [lusol](https://github.com/jacobwilliams/lusol), and [lsmr](https://github.com/jacobwilliams/LSMR) libraries are also dependencies (which will be automatically downloaded by fpm).
 
 ### Documentation
 
