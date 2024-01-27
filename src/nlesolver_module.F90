@@ -42,6 +42,7 @@
     use fmin_module,     only: fmin
     use lsqr_module,     only: lsqr_solver_ez
     use lusol_ez_module, only: solve, lusol_settings
+    use lsmrModule,      only: lsmr_ez
 
     implicit none
 
@@ -109,6 +110,7 @@
                                       !! * 1 - assume dense (use dense solver)
                                       !! * 2 - assume sparse (use LSQR sparse solver).
                                       !! * 3 - assume sparse (use LUSOL sparse solver).
+                                      !! * 4 - assume sparse (use LSMR sparse solver).
         integer :: n_nonzeros = -1 !! number of nonzero Jacobian elements (used for `sparsity_mode > 1`)
         integer,dimension(:),allocatable :: irow !! sparsity pattern nonzero elements row indices.
         integer,dimension(:),allocatable :: icol !! sparsity pattern nonzero elements column indices
@@ -121,6 +123,15 @@
         integer  :: itnlim  = 100   !! max iterations
         integer  :: nout    = 0     !! output unit for printing
         real(wp) :: damp    = zero  !! damp parameter for LSQR
+
+        integer :: localSize = 0 !! LSMR: Number of vectors for local reorthogonalization:
+                                 !!
+                                 !!  *  0    No reorthogonalization is performed.
+                                 !!  * >0    This many n-vectors "v" (the most recent ones)
+                                 !!          are saved for reorthogonalizing the next v.
+                                 !!
+                                 !! localSize need not be more than `min(m,n)`.
+                                 !! At most `min(m,n)` vectors will be allocated.
 
         ! LUSOL parameters:
         integer :: lusol_method = 0 !! * 0 => TPP: Threshold Partial   Pivoting.
@@ -321,7 +332,7 @@
                     verbose,iunit,n_uphill_max,n_intervals,&
                     sparsity_mode,irow,icol,&
                     atol,btol,conlim,damp,itnlim,nout,&
-                    lusol_method )
+                    lusol_method,localSize )
 
     implicit none
 
@@ -366,6 +377,7 @@
                                                  !!   Must specify `grad` for this mode.
                                                  !! * 2 - assume sparse (use LSQR sparse solver).
                                                  !! * 3 - assume sparse (use LUSOL sparse solver).
+                                                 !! * 4 - assume sparse (use LSMR sparse solver).
                                                  !! Must also specify `grad_sparse` and the `irow` and `icol`
                                                  !! sparsity pattern for `mode>1`.
     integer,dimension(:),intent(in),optional :: irow !! sparsity pattern nonzero elements row indices.
@@ -384,6 +396,14 @@
                                                       !! * 0 => TPP: Threshold Partial   Pivoting.
                                                       !! * 1 => TRP: Threshold Rook      Pivoting.
                                                       !! * 2 => TCP: Threshold Complete  Pivoting.
+    integer,intent(in),optional :: localSize !! `LSMR`: Number of vectors for local reorthogonalization:
+                                             !!
+                                             !!  *  0    No reorthogonalization is performed.
+                                             !!  * >0    This many n-vectors "v" (the most recent ones)
+                                             !!          are saved for reorthogonalizing the next v.
+                                             !!
+                                             !! localSize need not be more than `min(m,n)`.
+                                             !! At most `min(m,n)` vectors will be allocated.
 
     logical :: status_ok !! true if there were no errors
 
@@ -500,6 +520,9 @@
             ! LUSOL method
             if (present(nout)) me%lusol_method = lusol_method
 
+            ! LSMR optional inputs:
+            if (present(localSize)) me%localSize = localSize
+
         end if
     end if
 
@@ -549,6 +572,8 @@
     integer :: i !! counter
     integer,dimension(:),allocatable :: idx, index_array !! for sparse indexing
     character(len=10) :: i_str !! string version of `i` for row string
+    real(wp) :: normA, condA, normr, normAr, normx !! for LSMR
+    integer :: itn !! for LSMR
 
     if (me%istat<0) return ! class was not initialized properly
 
@@ -746,6 +771,30 @@
                 lusol_options%method = me%lusol_method
                 call solve(me%n,me%m,me%n_nonzeros,me%irow,me%icol,fjac_sparse,rhs,p,info,&
                            settings=lusol_options)
+            case (4)
+
+                ! use LSMR solver:
+                !me%conlim = 1.0_wp/(100*epsilon(1.0_wp))
+                call lsmr_ez  ( me%m, me%n, me%irow, me%icol, fjac_sparse, rhs, me%damp, &
+                                me%atol, me%btol, me%conlim, me%itnlim, me%localSize, me%nout, &
+                                p, info, itn, normA, condA, normr, normAr, normx )
+
+                ! check convergence:
+                select case (info)
+                case(4)
+                    call me%set_status(istat = -1004, &
+                                string = 'LSMR Error: The system appears to be ill-conditioned. istop =', i=info)
+                    exit
+                case(5)
+                    call me%set_status(istat = -1005, &
+                                string = 'LSMR Error: The iteration limit was reached. istop =', i=info)
+                    exit
+                case default
+                    info = 0
+                end select
+
+            case default
+                error stop 'invalid sparsity_mode'
             end select
 
             ! check for errors:
