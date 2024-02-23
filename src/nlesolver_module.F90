@@ -72,6 +72,8 @@
     integer,parameter,public :: NLESOLVER_SPARSITY_LUSOL         = 3 !! assume sparse (use LUSOL sparse solver).
     integer,parameter,public :: NLESOLVER_SPARSITY_LSMR          = 4 !! assume sparse (use LSMR sparse solver).
     integer,parameter,public :: NLESOLVER_SPARSITY_CUSTOM_SPARSE = 5 !! assume sparse (use a user provided sparse solver).
+    !integer,parameter,public :: NLESOLVER_SPARSITY_CUSTOM_DENSE  = 6 !! assume dense (use a user provided dense solver).
+    ! if add will have to update code below where sparsity_modes /= 1 is assumed sparse
 
     !*********************************************************
         type,public :: nlesolver_type
