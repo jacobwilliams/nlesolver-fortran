@@ -66,6 +66,15 @@
     real(wp),parameter :: eps  = epsilon(one)  !! machine \( \epsilon \)
     real(wp),parameter :: big  = huge(one)
 
+    ! options for sparsity_mode
+    integer,parameter,public :: NLESOLVER_SPARSITY_DENSE         = 1 !! assume dense (use dense solver).
+    integer,parameter,public :: NLESOLVER_SPARSITY_LSQR          = 2 !! assume sparse (use LSQR sparse solver).
+    integer,parameter,public :: NLESOLVER_SPARSITY_LUSOL         = 3 !! assume sparse (use LUSOL sparse solver).
+    integer,parameter,public :: NLESOLVER_SPARSITY_LSMR          = 4 !! assume sparse (use LSMR sparse solver).
+    integer,parameter,public :: NLESOLVER_SPARSITY_CUSTOM_SPARSE = 5 !! assume sparse (use a user provided sparse solver).
+    !integer,parameter,public :: NLESOLVER_SPARSITY_CUSTOM_DENSE  = 6 !! assume dense (use a user provided dense solver).
+    ! if add will have to update code below where sparsity_modes /= 1 is assumed sparse
+
     !*********************************************************
         type,public :: nlesolver_type
 
@@ -105,12 +114,13 @@
         procedure(linesearch_func),pointer :: linesearch       => null() !! line search method (determined by `step_mode` user input in [[nlesolver_type:initialize]])
 
         ! sparsity options:
-        integer :: sparsity_mode = 1  !! sparsity mode:
-                                      !!
-                                      !! * 1 - assume dense (use dense solver)
-                                      !! * 2 - assume sparse (use LSQR sparse solver).
-                                      !! * 3 - assume sparse (use LUSOL sparse solver).
-                                      !! * 4 - assume sparse (use LSMR sparse solver).
+        integer :: sparsity_mode = NLESOLVER_SPARSITY_DENSE  !! sparsity mode:
+                                                             !!
+                                                             !! * 1 - assume dense (use dense solver).
+                                                             !! * 2 - assume sparse (use LSQR sparse solver).
+                                                             !! * 3 - assume sparse (use LUSOL sparse solver).
+                                                             !! * 4 - assume sparse (use LSMR sparse solver).
+                                                             !! * 5 - assume sparse (use a user provided sparse solver).
         integer :: n_nonzeros = -1 !! number of nonzero Jacobian elements (used for `sparsity_mode > 1`)
         integer,dimension(:),allocatable :: irow !! sparsity pattern nonzero elements row indices.
         integer,dimension(:),allocatable :: icol !! sparsity pattern nonzero elements column indices
@@ -144,6 +154,9 @@
         ! sparse version:
         procedure(grad_func_sparse),pointer :: grad_sparse => null() !! user-supplied routine to compute the gradient of the function (sparse version)
 
+        ! custom sparse solver:
+        procedure(sparse_solver_func),pointer :: custom_solver_sparse => null() !! user-supplied sparse linear solver routine (used for `sparsity_mode=5`)
+
         contains
 
         private
@@ -159,6 +172,22 @@
     !*********************************************************
 
     abstract interface
+
+        subroutine sparse_solver_func(me,n_cols,n_rows,n_nonzero,irow,icol,a,b,x,istat)
+            !! for a custom user-provided linear solver (sparse version)
+            !! solve `Ax = b` for `x`, given `A` and `b`.
+            import :: wp,nlesolver_type
+            implicit none
+            class(nlesolver_type),intent(inout) :: me
+            integer,intent(in) :: n_cols !! `n`: number of columns in A.
+            integer,intent(in) :: n_rows !! `m`: number of rows in A.
+            integer,intent(in) :: n_nonzero !! number of nonzero elements of A.
+            integer,dimension(n_nonzero),intent(in) :: irow, icol !! sparsity pattern (size is `n_nonzero`)
+            real(wp),dimension(n_nonzero),intent(in) :: a !! matrix elements (size is `n_nonzero`)
+            real(wp),dimension(n_rows),intent(in) :: b !! right hand side (size is `m`)
+            real(wp),dimension(n_cols),intent(out) :: x !! solution (size is `n`)
+            integer,intent(out) :: istat !! status code (=0 for success)
+        end subroutine sparse_solver_func
 
         subroutine func_func(me,x,f)
             !! compute the function
@@ -332,7 +361,7 @@
                     verbose,iunit,n_uphill_max,n_intervals,&
                     sparsity_mode,irow,icol,&
                     atol,btol,conlim,damp,itnlim,nout,&
-                    lusol_method,localSize )
+                    lusol_method,localSize,custom_solver_sparse )
 
     implicit none
 
@@ -378,6 +407,8 @@
                                                  !! * 2 - assume sparse (use LSQR sparse solver).
                                                  !! * 3 - assume sparse (use LUSOL sparse solver).
                                                  !! * 4 - assume sparse (use LSMR sparse solver).
+                                                 !! * 5 - assume sparse (use the user provided sparse
+                                                 !!   solver `custom_solver_sparse`).
                                                  !! Must also specify `grad_sparse` and the `irow` and `icol`
                                                  !! sparsity pattern for `mode>1`.
     integer,dimension(:),intent(in),optional :: irow !! sparsity pattern nonzero elements row indices.
@@ -404,6 +435,8 @@
                                              !!
                                              !! localSize need not be more than `min(m,n)`.
                                              !! At most `min(m,n)` vectors will be allocated.
+    procedure(sparse_solver_func),optional :: custom_solver_sparse !! for `sparsity_mode=5`, this is the
+                                                                   !! user-provided linear solver.
 
     logical :: status_ok !! true if there were no errors
 
@@ -493,9 +526,11 @@
     if (allocated(me%irow)) deallocate(me%irow)
     if (allocated(me%icol)) deallocate(me%icol)
 
+    if (present(custom_solver_sparse)) me%custom_solver_sparse => custom_solver_sparse
+
     if (present(sparsity_mode)) then
         me%sparsity_mode = sparsity_mode
-        if (sparsity_mode>1) then ! sparse solver method
+        if (sparsity_mode>NLESOLVER_SPARSITY_DENSE) then ! sparse solver method
             if (present(irow) .and. present(icol) .and. present(grad_sparse)) then
                 if (size(irow) == size(icol)) then
                     me%n_nonzeros = size(irow)
@@ -523,6 +558,12 @@
             ! LSMR optional inputs:
             if (present(localSize)) me%localSize = localSize
 
+        end if
+        if (sparsity_mode==NLESOLVER_SPARSITY_CUSTOM_SPARSE) then
+            if (.not. associated(me%custom_solver_sparse)) then
+                call me%set_status(istat = -16, string = 'Error: must specify custom_solver_sparse for sparsity_mode = 5')
+                return
+            end if
         end if
     end if
 
@@ -581,11 +622,11 @@
         call me%set_status(istat = -10, string = 'Error: function routine is not associated')
         return
     end if
-    if (me%sparsity_mode==1 .and. .not. associated(me%grad)) then
+    if (me%sparsity_mode==NLESOLVER_SPARSITY_DENSE .and. .not. associated(me%grad)) then
         call me%set_status(istat = -11, string = 'Error: gradient routine is not associated')
         return
     end if
-    if (me%sparsity_mode>1 .and. .not. associated(me%grad_sparse)) then
+    if (me%sparsity_mode>NLESOLVER_SPARSITY_DENSE .and. .not. associated(me%grad_sparse)) then
         call me%set_status(istat = -11, string = 'Error: gradient routine is not associated')
         return
     end if
@@ -600,7 +641,7 @@
     alloc_stat = 0
     if (alloc_stat==0) allocate(fvec     (me%m)      , stat=alloc_stat)
 
-    if (me%sparsity_mode==1) then
+    if (me%sparsity_mode==NLESOLVER_SPARSITY_DENSE) then
         ! dense
         if (alloc_stat==0) allocate(fjac (me%m,me%n) , stat=alloc_stat)
     else
@@ -615,7 +656,7 @@
     if (me%use_broyden) then
         ! only need these for broyden:
         if (alloc_stat==0) allocate(prev_fvec(me%m)      , stat=alloc_stat)
-        if (me%sparsity_mode/=1 .and. alloc_stat==0) then
+        if (me%sparsity_mode/=NLESOLVER_SPARSITY_DENSE .and. alloc_stat==0) then
             allocate(prev_fjac(me%m,me%n) , stat=alloc_stat)
             index_array = [(i, i=1,me%n_nonzeros)] ! an array to index the sparse jacobian elements
         end if
@@ -661,9 +702,9 @@
                     ! always compute Jacobian on the first iteration
                     !call me%grad(x,fjac)
                     select case (me%sparsity_mode)
-                    case (1)
+                    case (NLESOLVER_SPARSITY_DENSE)
                         call me%grad(x,fjac)
-                    case (2:)
+                    case default ! sparse modes
                         call me%grad_sparse(x,fjac_sparse)
                     end select
                     broyden_counter = 0
@@ -675,7 +716,7 @@
                     delx(:,1) = x - xold
                     delf(:,1) = fvec - prev_fvec
 
-                    if (me%sparsity_mode==1) then ! dense
+                    if (me%sparsity_mode==NLESOLVER_SPARSITY_DENSE) then ! dense
 
                         delxmag2 = dot_product(delx(:,1),delx(:,1))
                         if (delxmag2 < eps) then
@@ -718,7 +759,7 @@
                     broyden_counter = broyden_counter + 1
                 end if
                 prev_fvec = fvec
-                if (me%sparsity_mode==1) then
+                if (me%sparsity_mode==NLESOLVER_SPARSITY_DENSE) then
                     prev_fjac = fjac
                 else
                     prev_fjac_sparse = fjac_sparse
@@ -726,9 +767,9 @@
             else
                 ! compute the jacobian:
                 select case (me%sparsity_mode)
-                case (1)
+                case (NLESOLVER_SPARSITY_DENSE)
                     call me%grad(x,fjac)
-                case (2:)
+                case default ! sparse
                     call me%grad_sparse(x,fjac_sparse)
                 end select
                 recompute_jac = .false.  ! for broyden
@@ -741,10 +782,12 @@
             ! compute the search direction p by solving linear system:
             rhs = -fvec ! RHS of the linear system
             select case (me%sparsity_mode)
-            case (1)
+
+            case (NLESOLVER_SPARSITY_DENSE)
                 ! use dense solver
                 call linear_solver(me%m,me%n,fjac,rhs,p,info)
-            case (2)
+
+            case (NLESOLVER_SPARSITY_LSQR)
                 ! initialize the LSQR sparse solver
                 call sparse_solver%initialize(me%m,me%n,fjac_sparse,me%irow,me%icol,&
                                               atol   = me%atol, &
@@ -766,12 +809,14 @@
                 case default
                     info = 0
                 end select
-            case (3)
+
+            case (NLESOLVER_SPARSITY_LUSOL)
                 ! use lusol solver
                 lusol_options%method = me%lusol_method
                 call solve(me%n,me%m,me%n_nonzeros,me%irow,me%icol,fjac_sparse,rhs,p,info,&
                            settings=lusol_options)
-            case (4)
+
+            case (NLESOLVER_SPARSITY_LSMR)
 
                 ! use LSMR solver:
                 !me%conlim = 1.0_wp/(100*epsilon(1.0_wp))
@@ -793,6 +838,15 @@
                     info = 0
                 end select
 
+            case (NLESOLVER_SPARSITY_CUSTOM_SPARSE)
+                if (associated(me%custom_solver_sparse)) then
+                    ! a user-provided sparse solver:
+                    call me%custom_solver_sparse(me%n,me%m,me%n_nonzeros,me%irow,me%icol,fjac_sparse,rhs,p,info)
+                else
+                    call me%set_status(istat = -1006, &
+                                string = 'Error: The custom_solver_sparse procedure has not been set.')
+                    exit
+                end if
             case default
                 error stop 'invalid sparsity_mode'
             end select
