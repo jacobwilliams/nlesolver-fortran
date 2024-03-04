@@ -77,7 +77,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title="<p>100.0% of total for derived types.</p>Including implementation: 456 statements, 100.0% of total for derived types.">47 statements</a>
+                 title="<p>100.0% of total for derived types.</p>Including implementation: 472 statements, 100.0% of total for derived types.">48 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -154,6 +154,7 @@
             <a class="list-group-item" href="../type/nlesolver_type.html#variable-lusol_method">lusol_method</a>
             <a class="list-group-item" href="../type/nlesolver_type.html#variable-grad">grad</a>
             <a class="list-group-item" href="../type/nlesolver_type.html#variable-grad_sparse">grad_sparse</a>
+            <a class="list-group-item" href="../type/nlesolver_type.html#variable-custom_solver_sparse">custom_solver_sparse</a>
         </div>
       </div>
     </div>
@@ -630,14 +631,15 @@ to allow where the value of <code>f</code> increases</p>
             <td>::</td>
             <td><strong>sparsity_mode</strong></td>
 <td> =</td>
-                <td>1</td>
+                <td>NLESOLVER_SPARSITY_DENSE</td>
             <td>
                 <p>sparsity mode:</p>
 <ul>
-<li>1 - assume dense (use dense solver)</li>
+<li>1 - assume dense (use dense solver).</li>
 <li>2 - assume sparse (use LSQR sparse solver).</li>
 <li>3 - assume sparse (use LUSOL sparse solver).</li>
 <li>4 - assume sparse (use LSMR sparse solver).</li>
+<li>5 - assume sparse (use a user provided sparse solver).</li>
 </ul>
             </td>
         </tr>
@@ -877,6 +879,23 @@ At most <code>min(m,n)</code> vectors will be allocated.</p>
                 <p>user-supplied routine to compute the gradient of the function (sparse version)</p>
             </td>
         </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-custom_solver_sparse"></span>
+              procedure(<a href='../interface/sparse_solver_func.html'>sparse_solver_func</a>),
+            </td>
+              <td>private,</td>
+            <td>
+              pointer
+            </td>
+            <td>::</td>
+            <td><strong>custom_solver_sparse</strong></td>
+<td>=&gt; </td>
+                <td>null()</td>
+            <td>
+                <p>user-supplied sparse linear solver routine (used for <code>sparsity_mode=5</code>)</p>
+            </td>
+        </tr>
     </tbody>
   </table>
 
@@ -900,7 +919,7 @@ At most <code>min(m,n)</code> vectors will be allocated.</p>
     <ul class="list-group">
         <li class="list-group-item">
                   <h3>
-    private  subroutine <a href='../proc/initialize_nlesolver_variables.html'>initialize_nlesolver_variables</a>(me, n, m, max_iter, tol, alpha, alpha_min, alpha_max, tolx, fmin_tol, backtrack_c, backtrack_tau, use_broyden, broyden_update_n, step_mode, func, grad, grad_sparse, export_iteration, user_input_check, verbose, iunit, n_uphill_max, n_intervals, sparsity_mode, irow, icol, atol, btol, conlim, damp, itnlim, nout, lusol_method, localSize)  
+    private  subroutine <a href='../proc/initialize_nlesolver_variables.html'>initialize_nlesolver_variables</a>(me, n, m, max_iter, tol, alpha, alpha_min, alpha_max, tolx, fmin_tol, backtrack_c, backtrack_tau, use_broyden, broyden_update_n, step_mode, func, grad, grad_sparse, export_iteration, user_input_check, verbose, iunit, n_uphill_max, n_intervals, sparsity_mode, irow, icol, atol, btol, conlim, damp, itnlim, nout, lusol_method, localSize, custom_solver_sparse)  
 </h3>
     
 
@@ -1450,6 +1469,22 @@ condition number of the matrix <code>Abar</code>.</p>
 <p><code>LSMR</code>: Number of vectors for local reorthogonalization:</p><a href="../proc/initialize_nlesolver_variables.html#variable-localsize~2" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              procedure(<a href='../interface/sparse_solver_func.html'>sparse_solver_func</a>),
+            </td>
+<td></td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>custom_solver_sparse</strong></td>
+            <td>
+<p>for <code>sparsity_mode=5</code>, this is the
+user-provided linear solver.</p>
+            </td>
+        </tr>
     </tbody>
   </table>
 
@@ -1822,12 +1857,13 @@ condition number of the matrix <code>Abar</code>.</p>
 <span class="w">        </span><span class="k">procedure</span><span class="p">(</span><span class="n">linesearch_func</span><span class="p">),</span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">linesearch</span><span class="w">       </span><span class="o">=&gt;</span><span class="w"> </span><span class="nb">null</span><span class="p">()</span><span class="w"> </span><span class="c">!! line search method (determined by `step_mode` user input in [[nlesolver_type:initialize]])</span>
 
 <span class="w">        </span><span class="c">! sparsity options:</span>
-<span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">sparsity_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w">  </span><span class="c">!! sparsity mode:</span>
-<span class="w">                                      </span><span class="c">!!</span>
-<span class="w">                                      </span><span class="c">!! * 1 - assume dense (use dense solver)</span>
-<span class="w">                                      </span><span class="c">!! * 2 - assume sparse (use LSQR sparse solver).</span>
-<span class="w">                                      </span><span class="c">!! * 3 - assume sparse (use LUSOL sparse solver).</span>
-<span class="w">                                      </span><span class="c">!! * 4 - assume sparse (use LSMR sparse solver).</span>
+<span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">sparsity_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">NLESOLVER_SPARSITY_DENSE</span><span class="w">  </span><span class="c">!! sparsity mode:</span>
+<span class="w">                                                             </span><span class="c">!!</span>
+<span class="w">                                                             </span><span class="c">!! * 1 - assume dense (use dense solver).</span>
+<span class="w">                                                             </span><span class="c">!! * 2 - assume sparse (use LSQR sparse solver).</span>
+<span class="w">                                                             </span><span class="c">!! * 3 - assume sparse (use LUSOL sparse solver).</span>
+<span class="w">                                                             </span><span class="c">!! * 4 - assume sparse (use LSMR sparse solver).</span>
+<span class="w">                                                             </span><span class="c">!! * 5 - assume sparse (use a user provided sparse solver).</span>
 <span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n_nonzeros</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="c">!! number of nonzero Jacobian elements (used for `sparsity_mode &gt; 1`)</span>
 <span class="w">        </span><span class="kt">integer</span><span class="p">,</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">irow</span><span class="w"> </span><span class="c">!! sparsity pattern nonzero elements row indices.</span>
 <span class="w">        </span><span class="kt">integer</span><span class="p">,</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">icol</span><span class="w"> </span><span class="c">!! sparsity pattern nonzero elements column indices</span>
@@ -1860,6 +1896,9 @@ condition number of the matrix <code>Abar</code>.</p>
 
 <span class="w">        </span><span class="c">! sparse version:</span>
 <span class="w">        </span><span class="k">procedure</span><span class="p">(</span><span class="n">grad_func_sparse</span><span class="p">),</span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">grad_sparse</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="nb">null</span><span class="p">()</span><span class="w"> </span><span class="c">!! user-supplied routine to compute the gradient of the function (sparse version)</span>
+
+<span class="w">        </span><span class="c">! custom sparse solver:</span>
+<span class="w">        </span><span class="k">procedure</span><span class="p">(</span><span class="n">sparse_solver_func</span><span class="p">),</span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">custom_solver_sparse</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="nb">null</span><span class="p">()</span><span class="w"> </span><span class="c">!! user-supplied sparse linear solver routine (used for `sparsity_mode=5`)</span>
 
 <span class="w">        </span><span class="k">contains</span>
 

@@ -77,7 +77,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title="100.0% of total for modules and submodules.">735 statements</a>
+                 title="100.0% of total for modules and submodules.">769 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -123,6 +123,11 @@
             <a class="list-group-item" href="../module/nlesolver_module.html#variable-two">two</a>
             <a class="list-group-item" href="../module/nlesolver_module.html#variable-eps">eps</a>
             <a class="list-group-item" href="../module/nlesolver_module.html#variable-big">big</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_sparsity_dense">NLESOLVER_SPARSITY_DENSE</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_sparsity_lsqr">NLESOLVER_SPARSITY_LSQR</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_sparsity_lusol">NLESOLVER_SPARSITY_LUSOL</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_sparsity_lsmr">NLESOLVER_SPARSITY_LSMR</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_sparsity_custom_sparse">NLESOLVER_SPARSITY_CUSTOM_SPARSE</a>
         </div>
       </div>
     </div>
@@ -141,6 +146,7 @@
       </a>
       <div id="absints-0" class="collapse">
         <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/nlesolver_module.html#interface-sparse_solver_func">sparse_solver_func</a>
             <a class="list-group-item" href="../module/nlesolver_module.html#interface-func_func">func_func</a>
             <a class="list-group-item" href="../module/nlesolver_module.html#interface-grad_func">grad_func</a>
             <a class="list-group-item" href="../module/nlesolver_module.html#interface-grad_func_sparse">grad_func_sparse</a>
@@ -240,11 +246,11 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item"><a href='https://jacobwilliams.github.io/LSQR'>lsqr_module</a></li>
-                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
                   <li class="list-inline-item"><a href='https://jacobwilliams.github.io/fmin'>fmin_module</a></li>
                   <li class="list-inline-item">lsmrModule</li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
                   <li class="list-inline-item"><a href='https://jacobwilliams.github.io/lusol'>lusol_ez_module</a></li>
+                  <li class="list-inline-item"><a href='https://jacobwilliams.github.io/LSQR'>lsqr_module</a></li>
               </ul>
             </li>
             <li class="list-group-item">
@@ -538,6 +544,91 @@ parameter
                 
             </td>
         </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_sparsity_dense"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>NLESOLVER_SPARSITY_DENSE</strong></td>
+<td> =</td>
+                <td>1</td>
+            <td>
+                <p>assume dense (use dense solver).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_sparsity_lsqr"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>NLESOLVER_SPARSITY_LSQR</strong></td>
+<td> =</td>
+                <td>2</td>
+            <td>
+                <p>assume sparse (use LSQR sparse solver).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_sparsity_lusol"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>NLESOLVER_SPARSITY_LUSOL</strong></td>
+<td> =</td>
+                <td>3</td>
+            <td>
+                <p>assume sparse (use LUSOL sparse solver).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_sparsity_lsmr"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>NLESOLVER_SPARSITY_LSMR</strong></td>
+<td> =</td>
+                <td>4</td>
+            <td>
+                <p>assume sparse (use LSMR sparse solver).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_sparsity_custom_sparse"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>NLESOLVER_SPARSITY_CUSTOM_SPARSE</strong></td>
+<td> =</td>
+                <td>5</td>
+            <td>
+                <p>assume sparse (use a user provided sparse solver).</p>
+            </td>
+        </tr>
     </tbody>
   </table>
 
@@ -549,16 +640,17 @@ parameter
         <section>
           <h2>Abstract Interfaces</h2>
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="interface-func_func"></span><h3>abstract interface
+    <div class="card-header codesum"><span class="anchor" id="interface-sparse_solver_func"></span><h3>abstract interface
         
     </h3></div>
     <ul class="list-group">
       <li class="list-group-item">
             <h3>
-    private  subroutine func_func(me, x, f)  
+    private  subroutine sparse_solver_func(me, n_cols, n_rows, n_nonzero, irow, icol, a, b, x, istat)  
 
     </h3>
-  <p>compute the function</p>
+  <p>for a custom user-provided linear solver (sparse version)
+solve <code>Ax = b</code> for <code>x</code>, given <code>A</code> and <code>b</code>.</p>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -588,7 +680,188 @@ parameter
         </tr>
         <tr>
             <td>
+              <span class="anchor" id="variable-n_cols"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n_cols</strong></td>
+            <td>
+                <p><code>n</code>: number of columns in A.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n_rows"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n_rows</strong></td>
+            <td>
+                <p><code>m</code>: number of rows in A.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n_nonzero"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n_nonzero</strong></td>
+            <td>
+                <p>number of nonzero elements of A.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-irow~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(n_nonzero)
+            </td>
+            <td>::</td>
+            <td><strong>irow</strong></td>
+            <td>
+                <p>sparsity pattern (size is <code>n_nonzero</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-icol~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(n_nonzero)
+            </td>
+            <td>::</td>
+            <td><strong>icol</strong></td>
+            <td>
+                <p>sparsity pattern (size is <code>n_nonzero</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-a"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(n_nonzero)
+            </td>
+            <td>::</td>
+            <td><strong>a</strong></td>
+            <td>
+                <p>matrix elements (size is <code>n_nonzero</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-b"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(n_rows)
+            </td>
+            <td>::</td>
+            <td><strong>b</strong></td>
+            <td>
+                <p>right hand side (size is <code>m</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
               <span class="anchor" id="variable-x"></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(n_cols)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>solution (size is <code>n</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-istat~2"></span>
+              integer,
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>istat</strong></td>
+            <td>
+                <p>status code (=0 for success)</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+      </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="interface-func_func"></span><h3>abstract interface
+        
+    </h3></div>
+    <ul class="list-group">
+      <li class="list-group-item">
+            <h3>
+    private  subroutine func_func(me, x, f)  
+
+    </h3>
+  <p>compute the function</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~2"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~2"></span>
               real(kind=wp),
             </td>
 <td>intent(in),</td>
@@ -649,7 +922,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-me~2"></span>
+              <span class="anchor" id="variable-me~3"></span>
               class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
             </td>
 <td>intent(inout)</td>
@@ -664,7 +937,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~2"></span>
+              <span class="anchor" id="variable-x~3"></span>
               real(kind=wp),
             </td>
 <td>intent(in),</td>
@@ -725,7 +998,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-me~3"></span>
+              <span class="anchor" id="variable-me~4"></span>
               class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
             </td>
 <td>intent(inout)</td>
@@ -740,7 +1013,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~3"></span>
+              <span class="anchor" id="variable-x~4"></span>
               real(kind=wp),
             </td>
 <td>intent(in),</td>
@@ -801,7 +1074,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-me~4"></span>
+              <span class="anchor" id="variable-me~5"></span>
               class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
             </td>
 <td>intent(inout)</td>
@@ -816,7 +1089,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~4"></span>
+              <span class="anchor" id="variable-x~5"></span>
               real(kind=wp),
             </td>
 <td>intent(in),</td>
@@ -892,7 +1165,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-me~5"></span>
+              <span class="anchor" id="variable-me~6"></span>
               class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
             </td>
 <td>intent(inout)</td>
@@ -954,7 +1227,7 @@ used by all methods.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-me~6"></span>
+              <span class="anchor" id="variable-me~7"></span>
               class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
             </td>
 <td>intent(inout)</td>
@@ -999,7 +1272,7 @@ used by all methods.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~5"></span>
+              <span class="anchor" id="variable-x~6"></span>
               real(kind=wp),
             </td>
 <td>intent(out),</td>
@@ -1523,7 +1796,7 @@ to allow where the value of <code>f</code> increases</p>
             <td>::</td>
             <td><strong>sparsity_mode</strong></td>
 <td> =</td>
-                <td>1</td>
+                <td>NLESOLVER_SPARSITY_DENSE</td>
             <td>
 <p>sparsity mode:</p><a href="../type/nlesolver_type.html#variable-sparsity_mode" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
@@ -1751,6 +2024,23 @@ condition number of the matrix <code>Abar</code>.</p>
 <p>user-supplied routine to compute the gradient of the function (sparse version)</p>
             </td>
         </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-custom_solver_sparse"></span>
+              procedure(<a href='../interface/sparse_solver_func.html'>sparse_solver_func</a>),
+            </td>
+              <td>private,</td>
+            <td>
+              pointer
+            </td>
+            <td>::</td>
+            <td><strong>custom_solver_sparse</strong></td>
+<td>=&gt; </td>
+                <td>null()</td>
+            <td>
+<p>user-supplied sparse linear solver routine (used for <code>sparsity_mode=5</code>)</p>
+            </td>
+        </tr>
     </tbody>
   </table>
 
@@ -1816,7 +2106,7 @@ condition number of the matrix <code>Abar</code>.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-me~7"></span>
+              <span class="anchor" id="variable-me~8"></span>
               class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
             </td>
 <td>intent(inout)</td>
@@ -1831,7 +2121,7 @@ condition number of the matrix <code>Abar</code>.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-istat~2"></span>
+              <span class="anchor" id="variable-istat~3"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -1916,7 +2206,7 @@ condition number of the matrix <code>Abar</code>.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-me~8"></span>
+              <span class="anchor" id="variable-me~9"></span>
               class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
             </td>
 <td>intent(inout)</td>
@@ -1931,7 +2221,7 @@ condition number of the matrix <code>Abar</code>.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-istat~3"></span>
+              <span class="anchor" id="variable-istat~4"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -1967,7 +2257,7 @@ condition number of the matrix <code>Abar</code>.</p>
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-initialize_nlesolver_variables"></span> <h3>private  subroutine <a href='../proc/initialize_nlesolver_variables.html'>initialize_nlesolver_variables</a>(me, n, m, max_iter, tol, alpha, alpha_min, alpha_max, tolx, fmin_tol, backtrack_c, backtrack_tau, use_broyden, broyden_update_n, step_mode, func, grad, grad_sparse, export_iteration, user_input_check, verbose, iunit, n_uphill_max, n_intervals, sparsity_mode, irow, icol, atol, btol, conlim, damp, itnlim, nout, lusol_method, localSize)  
+    <div class="card-header codesum"><span class="anchor" id="proc-initialize_nlesolver_variables"></span> <h3>private  subroutine <a href='../proc/initialize_nlesolver_variables.html'>initialize_nlesolver_variables</a>(me, n, m, max_iter, tol, alpha, alpha_min, alpha_max, tolx, fmin_tol, backtrack_c, backtrack_tau, use_broyden, broyden_update_n, step_mode, func, grad, grad_sparse, export_iteration, user_input_check, verbose, iunit, n_uphill_max, n_intervals, sparsity_mode, irow, icol, atol, btol, conlim, damp, itnlim, nout, lusol_method, localSize, custom_solver_sparse)  
 </h3></div>
     <div class="card-body">
           
@@ -1986,7 +2276,7 @@ condition number of the matrix <code>Abar</code>.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-me~9"></span>
+              <span class="anchor" id="variable-me~10"></span>
               class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
             </td>
 <td>intent(inout)</td>
@@ -2366,7 +2656,7 @@ to allow where the value of <code>f</code> increases</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-irow~2"></span>
+              <span class="anchor" id="variable-irow~3"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -2382,7 +2672,7 @@ must be specified with <code>icol</code> and be the same length (<code>n_nonzero
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-icol~2"></span>
+              <span class="anchor" id="variable-icol~3"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -2517,6 +2807,22 @@ condition number of the matrix <code>Abar</code>.</p>
 <p><code>LSMR</code>: Number of vectors for local reorthogonalization:</p><a href="../proc/initialize_nlesolver_variables.html#variable-localsize~2" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-custom_solver_sparse~2"></span>
+              procedure(<a href='../interface/sparse_solver_func.html'>sparse_solver_func</a>),
+            </td>
+<td></td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>custom_solver_sparse</strong></td>
+            <td>
+<p>for <code>sparsity_mode=5</code>, this is the
+user-provided linear solver.</p>
+            </td>
+        </tr>
     </tbody>
   </table>
 
@@ -2544,7 +2850,7 @@ condition number of the matrix <code>Abar</code>.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-me~10"></span>
+              <span class="anchor" id="variable-me~11"></span>
               class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
             </td>
 <td>intent(inout)</td>
@@ -2559,7 +2865,7 @@ condition number of the matrix <code>Abar</code>.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~6"></span>
+              <span class="anchor" id="variable-x~7"></span>
               real(kind=wp),
             </td>
 <td>intent(inout),</td>
@@ -2599,7 +2905,7 @@ condition number of the matrix <code>Abar</code>.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-me~11"></span>
+              <span class="anchor" id="variable-me~12"></span>
               class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
             </td>
 <td>intent(out)</td>
@@ -2669,7 +2975,7 @@ condition number of the matrix <code>Abar</code>.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a"></span>
+              <span class="anchor" id="variable-a~2"></span>
               real(kind=wp),
             </td>
 <td>intent(in),</td>
@@ -2684,7 +2990,7 @@ condition number of the matrix <code>Abar</code>.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-b"></span>
+              <span class="anchor" id="variable-b~2"></span>
               real(kind=wp),
             </td>
 <td>intent(in),</td>
@@ -2699,7 +3005,7 @@ condition number of the matrix <code>Abar</code>.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~7"></span>
+              <span class="anchor" id="variable-x~8"></span>
               real(kind=wp),
             </td>
 <td>intent(out),</td>
@@ -2754,7 +3060,7 @@ condition number of the matrix <code>Abar</code>.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-me~12"></span>
+              <span class="anchor" id="variable-me~13"></span>
               class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
             </td>
 <td>intent(inout)</td>
@@ -2799,7 +3105,7 @@ condition number of the matrix <code>Abar</code>.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~8"></span>
+              <span class="anchor" id="variable-x~9"></span>
               real(kind=wp),
             </td>
 <td>intent(out),</td>
@@ -2899,7 +3205,7 @@ condition number of the matrix <code>Abar</code>.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-me~13"></span>
+              <span class="anchor" id="variable-me~14"></span>
               class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
             </td>
 <td>intent(inout)</td>
@@ -2944,7 +3250,7 @@ condition number of the matrix <code>Abar</code>.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~9"></span>
+              <span class="anchor" id="variable-x~10"></span>
               real(kind=wp),
             </td>
 <td>intent(out),</td>
@@ -3047,7 +3353,7 @@ find the minimum value of <code>f(x)</code> between
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-me~14"></span>
+              <span class="anchor" id="variable-me~15"></span>
               class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
             </td>
 <td>intent(inout)</td>
@@ -3092,7 +3398,7 @@ find the minimum value of <code>f(x)</code> between
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~10"></span>
+              <span class="anchor" id="variable-x~11"></span>
               real(kind=wp),
             </td>
 <td>intent(out),</td>
@@ -3193,7 +3499,7 @@ number of points and picks the one with the minimum function value.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-me~15"></span>
+              <span class="anchor" id="variable-me~16"></span>
               class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
             </td>
 <td>intent(inout)</td>
@@ -3238,7 +3544,7 @@ number of points and picks the one with the minimum function value.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~11"></span>
+              <span class="anchor" id="variable-x~12"></span>
               real(kind=wp),
             </td>
 <td>intent(out),</td>

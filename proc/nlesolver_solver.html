@@ -77,7 +77,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title="35.0% of total for procedures.">218 statements</a>
+                 title="35.3% of total for procedures.">225 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -164,7 +164,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-me~10"></span>
+              <span class="anchor" id="variable-me~11"></span>
               class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
             </td>
 <td>intent(inout)</td>
@@ -179,7 +179,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~6"></span>
+              <span class="anchor" id="variable-x~7"></span>
               real(kind=wp),
             </td>
 <td>intent(inout),</td>
@@ -423,11 +423,11 @@ implementation in a submodule of an interface in a parent module.
 <span class="k">        call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: function routine is not associated&#39;</span><span class="p">)</span>
 <span class="w">        </span><span class="k">return</span>
 <span class="k">    end if</span>
-<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="o">==</span><span class="mi">1</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="p">.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="nb">associated</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">grad</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="o">==</span><span class="n">NLESOLVER_SPARSITY_DENSE</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="p">.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="nb">associated</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">grad</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
 <span class="k">        call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: gradient routine is not associated&#39;</span><span class="p">)</span>
 <span class="w">        </span><span class="k">return</span>
 <span class="k">    end if</span>
-<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="o">&gt;</span><span class="mi">1</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="p">.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="nb">associated</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">grad_sparse</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="o">&gt;</span><span class="n">NLESOLVER_SPARSITY_DENSE</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="p">.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="nb">associated</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">grad_sparse</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
 <span class="k">        call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: gradient routine is not associated&#39;</span><span class="p">)</span>
 <span class="w">        </span><span class="k">return</span>
 <span class="k">    end if</span>
@@ -442,7 +442,7 @@ implementation in a submodule of an interface in a parent module.
 <span class="w">    </span><span class="n">alloc_stat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">alloc_stat</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">allocate</span><span class="p">(</span><span class="n">fvec</span><span class="w">     </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">)</span><span class="w">      </span><span class="p">,</span><span class="w"> </span><span class="nb">stat</span><span class="o">=</span><span class="n">alloc_stat</span><span class="p">)</span>
 
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="o">==</span><span class="n">NLESOLVER_SPARSITY_DENSE</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
 <span class="w">        </span><span class="c">! dense</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">alloc_stat</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">allocate</span><span class="p">(</span><span class="n">fjac</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="nb">stat</span><span class="o">=</span><span class="n">alloc_stat</span><span class="p">)</span>
 <span class="w">    </span><span class="k">else</span>
@@ -457,7 +457,7 @@ implementation in a submodule of an interface in a parent module.
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">use_broyden</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
 <span class="w">        </span><span class="c">! only need these for broyden:</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">alloc_stat</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">allocate</span><span class="p">(</span><span class="n">prev_fvec</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">)</span><span class="w">      </span><span class="p">,</span><span class="w"> </span><span class="nb">stat</span><span class="o">=</span><span class="n">alloc_stat</span><span class="p">)</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="o">/=</span><span class="mi">1</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="n">alloc_stat</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="o">/=</span><span class="n">NLESOLVER_SPARSITY_DENSE</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="n">alloc_stat</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
 <span class="k">            allocate</span><span class="p">(</span><span class="n">prev_fjac</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="nb">stat</span><span class="o">=</span><span class="n">alloc_stat</span><span class="p">)</span>
 <span class="w">            </span><span class="n">index_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">n_nonzeros</span><span class="p">)]</span><span class="w"> </span><span class="c">! an array to index the sparse jacobian elements</span>
 <span class="w">        </span><span class="k">end if</span>
@@ -503,9 +503,9 @@ implementation in a submodule of an interface in a parent module.
 <span class="w">                    </span><span class="c">! always compute Jacobian on the first iteration</span>
 <span class="w">                    </span><span class="c">!call me%grad(x,fjac)</span>
 <span class="w">                    </span><span class="k">select case</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="p">)</span>
-<span class="w">                    </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">NLESOLVER_SPARSITY_DENSE</span><span class="p">)</span>
 <span class="w">                        </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">grad</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">fjac</span><span class="p">)</span>
-<span class="w">                    </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">:)</span>
+<span class="w">                    </span><span class="k">case </span><span class="n">default</span><span class="w"> </span><span class="c">! sparse modes</span>
 <span class="w">                        </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">grad_sparse</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">fjac_sparse</span><span class="p">)</span>
 <span class="w">                    </span><span class="k">end select</span>
 <span class="k">                    </span><span class="n">broyden_counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
@@ -517,7 +517,7 @@ implementation in a submodule of an interface in a parent module.
 <span class="w">                    </span><span class="n">delx</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">xold</span>
 <span class="w">                    </span><span class="n">delf</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fvec</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">prev_fvec</span>
 
-<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! dense</span>
+<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="o">==</span><span class="n">NLESOLVER_SPARSITY_DENSE</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! dense</span>
 
 <span class="w">                        </span><span class="n">delxmag2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">dot_product</span><span class="p">(</span><span class="n">delx</span><span class="p">(:,</span><span class="mi">1</span><span class="p">),</span><span class="n">delx</span><span class="p">(:,</span><span class="mi">1</span><span class="p">))</span>
 <span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">delxmag2</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">eps</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
@@ -560,7 +560,7 @@ implementation in a submodule of an interface in a parent module.
 <span class="k">                    </span><span class="n">broyden_counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">broyden_counter</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span>
 <span class="w">                </span><span class="k">end if</span>
 <span class="k">                </span><span class="n">prev_fvec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fvec</span>
-<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="o">==</span><span class="n">NLESOLVER_SPARSITY_DENSE</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
 <span class="k">                    </span><span class="n">prev_fjac</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fjac</span>
 <span class="w">                </span><span class="k">else</span>
 <span class="k">                    </span><span class="n">prev_fjac_sparse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fjac_sparse</span>
@@ -568,9 +568,9 @@ implementation in a submodule of an interface in a parent module.
 <span class="k">            else</span>
 <span class="w">                </span><span class="c">! compute the jacobian:</span>
 <span class="w">                </span><span class="k">select case</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="p">)</span>
-<span class="w">                </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">                </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">NLESOLVER_SPARSITY_DENSE</span><span class="p">)</span>
 <span class="w">                    </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">grad</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">fjac</span><span class="p">)</span>
-<span class="w">                </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">:)</span>
+<span class="w">                </span><span class="k">case </span><span class="n">default</span><span class="w"> </span><span class="c">! sparse</span>
 <span class="w">                    </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">grad_sparse</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">fjac_sparse</span><span class="p">)</span>
 <span class="w">                </span><span class="k">end select</span>
 <span class="k">                </span><span class="n">recompute_jac</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w">  </span><span class="c">! for broyden</span>
@@ -583,10 +583,12 @@ implementation in a submodule of an interface in a parent module.
 <span class="w">            </span><span class="c">! compute the search direction p by solving linear system:</span>
 <span class="w">            </span><span class="n">rhs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">fvec</span><span class="w"> </span><span class="c">! RHS of the linear system</span>
 <span class="w">            </span><span class="k">select case</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="p">)</span>
-<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">NLESOLVER_SPARSITY_DENSE</span><span class="p">)</span>
 <span class="w">                </span><span class="c">! use dense solver</span>
 <span class="w">                </span><span class="k">call </span><span class="n">linear_solver</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">,</span><span class="n">fjac</span><span class="p">,</span><span class="n">rhs</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">info</span><span class="p">)</span>
-<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">NLESOLVER_SPARSITY_LSQR</span><span class="p">)</span>
 <span class="w">                </span><span class="c">! initialize the LSQR sparse solver</span>
 <span class="w">                </span><span class="k">call </span><span class="n">sparse_solver</span><span class="p">%</span><span class="n">initialize</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">,</span><span class="n">fjac_sparse</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">irow</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">icol</span><span class="p">,&amp;</span>
 <span class="w">                                              </span><span class="n">atol</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">atol</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
@@ -608,12 +610,14 @@ implementation in a submodule of an interface in a parent module.
 <span class="k">                case </span><span class="n">default</span>
 <span class="w">                    </span><span class="n">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
 <span class="w">                </span><span class="k">end select</span>
-<span class="k">            case</span><span class="w"> </span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="k">            case</span><span class="w"> </span><span class="p">(</span><span class="n">NLESOLVER_SPARSITY_LUSOL</span><span class="p">)</span>
 <span class="w">                </span><span class="c">! use lusol solver</span>
 <span class="w">                </span><span class="n">lusol_options</span><span class="p">%</span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">lusol_method</span>
 <span class="w">                </span><span class="k">call </span><span class="n">solve</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">n_nonzeros</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">irow</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">icol</span><span class="p">,</span><span class="n">fjac_sparse</span><span class="p">,</span><span class="n">rhs</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">info</span><span class="p">,&amp;</span>
 <span class="w">                           </span><span class="n">settings</span><span class="o">=</span><span class="n">lusol_options</span><span class="p">)</span>
-<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">NLESOLVER_SPARSITY_LSMR</span><span class="p">)</span>
 
 <span class="w">                </span><span class="c">! use LSMR solver:</span>
 <span class="w">                </span><span class="c">!me%conlim = 1.0_wp/(100*epsilon(1.0_wp))</span>
@@ -635,6 +639,15 @@ implementation in a submodule of an interface in a parent module.
 <span class="w">                    </span><span class="n">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
 <span class="w">                </span><span class="k">end select</span>
 
+<span class="k">            case</span><span class="w"> </span><span class="p">(</span><span class="n">NLESOLVER_SPARSITY_CUSTOM_SPARSE</span><span class="p">)</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">associated</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">custom_solver_sparse</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="w">                    </span><span class="c">! a user-provided sparse solver:</span>
+<span class="w">                    </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">custom_solver_sparse</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">n_nonzeros</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">irow</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">icol</span><span class="p">,</span><span class="n">fjac_sparse</span><span class="p">,</span><span class="n">rhs</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">info</span><span class="p">)</span>
+<span class="w">                </span><span class="k">else</span>
+<span class="k">                    call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1006</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                                </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: The custom_solver_sparse procedure has not been set.&#39;</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">exit</span>
+<span class="k">                end if</span>
 <span class="k">            case </span><span class="n">default</span>
 <span class="w">                </span><span class="k">error stop</span><span class="w"> </span><span class="s1">&#39;invalid sparsity_mode&#39;</span>
 <span class="w">            </span><span class="k">end select</span>

@@ -77,7 +77,7 @@
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip"
                  data-bs-placement="bottom" data-html="true"
-                 title="22.8% of total for procedures.">142 statements</a>
+                 title="23.5% of total for procedures.">150 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -142,7 +142,7 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>private  subroutine initialize_nlesolver_variables(me, n, m, max_iter, tol, alpha, alpha_min, alpha_max, tolx, fmin_tol, backtrack_c, backtrack_tau, use_broyden, broyden_update_n, step_mode, func, grad, grad_sparse, export_iteration, user_input_check, verbose, iunit, n_uphill_max, n_intervals, sparsity_mode, irow, icol, atol, btol, conlim, damp, itnlim, nout, lusol_method, localSize)  
+    <h2>private  subroutine initialize_nlesolver_variables(me, n, m, max_iter, tol, alpha, alpha_min, alpha_max, tolx, fmin_tol, backtrack_c, backtrack_tau, use_broyden, broyden_update_n, step_mode, func, grad, grad_sparse, export_iteration, user_input_check, verbose, iunit, n_uphill_max, n_intervals, sparsity_mode, irow, icol, atol, btol, conlim, damp, itnlim, nout, lusol_method, localSize, custom_solver_sparse)  
 </h2>
     
 
@@ -164,7 +164,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-me~9"></span>
+              <span class="anchor" id="variable-me~10"></span>
               class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
             </td>
 <td>intent(inout)</td>
@@ -551,7 +551,9 @@ to allow where the value of <code>f</code> increases</p>
   Must specify <code>grad</code> for this mode.</li>
 <li>2 - assume sparse (use LSQR sparse solver).</li>
 <li>3 - assume sparse (use LUSOL sparse solver).</li>
-<li>4 - assume sparse (use LSMR sparse solver).
+<li>4 - assume sparse (use LSMR sparse solver).</li>
+<li>5 - assume sparse (use the user provided sparse
+  solver <code>custom_solver_sparse</code>).
 Must also specify <code>grad_sparse</code> and the <code>irow</code> and <code>icol</code>
 sparsity pattern for <code>mode&gt;1</code>.</li>
 </ul>
@@ -559,7 +561,7 @@ sparsity pattern for <code>mode&gt;1</code>.</li>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-irow~2"></span>
+              <span class="anchor" id="variable-irow~3"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -575,7 +577,7 @@ must be specified with <code>icol</code> and be the same length (<code>n_nonzero
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-icol~2"></span>
+              <span class="anchor" id="variable-icol~3"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -724,6 +726,22 @@ condition number of the matrix <code>Abar</code>.</p>
 </ul>
 <p>localSize need not be more than <code>min(m,n)</code>.
 At most <code>min(m,n)</code> vectors will be allocated.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-custom_solver_sparse~2"></span>
+              procedure(<a href='../interface/sparse_solver_func.html'>sparse_solver_func</a>),
+            </td>
+<td></td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>custom_solver_sparse</strong></td>
+            <td>
+                <p>for <code>sparsity_mode=5</code>, this is the
+user-provided linear solver.</p>
             </td>
         </tr>
     </tbody>
@@ -875,7 +893,7 @@ implementation in a submodule of an interface in a parent module.
 <span class="w">                    </span><span class="n">verbose</span><span class="p">,</span><span class="n">iunit</span><span class="p">,</span><span class="n">n_uphill_max</span><span class="p">,</span><span class="n">n_intervals</span><span class="p">,&amp;</span>
 <span class="w">                    </span><span class="n">sparsity_mode</span><span class="p">,</span><span class="n">irow</span><span class="p">,</span><span class="n">icol</span><span class="p">,&amp;</span>
 <span class="w">                    </span><span class="n">atol</span><span class="p">,</span><span class="n">btol</span><span class="p">,</span><span class="n">conlim</span><span class="p">,</span><span class="n">damp</span><span class="p">,</span><span class="n">itnlim</span><span class="p">,</span><span class="n">nout</span><span class="p">,&amp;</span>
-<span class="w">                    </span><span class="n">lusol_method</span><span class="p">,</span><span class="n">localSize</span><span class="w"> </span><span class="p">)</span>
+<span class="w">                    </span><span class="n">lusol_method</span><span class="p">,</span><span class="n">localSize</span><span class="p">,</span><span class="n">custom_solver_sparse</span><span class="w"> </span><span class="p">)</span>
 
 <span class="w">    </span><span class="k">implicit none</span>
 
@@ -921,6 +939,8 @@ implementation in a submodule of an interface in a parent module.
 <span class="w">                                                 </span><span class="c">!! * 2 - assume sparse (use LSQR sparse solver).</span>
 <span class="w">                                                 </span><span class="c">!! * 3 - assume sparse (use LUSOL sparse solver).</span>
 <span class="w">                                                 </span><span class="c">!! * 4 - assume sparse (use LSMR sparse solver).</span>
+<span class="w">                                                 </span><span class="c">!! * 5 - assume sparse (use the user provided sparse</span>
+<span class="w">                                                 </span><span class="c">!!   solver `custom_solver_sparse`).</span>
 <span class="w">                                                 </span><span class="c">!! Must also specify `grad_sparse` and the `irow` and `icol`</span>
 <span class="w">                                                 </span><span class="c">!! sparsity pattern for `mode&gt;1`.</span>
 <span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">irow</span><span class="w"> </span><span class="c">!! sparsity pattern nonzero elements row indices.</span>
@@ -947,6 +967,8 @@ implementation in a submodule of an interface in a parent module.
 <span class="w">                                             </span><span class="c">!!</span>
 <span class="w">                                             </span><span class="c">!! localSize need not be more than `min(m,n)`.</span>
 <span class="w">                                             </span><span class="c">!! At most `min(m,n)` vectors will be allocated.</span>
+<span class="w">    </span><span class="k">procedure</span><span class="p">(</span><span class="n">sparse_solver_func</span><span class="p">),</span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">custom_solver_sparse</span><span class="w"> </span><span class="c">!! for `sparsity_mode=5`, this is the</span>
+<span class="w">                                                                   </span><span class="c">!! user-provided linear solver.</span>
 
 <span class="w">    </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status_ok</span><span class="w"> </span><span class="c">!! true if there were no errors</span>
 
@@ -1036,9 +1058,11 @@ implementation in a submodule of an interface in a parent module.
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">irow</span><span class="p">))</span><span class="w"> </span><span class="k">deallocate</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">irow</span><span class="p">)</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">icol</span><span class="p">))</span><span class="w"> </span><span class="k">deallocate</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">icol</span><span class="p">)</span>
 
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">custom_solver_sparse</span><span class="p">))</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">custom_solver_sparse</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">custom_solver_sparse</span>
+
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">sparsity_mode</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
 <span class="k">        </span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sparsity_mode</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sparsity_mode</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! sparse solver method</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sparsity_mode</span><span class="o">&gt;</span><span class="n">NLESOLVER_SPARSITY_DENSE</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! sparse solver method</span>
 <span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">irow</span><span class="p">)</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="nb">present</span><span class="p">(</span><span class="n">icol</span><span class="p">)</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="nb">present</span><span class="p">(</span><span class="n">grad_sparse</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
 <span class="k">                if</span><span class="w"> </span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">irow</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">icol</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
 <span class="k">                    </span><span class="n">me</span><span class="p">%</span><span class="n">n_nonzeros</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">irow</span><span class="p">)</span>
@@ -1067,6 +1091,12 @@ implementation in a submodule of an interface in a parent module.
 <span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">localSize</span><span class="p">))</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">localSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">localSize</span>
 
 <span class="w">        </span><span class="k">end if</span>
+<span class="k">        if</span><span class="w"> </span><span class="p">(</span><span class="n">sparsity_mode</span><span class="o">==</span><span class="n">NLESOLVER_SPARSITY_CUSTOM_SPARSE</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">            if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="nb">associated</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">custom_solver_sparse</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: must specify custom_solver_sparse for sparsity_mode = 5&#39;</span><span class="p">)</span>
+<span class="w">                </span><span class="k">return</span>
+<span class="k">            end if</span>
+<span class="k">        end if</span>
 <span class="k">    end if</span>
 
 <span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">status_ok</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>

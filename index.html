@@ -88,14 +88,15 @@
 <ul>
 <li>Is object-oriented.</li>
 <li>Works with square, under-determined, or over-determined systems.</li>
-<li>Three different methods to solve the linear system:<ol>
+<li>Can use different methods to solve the linear system:<ol>
 <li><a href="https://www.netlib.org/lapack/">LAPACK</a> routines (<code>dgesv</code> or <code>dgels</code>) for dense systems: If <code>n=m</code>, uses <code>dgesv</code> (LU decomposition). If <code>n/=m</code>, uses <code>dgels</code> (if <code>m&gt;n</code> uses QR factorization, if <code>m&lt;n</code> uses LQ factorization).</li>
 <li><a href="https://github.com/jacobwilliams/LSQR">lsqr</a> -- a conjugate-gradient type method for solving sparse linear equations and sparse least-squares problems.</li>
 <li><a href="https://github.com/jacobwilliams/lusol">lusol</a> -- A sparse LU factorization for square and rectangular matrices, with Bartels-Golub-Reid updates for column replacement and other rank-1 modifications.</li>
 <li><a href="https://github.com/jacobwilliams/LSMR">lsmr</a> -- a conjugate-gradient type method for solving sparse linear equations and sparse least-squares problems</li>
+<li>The user can also provide a custom linear solver.</li>
 </ol>
 </li>
-<li>Has a Broyden update option.</li>
+<li>Has a Broyden update option (sparse and dense versions).</li>
 <li>Has various line search options.<ul>
 <li>use a specified constant step size (0,1]</li>
 <li>backtracking linesearch method</li>
