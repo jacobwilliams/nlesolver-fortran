@@ -108,6 +108,15 @@
         character(len=:),allocatable :: message         !! latest status message
         integer     :: istat            = -999          !! latest status message
 
+        integer :: bounds_mode = 0  !! how to handle the `x` variable bounds:
+                                    !!
+                                    !!  * 0 = ignore bounds.
+                                    !!  * 1 = use bounds (if specified) by adjusting the `x` vector
+                                    !!    at each function evaluation so that each individual `x`
+                                    !!    component is within its bounds.
+        real(wp),dimension(:),allocatable :: xlow !! lower bounds for `x` (size is `n`). only used if `bounds_mode>0`.
+        real(wp),dimension(:),allocatable :: xupp !! upper bounds for `x` (size is `n`). only used if `bounds_mode>0`.
+
         procedure(func_func),pointer       :: func             => null() !! user-supplied routine to compute the function
         procedure(export_func),pointer     :: export_iteration => null() !! user-supplied routine to export iterations
         procedure(wait_func),pointer       :: user_input_check => null() !! user-supplied routine to enable user to stop iterations
@@ -167,6 +176,7 @@
         procedure,public :: status     => get_status
 
         procedure :: set_status
+        procedure :: adjust_x_for_bounds
 
         end type nlesolver_type
     !*********************************************************
@@ -361,7 +371,8 @@
                     verbose,iunit,n_uphill_max,n_intervals,&
                     sparsity_mode,irow,icol,&
                     atol,btol,conlim,damp,itnlim,nout,&
-                    lusol_method,localSize,custom_solver_sparse )
+                    lusol_method,localSize,custom_solver_sparse,&
+                    bounds_mode,xlow,xupp)
 
     implicit none
 
@@ -437,6 +448,14 @@
                                              !! At most `min(m,n)` vectors will be allocated.
     procedure(sparse_solver_func),optional :: custom_solver_sparse !! for `sparsity_mode=5`, this is the
                                                                    !! user-provided linear solver.
+    logical,intent(in),optional :: bounds_mode  !! how to handle the `x` variable bounds:
+                                                !!
+                                                !!  * 0 = ignore bounds
+                                                !!  * 1 = use bounds (if specified) by adjusting the `x` vector
+                                                !!    at each step so that each individual `x` component is within
+                                                !!    the bounds
+    real(wp),dimension(n),intent(in),optional :: xlow  !! lower bounds for `x` (size is `n`). only used if `bounds_mode>0`.
+    real(wp),dimension(n),intent(in),optional :: xupp  !! upper bounds for `x` (size is `n`). only used if `bounds_mode>0`.
 
     logical :: status_ok !! true if there were no errors
 
@@ -452,6 +471,14 @@
     if (present(grad_sparse)) me%grad_sparse => grad_sparse
 
     !optional:
+
+    if (present(bounds_mode) .and. present(xlow) .and. present(xupp)) then
+        me%bounds_mode = bounds_mode
+        me%xupp = xupp
+        me%xlow = xlow
+    else
+        me%bounds_mode = 0  ! default
+    end if
 
     if (present(step_mode)) then
         select case (step_mode)
@@ -672,6 +699,7 @@
     end if
 
     ! evaluate the function:
+    call me%adjust_x_for_bounds(x) ! if the guess is out of bounds it may also be adjusted first.
     call me%func(x,fvec)
     f = norm2(fvec)
 
@@ -925,6 +953,22 @@
 
 !*****************************************************************************************
 !>
+!  if necessary, adjust the `x` vector to be within the bounds.
+
+    subroutine adjust_x_for_bounds(me,x)
+
+    implicit none
+
+    class(nlesolver_type),intent(inout) :: me
+    real(wp),dimension(me%n),intent(inout) :: x  !! the `x` vector to adjust
+
+    if (me%bounds_mode==1) x = min(max(x,me%xlow),me%xupp)
+
+    end subroutine adjust_x_for_bounds
+!*****************************************************************************************
+
+!*****************************************************************************************
+!>
 !   Destructor
 
     subroutine destroy_nlesolver_variables(me)
@@ -1042,6 +1086,7 @@
     real(wp),dimension(:),intent(in),optional :: fjac_sparse !! jacobian matrix [sparse]
 
     x = xold + p * me%alpha
+    call me%adjust_x_for_bounds(x)
 
     !evaluate the function at the new point:
     call me%func(x,fvec)
@@ -1115,6 +1160,7 @@
     do
 
         xtmp = xold + p * alpha
+        call me%adjust_x_for_bounds(xtmp)
         call me%func(xtmp,fvectmp)
         ftmp = norm2(fvectmp)
 
@@ -1183,6 +1229,7 @@
     if (me%verbose) write(me%iunit,'(1P,*(A,1X,E16.6))') '        alpha_min = ', alpha_min
 
     x = xold + p * alpha_min
+    call me%adjust_x_for_bounds(x)
     if (all(x==xnew)) then
         ! already computed in the func
     else
@@ -1198,6 +1245,7 @@ contains
     real(wp),intent(in) :: alpha !! indep variable
 
     xnew = xold + p * alpha
+    call me%adjust_x_for_bounds(xnew)
     call me%func(xnew,fvec)
     func_for_fmin = norm2(fvec) ! return result
 
@@ -1260,6 +1308,7 @@ contains
     do i = 1, n_points
 
         x_tmp = xold + p * alphas_to_try(i)
+        call me%adjust_x_for_bounds(x_tmp)
 
         ! evaluate the function at tthis point:
         call me%func(x_tmp,fvec_tmp)
