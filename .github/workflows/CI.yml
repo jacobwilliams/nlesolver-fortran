@@ -53,6 +53,7 @@ jobs:
            --install /usr/bin/gcc gcc /usr/bin/gcc-${{ matrix.gcc_v }} 100 \
            --slave /usr/bin/gfortran gfortran /usr/bin/gfortran-${{ matrix.gcc_v }} \
            --slave /usr/bin/gcov gcov /usr/bin/gcov-${{ matrix.gcc_v }}
+        sudo apt-get install libblas-dev liblapack-dev
 
     # - name: Compile
     #   run: fpm build --profile release
