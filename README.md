@@ -3,7 +3,7 @@
 
 Nonlinear Equation Solver with Modern Fortran.
 
-A basic Newton-Raphson type nonlinear equation solver for dense systems with `m` functions of `n` input variables.
+A basic Newton-Raphson type nonlinear equation solver for sparse or dense systems with `m` functions of `n` input variables.
 
 A work in progress.
 
