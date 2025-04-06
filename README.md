@@ -31,6 +31,9 @@ A work in progress.
      * backtracking linesearch method
      * exact linesearch method using [fmin](https://github.com/jacobwilliams/fmin) minimizer
      * evaluate function at specified fixed points
+  * Has two options for variable bounds (`xlow<=x<=xupp`):
+     * Ignore bounds
+     * Crude method: manually adjust `x` vector at each function evaluation so that `x = min(max(x,xlow),xupp)`.
 
 ### Compiling
 
