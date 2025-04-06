@@ -280,33 +280,56 @@
     integer,intent(in),optional         :: i       !! an integer value to append
     real(wp),intent(in),optional        :: r       !! a real value to append
 
-    character(len=256) :: numstr !! for number fo string conversion
     character(len=:),allocatable :: message !! the full message to log
     integer :: iostat !! write `iostat` code
 
     message = trim(string)
-    if (present(i)) then
-        numstr = ''
-        write(numstr,fmt=*,iostat=iostat) i
-        if (iostat/=0) numstr = '****'
-        message = message//' '//trim(adjustl(numstr))
-    end if
-    if (present(r)) then
-        numstr = ''
-        write(numstr,fmt=*,iostat=iostat) r
-        if (iostat/=0) numstr = '****'
-        message = message//' '//trim(adjustl(numstr))
-    end if
+    if (present(i)) message = message//' '//int2str(i)
+    if (present(r)) message = message//' '//real2str(r)
 
-    if (me%verbose) then
-        write(me%iunit,'(A)',iostat=iostat) message
-    end if
+    if (me%verbose)  write(me%iunit,'(A)',iostat=iostat) message
 
     ! store in the class:
     me%istat = istat
     me%message = message
 
     end subroutine set_status
+!*****************************************************************************************
+
+!*****************************************************************************************
+!>
+!  Convert an integer to a string. Works for up to 256 digits.
+
+    function int2str(i) result(s)
+        integer, intent(in) :: i !! integer to convert
+        character(len=:),allocatable :: s !! string result
+        character(len=256) :: tmp !! temp string
+        integer :: iostat !! write `iostat` code
+        write(tmp,fmt=*,iostat=iostat) i
+        if (iostat/=0) then
+            s = '****'
+        else
+            s = trim(adjustl(tmp))
+        end if
+    end function int2str
+!*****************************************************************************************
+
+!*****************************************************************************************
+!>
+!  Convert a real to a string. Works for up to 256 digits.
+
+    function real2str(r) result(s)
+        real(wp), intent(in) :: r !! real to convert
+        character(len=:),allocatable :: s !! string result
+        character(len=256) :: tmp !! temp string
+        integer :: iostat !! write `iostat` code
+        write(tmp,fmt=*,iostat=iostat) r
+        if (iostat/=0) then
+            s = '****'
+        else
+            s = trim(adjustl(tmp))
+        end if
+    end function real2str
 !*****************************************************************************************
 
 !*****************************************************************************************
@@ -330,6 +353,7 @@
 !  * -13  -- Error: backtracking linesearch tau must be in range (0, 1)
 !  * -14  -- Error: must specify grad_sparse, irow, and icol for sparsity_mode > 1
 !  * -15  -- Error: irow and icol must be the same length
+!  * -16  -- Error: xlow > xupp
 !  * -999 -- Error: class has not been initialized
 !  * 0    -- Class successfully initialized in [[nlesolver_type:initialize]]
 !  * 1    -- Required accuracy achieved
@@ -448,14 +472,16 @@
                                              !! At most `min(m,n)` vectors will be allocated.
     procedure(sparse_solver_func),optional :: custom_solver_sparse !! for `sparsity_mode=5`, this is the
                                                                    !! user-provided linear solver.
-    logical,intent(in),optional :: bounds_mode  !! how to handle the `x` variable bounds:
+    integer,intent(in),optional :: bounds_mode  !! how to handle the `x` variable bounds:
                                                 !!
                                                 !!  * 0 = ignore bounds
                                                 !!  * 1 = use bounds (if specified) by adjusting the `x` vector
                                                 !!    at each step so that each individual `x` component is within
                                                 !!    the bounds
-    real(wp),dimension(n),intent(in),optional :: xlow  !! lower bounds for `x` (size is `n`). only used if `bounds_mode>0`.
-    real(wp),dimension(n),intent(in),optional :: xupp  !! upper bounds for `x` (size is `n`). only used if `bounds_mode>0`.
+    real(wp),dimension(n),intent(in),optional :: xlow  !! lower bounds for `x` (size is `n`). only used if `bounds_mode>0` and
+                                                       !! both `xlow` and `xupp` are specified.
+    real(wp),dimension(n),intent(in),optional :: xupp  !! upper bounds for `x` (size is `n`). only used if `bounds_mode>0` and
+                                                       !! both `xlow` and `xupp` are specified.
 
     logical :: status_ok !! true if there were no errors
 
@@ -473,6 +499,11 @@
     !optional:
 
     if (present(bounds_mode) .and. present(xlow) .and. present(xupp)) then
+        if (any(xlow>xupp)) then  ! check for consistency
+            status_ok = .false.
+            call me%set_status(istat = -16, string = 'Error: xlow > xupp')
+            return
+        end if
         me%bounds_mode = bounds_mode
         me%xupp = xupp
         me%xlow = xlow
@@ -962,7 +993,20 @@
     class(nlesolver_type),intent(inout) :: me
     real(wp),dimension(me%n),intent(inout) :: x  !! the `x` vector to adjust
 
-    if (me%bounds_mode==1) x = min(max(x,me%xlow),me%xupp)
+    integer :: i !! counter
+
+    if (me%bounds_mode==1) then
+        ! x = min(max(x,me%xlow),me%xupp)
+        do i = 1, me%n
+            if (x(i)<me%xlow(i)) then
+                x(i) = me%xlow(i)
+                if (me%verbose) write(me%iunit, '(A)') 'x('//int2str(i)//') < xlow(i) : adjusting to lower bound'
+            else if (x(i)>me%xupp(i)) then
+                x(i) = me%xupp(i)
+                if (me%verbose) write(me%iunit, '(A)') 'x('//int2str(i)//') > xupp(i) : adjusting to upper bound'
+            end if
+        end do
+    end if
 
     end subroutine adjust_x_for_bounds
 !*****************************************************************************************
