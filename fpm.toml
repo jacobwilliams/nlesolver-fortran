@@ -1,6 +1,6 @@
 name = "nlesolver-fortran"
 author = "Jacob Williams"
-copyright  = "Copyright (c) 2021-2022, Jacob Williams"
+copyright  = "Copyright (c) 2021-2025, Jacob Williams"
 license = "BSD-3"
 description = "Nonlinear Equation Solver with Modern Fortran"
 homepage = "https://github.com/jacobwilliams/nlesolver-fortran"
