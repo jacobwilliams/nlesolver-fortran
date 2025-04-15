@@ -76,11 +76,16 @@
     !integer,parameter,public :: NLESOLVER_SPARSITY_CUSTOM_DENSE  = 6 !! [[nlesolver_type:sparsity_mode]] : assume dense (use a user provided dense solver). [not available]
     ! if add will have to update code below where sparsity_modes /= 1 is assumed sparse
 
-    ! bounds model options:
+    ! bounds mode options:
     integer,parameter,public :: NLESOLVER_IGNORE_BOUNDS = 0 !! [[nlesolver_type:bounds_mode]] : ignore bounds
     integer,parameter,public :: NLESOLVER_SCALAR_BOUNDS = 1 !! [[nlesolver_type:bounds_mode]] : scalar mode
     integer,parameter,public :: NLESOLVER_VECTOR_BOUNDS = 2 !! [[nlesolver_type:bounds_mode]] : vector mode
     integer,parameter,public :: NLESOLVER_WALL_BOUNDS   = 3 !! [[nlesolver_type:bounds_mode]] : wall mode
+
+    ! options to compute vector norm for function value:
+    integer,parameter,public :: NLESOLVER_2_NORM   = 1 !! [[nlesolver_type:norm_mode]] : 2-norm
+    integer,parameter,public :: NLESOLVER_INF_NORM = 2 !! [[nlesolver_type:norm_mode]] : infinity-norm
+    integer,parameter,public :: NLESOLVER_1_NORM   = 3 !! [[nlesolver_type:norm_mode]] : 1-norm
 
     !*********************************************************
         type,public :: nlesolver_type
@@ -115,9 +120,15 @@
         character(len=:),allocatable :: message         !! latest status message
         integer     :: istat            = -999          !! latest status message
 
+        integer :: norm_mode = NLESOLVER_2_NORM  !! how to compute the norm of the function vector:
+                                                 !!
+                                                 !! * 1 = 2-norm (default)
+                                                 !! * 2 = infinity-norm
+                                                 !! * 3 = 1-norm
+
         integer :: bounds_mode = NLESOLVER_IGNORE_BOUNDS  !! how to handle the `x` variable bounds:
                                     !!
-                                    !!  * 0 = ignore bounds.
+                                    !!  * 0 = ignore bounds (default).
                                     !!  * 1 = scalar mode : adjust the step vector (`xnew-x`) by moving each individual scalar component
                                     !!    of `xnew` to be within the bounds. Note that this can change the direction and magnitude of
                                     !!    the search vector.
@@ -194,6 +205,7 @@
         procedure :: adjust_x_for_bounds
         procedure :: adjust_search_direction
         procedure :: compute_next_step
+        procedure :: norm
 
         end type nlesolver_type
     !*********************************************************
@@ -372,6 +384,7 @@
 !  * -15  -- Error: irow and icol must be the same length
 !  * -16  -- Error: xlow > xupp
 !  * -17  -- Error adjusting line search direction for bounds
+!  * -18  -- Error: invalid norm_mode
 !  * -999 -- Error: class has not been initialized
 !  * 0    -- Class successfully initialized in [[nlesolver_type:initialize]]
 !  * 1    -- Required accuracy achieved
@@ -414,7 +427,7 @@
                     sparsity_mode,irow,icol,&
                     atol,btol,conlim,damp,itnlim,nout,&
                     lusol_method,localSize,custom_solver_sparse,&
-                    bounds_mode,xlow,xupp)
+                    bounds_mode,xlow,xupp,norm_mode)
 
     implicit none
 
@@ -502,6 +515,13 @@
                                                        !! both `xlow` and `xupp` are specified.
     real(wp),dimension(n),intent(in),optional :: xupp  !! upper bounds for `x` (size is `n`). only used if `bounds_mode>0` and
                                                        !! both `xlow` and `xupp` are specified.
+    integer,intent(in),optional :: norm_mode !! how to compute the norm of the function vector:
+                                             !!
+                                             !!  * 1 = 2-norm (optional)
+                                             !!  * 2 = infinity-norm
+                                             !!  * 3 = 1-norm
+                                             !!
+                                             !! See [[nlesolver_type:norm_mode]] for full descriptions.
 
     logical :: status_ok !! true if there were no errors
 
@@ -529,6 +549,18 @@
         me%xlow = xlow
     else
         me%bounds_mode = NLESOLVER_IGNORE_BOUNDS  ! default
+    end if
+
+    if (present(norm_mode)) then
+        if (norm_mode>=1 .and. norm_mode<=3) then   ! only valid values are 1,2,3
+            me%norm_mode = norm_mode
+        else
+            status_ok = .false.
+            call me%set_status(istat = -18, string = 'Error: invalid norm_mode:',i=norm_mode)
+            return
+        end if
+    else
+        me%norm_mode = NLESOLVER_2_NORM ! default
     end if
 
     if (present(step_mode)) then
@@ -752,7 +784,7 @@
     ! evaluate the function:
     call me%adjust_x_for_bounds(x) ! if the guess is out of bounds it may also be adjusted first.
     call me%func(x,fvec)
-    f = norm2(fvec)
+    f = me%norm(fvec)
 
     ! check to see if initial guess is a root:
     if (f <= me%tol) then
@@ -1146,6 +1178,25 @@
 
 !*****************************************************************************************
 !>
+!  Compute the norm of the function vector.
+
+    pure function norm(me, fvec) result(f)
+
+    class(nlesolver_type),intent(in) :: me
+    real(wp),dimension(me%m),intent(in) :: fvec  !! the function vector
+    real(wp) :: f  !! norm of the vector
+
+    select case (me%norm_mode)
+    case(NLESOLVER_2_NORM);   f = norm2(fvec)
+    case(NLESOLVER_INF_NORM); f = maxval(abs(fvec))
+    case(NLESOLVER_1_NORM);   f = sum(abs(fvec))
+    end select
+
+    end function norm
+!*****************************************************************************************
+
+!*****************************************************************************************
+!>
 !   Destructor
 
     subroutine destroy_nlesolver_variables(me)
@@ -1273,7 +1324,7 @@
 
     !evaluate the function at the new point:
     call me%func(x,fvec)
-    f = norm2(fvec)
+    f = me%norm(fvec)
 
     end subroutine simple_step
 !*****************************************************************************************
@@ -1352,7 +1403,7 @@
 
         call me%compute_next_step(xold, search_direction, alpha, modified, xtmp)
         call me%func(xtmp,fvectmp)
-        ftmp = norm2(fvectmp)
+        ftmp = me%norm(fvectmp)
 
         if (me%verbose) then
             write(me%iunit,'(1P,*(A,1X,E16.6))')          '        alpha    = ', alpha,    ' f       = ', ftmp
@@ -1428,7 +1479,7 @@
         ! already computed in the func
     else
         call me%func(x,fvec)
-        f = norm2(fvec)
+        f = me%norm(fvec)
     end if
 
 contains
@@ -1440,7 +1491,7 @@ contains
 
     call me%compute_next_step(xold, search_direction, alpha, modified, xnew)
     call me%func(xnew,fvec)
-    func_for_fmin = norm2(fvec) ! return result
+    func_for_fmin = me%norm(fvec) ! return result
 
     f = func_for_fmin ! just in case this is the solution
 
@@ -1507,9 +1558,9 @@ contains
 
         call me%compute_next_step(xold, search_direction, alphas_to_try(i), modified, x_tmp)
 
-        ! evaluate the function at tthis point:
+        ! evaluate the function at this point:
         call me%func(x_tmp,fvec_tmp)
-        f_tmp = norm2(fvec_tmp)
+        f_tmp = me%norm(fvec_tmp)
 
         if (f_tmp<=f) then ! new best point
             x = x_tmp
