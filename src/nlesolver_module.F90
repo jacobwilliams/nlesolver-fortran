@@ -13,6 +13,7 @@
 !  * http://projecteuclid.org/download/pdf_1/euclid.pjm/1102995080
 !  * http://help.agi.com/stk/index.htm#gator/eq-diffcorr.htm
 !  * http://gmat.sourceforge.net/doc/R2015a/html/DifferentialCorrector.html
+!  * https://openmdao.org/newdocs/versions/latest/features/building_blocks/solvers/bounds_enforce.html
 !
 !### Author
 !  * Jacob Williams
@@ -67,19 +68,19 @@
     real(wp),parameter :: big  = huge(one)
 
     ! options for sparsity_mode
-    integer,parameter,public :: NLESOLVER_SPARSITY_DENSE         = 1 !! assume dense (use dense solver).
-    integer,parameter,public :: NLESOLVER_SPARSITY_LSQR          = 2 !! assume sparse (use LSQR sparse solver).
-    integer,parameter,public :: NLESOLVER_SPARSITY_LUSOL         = 3 !! assume sparse (use LUSOL sparse solver).
-    integer,parameter,public :: NLESOLVER_SPARSITY_LSMR          = 4 !! assume sparse (use LSMR sparse solver).
-    integer,parameter,public :: NLESOLVER_SPARSITY_CUSTOM_SPARSE = 5 !! assume sparse (use a user provided sparse solver).
-    !integer,parameter,public :: NLESOLVER_SPARSITY_CUSTOM_DENSE  = 6 !! assume dense (use a user provided dense solver).
+    integer,parameter,public :: NLESOLVER_SPARSITY_DENSE         = 1 !! [[nlesolver_type:sparsity_mode]] : assume dense (use dense solver).
+    integer,parameter,public :: NLESOLVER_SPARSITY_LSQR          = 2 !! [[nlesolver_type:sparsity_mode]] : assume sparse (use LSQR sparse solver).
+    integer,parameter,public :: NLESOLVER_SPARSITY_LUSOL         = 3 !! [[nlesolver_type:sparsity_mode]] : assume sparse (use LUSOL sparse solver).
+    integer,parameter,public :: NLESOLVER_SPARSITY_LSMR          = 4 !! [[nlesolver_type:sparsity_mode]] : assume sparse (use LSMR sparse solver).
+    integer,parameter,public :: NLESOLVER_SPARSITY_CUSTOM_SPARSE = 5 !! [[nlesolver_type:sparsity_mode]] : assume sparse (use a user provided sparse solver).
+    !integer,parameter,public :: NLESOLVER_SPARSITY_CUSTOM_DENSE  = 6 !! [[nlesolver_type:sparsity_mode]] : assume dense (use a user provided dense solver). [not available]
     ! if add will have to update code below where sparsity_modes /= 1 is assumed sparse
 
-    ! bounds model parameters:
-    integer,parameter,public :: NLESOLVER_IGNORE_BOUNDS = 0
-    integer,parameter,public :: NLESOLVER_SCALAR_BOUNDS = 1
-    integer,parameter,public :: NLESOLVER_VECTOR_BOUNDS = 2
-    integer,parameter,public :: NLESOLVER_WALL_BOUNDS   = 3
+    ! bounds model options:
+    integer,parameter,public :: NLESOLVER_IGNORE_BOUNDS = 0 !! [[nlesolver_type:bounds_mode]] : ignore bounds
+    integer,parameter,public :: NLESOLVER_SCALAR_BOUNDS = 1 !! [[nlesolver_type:bounds_mode]] : scalar mode
+    integer,parameter,public :: NLESOLVER_VECTOR_BOUNDS = 2 !! [[nlesolver_type:bounds_mode]] : vector mode
+    integer,parameter,public :: NLESOLVER_WALL_BOUNDS   = 3 !! [[nlesolver_type:bounds_mode]] : wall mode
 
     !*********************************************************
         type,public :: nlesolver_type
@@ -495,6 +496,8 @@
                                                 !!  * 1 = scalar mode
                                                 !!  * 2 = vector mode
                                                 !!  * 3 = wall mode
+                                                !!
+                                                !! See [[nlesolver_type:bounds_mode]] for full descriptions.
     real(wp),dimension(n),intent(in),optional :: xlow  !! lower bounds for `x` (size is `n`). only used if `bounds_mode>0` and
                                                        !! both `xlow` and `xupp` are specified.
     real(wp),dimension(n),intent(in),optional :: xupp  !! upper bounds for `x` (size is `n`). only used if `bounds_mode>0` and
@@ -1032,24 +1035,20 @@
 
 !*****************************************************************************************
 !>
-!  if necessary, adjust the search direction vector so that bounds are not violated.
+!  if necessary, adjust the search direction vector `p` so that bounds are not violated.
 !
 !### Reference
 !  * https://openmdao.org/newdocs/versions/latest/features/building_blocks/solvers/bounds_enforce.html
-
-    ! TODO:  for the 'wall' mode, flag the ones that were violated, and use
-    !        that to set the alpha=0 for those vars during the line search.
-    !        --> where (adjusted) xnew = x
 
     subroutine adjust_search_direction(me,x,p,pnew,modified)
 
     implicit none
 
     class(nlesolver_type),intent(inout) :: me
-    real(wp),dimension(me%n),intent(in) :: x  !! initial `x`
+    real(wp),dimension(me%n),intent(in) :: x  !! initial `x`. it is assumed that this does not violate any bounds.
     real(wp),dimension(me%n),intent(in) :: p  !! search direction `p = xnew - x`
     real(wp),dimension(me%n),intent(out) :: pnew  !! new search direction
-    logical,dimension(me%n),intent(out) :: modified  !! indicates the elements of p that were modified
+    logical,dimension(me%n),intent(out) :: modified  !! indicates the elements of `p` that were modified
 
     integer :: i  !! counter
     real(wp),dimension(:),allocatable :: xnew  !! `x + pnew`
