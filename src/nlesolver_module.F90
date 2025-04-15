@@ -75,6 +75,12 @@
     !integer,parameter,public :: NLESOLVER_SPARSITY_CUSTOM_DENSE  = 6 !! assume dense (use a user provided dense solver).
     ! if add will have to update code below where sparsity_modes /= 1 is assumed sparse
 
+    ! bounds model parameters:
+    integer,parameter,public :: NLESOLVER_IGNORE_BOUNDS = 0
+    integer,parameter,public :: NLESOLVER_SCALAR_BOUNDS = 1
+    integer,parameter,public :: NLESOLVER_VECTOR_BOUNDS = 2
+    integer,parameter,public :: NLESOLVER_WALL_BOUNDS   = 3
+
     !*********************************************************
         type,public :: nlesolver_type
 
@@ -108,12 +114,20 @@
         character(len=:),allocatable :: message         !! latest status message
         integer     :: istat            = -999          !! latest status message
 
-        integer :: bounds_mode = 0  !! how to handle the `x` variable bounds:
+        integer :: bounds_mode = NLESOLVER_IGNORE_BOUNDS  !! how to handle the `x` variable bounds:
                                     !!
                                     !!  * 0 = ignore bounds.
-                                    !!  * 1 = use bounds (if specified) by adjusting the `x` vector
-                                    !!    at each function evaluation so that each individual `x`
-                                    !!    component is within its bounds.
+                                    !!  * 1 = scalar mode : adjust the step vector (`xnew-x`) by moving each individual scalar component
+                                    !!    of `xnew` to be within the bounds. Note that this can change the direction and magnitude of
+                                    !!    the search vector.
+                                    !!  * 2 = vector mode: backtrack the search vector so that no bounds are violated. note that
+                                    !!    this does not change the direction of the vector, only the magnitude.
+                                    !!  * 3 = wall mode: adjust the step vector (`xnew-x`) by moving each individual scalar component
+                                    !!    of `xnew` to be within the bounds. And then holding the ones changed fixed during the line search.
+                                    !!
+                                    !! Note: if `bounds_mode>0`, then the initial `x` vector is also adjusted
+                                    !! to be within the bounds before the first step, if necessary. This is just done
+                                    !! by adjusting each scalar component of `x` to be within bounds.
         real(wp),dimension(:),allocatable :: xlow !! lower bounds for `x` (size is `n`). only used if `bounds_mode>0`.
         real(wp),dimension(:),allocatable :: xupp !! upper bounds for `x` (size is `n`). only used if `bounds_mode>0`.
 
@@ -177,6 +191,8 @@
 
         procedure :: set_status
         procedure :: adjust_x_for_bounds
+        procedure :: adjust_search_direction
+        procedure :: compute_next_step
 
         end type nlesolver_type
     !*********************************************************
@@ -354,6 +370,7 @@
 !  * -14  -- Error: must specify grad_sparse, irow, and icol for sparsity_mode > 1
 !  * -15  -- Error: irow and icol must be the same length
 !  * -16  -- Error: xlow > xupp
+!  * -17  -- Error adjusting line search direction for bounds
 !  * -999 -- Error: class has not been initialized
 !  * 0    -- Class successfully initialized in [[nlesolver_type:initialize]]
 !  * 1    -- Required accuracy achieved
@@ -475,9 +492,9 @@
     integer,intent(in),optional :: bounds_mode  !! how to handle the `x` variable bounds:
                                                 !!
                                                 !!  * 0 = ignore bounds
-                                                !!  * 1 = use bounds (if specified) by adjusting the `x` vector
-                                                !!    at each step so that each individual `x` component is within
-                                                !!    the bounds
+                                                !!  * 1 = scalar mode
+                                                !!  * 2 = vector mode
+                                                !!  * 3 = wall mode
     real(wp),dimension(n),intent(in),optional :: xlow  !! lower bounds for `x` (size is `n`). only used if `bounds_mode>0` and
                                                        !! both `xlow` and `xupp` are specified.
     real(wp),dimension(n),intent(in),optional :: xupp  !! upper bounds for `x` (size is `n`). only used if `bounds_mode>0` and
@@ -508,7 +525,7 @@
         me%xupp = xupp
         me%xlow = xlow
     else
-        me%bounds_mode = 0  ! default
+        me%bounds_mode = NLESOLVER_IGNORE_BOUNDS  ! default
     end if
 
     if (present(step_mode)) then
@@ -985,6 +1002,7 @@
 !*****************************************************************************************
 !>
 !  if necessary, adjust the `x` vector to be within the bounds.
+!  used for the initial guess.
 
     subroutine adjust_x_for_bounds(me,x)
 
@@ -995,20 +1013,136 @@
 
     integer :: i !! counter
 
-    if (me%bounds_mode==1) then
+    if (me%bounds_mode/=NLESOLVER_IGNORE_BOUNDS) then
+        ! for all bounds modes, adjust the initial guess to be within the bounds
         ! x = min(max(x,me%xlow),me%xupp)
         do i = 1, me%n
             if (x(i)<me%xlow(i)) then
                 x(i) = me%xlow(i)
-                if (me%verbose) write(me%iunit, '(A)') 'x('//int2str(i)//') < xlow(i) : adjusting to lower bound'
+                if (me%verbose) write(me%iunit, '(A)') 'Initial x('//int2str(i)//') < xlow(i) : adjusting to lower bound'
             else if (x(i)>me%xupp(i)) then
                 x(i) = me%xupp(i)
-                if (me%verbose) write(me%iunit, '(A)') 'x('//int2str(i)//') > xupp(i) : adjusting to upper bound'
+                if (me%verbose) write(me%iunit, '(A)') 'Initial x('//int2str(i)//') > xupp(i) : adjusting to upper bound'
             end if
         end do
     end if
 
     end subroutine adjust_x_for_bounds
+!*****************************************************************************************
+
+!*****************************************************************************************
+!>
+!  if necessary, adjust the search direction vector so that bounds are not violated.
+!
+!### Reference
+!  * https://openmdao.org/newdocs/versions/latest/features/building_blocks/solvers/bounds_enforce.html
+
+    ! TODO:  for the 'wall' mode, flag the ones that were violated, and use
+    !        that to set the alpha=0 for those vars during the line search.
+    !        --> where (adjusted) xnew = x
+
+    subroutine adjust_search_direction(me,x,p,pnew,modified)
+
+    implicit none
+
+    class(nlesolver_type),intent(inout) :: me
+    real(wp),dimension(me%n),intent(in) :: x  !! initial `x`
+    real(wp),dimension(me%n),intent(in) :: p  !! search direction `p = xnew - x`
+    real(wp),dimension(me%n),intent(out) :: pnew  !! new search direction
+    logical,dimension(me%n),intent(out) :: modified  !! indicates the elements of p that were modified
+
+    integer :: i  !! counter
+    real(wp),dimension(:),allocatable :: xnew  !! `x + pnew`
+    logical :: search_direction_modifed !! if `p` has been modified
+    real(wp) :: t !! indep var in the step equation: `xnew = x + t*p`
+
+    if (me%bounds_mode==NLESOLVER_IGNORE_BOUNDS) then ! no change
+        modified = .false.
+        pnew = p
+        return
+    end if
+
+    allocate(xnew(me%n))
+    xnew = x + p
+    search_direction_modifed = .false.
+    t = 1.0_wp ! for mode 2, start with full newton step
+               ! note: have to check each variable and choose the smallest t.
+    modified = .false.  ! initialize
+
+    do i = 1, me%n
+        if (xnew(i)<me%xlow(i)) then
+            search_direction_modifed = .true.
+            modified(i) = .true.
+            if (me%verbose) write(me%iunit, '(A)') 'x('//int2str(i)//') < xlow(i) : adjusting to lower bound'
+            select case (me%bounds_mode)
+            case(NLESOLVER_SCALAR_BOUNDS,NLESOLVER_WALL_BOUNDS)
+                xnew(i) = me%xlow(i)
+            case(NLESOLVER_VECTOR_BOUNDS)
+                t = min(t,(me%xlow(i)-x(i))/p(i))
+            end select
+        else if (xnew(i)>me%xupp(i)) then
+            search_direction_modifed = .true.
+            modified(i) = .true.
+            if (me%verbose) write(me%iunit, '(A)') 'x('//int2str(i)//') > xupp(i) : adjusting to upper bound'
+            select case (me%bounds_mode)
+            case(NLESOLVER_SCALAR_BOUNDS,NLESOLVER_WALL_BOUNDS)
+                xnew(i) = me%xupp(i)
+            case(NLESOLVER_VECTOR_BOUNDS)
+                t = min(t,(me%xupp(i)-x(i))/p(i))
+            end select
+        end if
+    end do
+
+    if (search_direction_modifed) then
+        ! adjust the search direction:
+        select case (me%bounds_mode)
+        case (NLESOLVER_SCALAR_BOUNDS,NLESOLVER_WALL_BOUNDS)
+            pnew = xnew - x  ! here we have changed the search direction vector
+            if (all(pnew==0.0_wp)) call me%set_status(istat = -17, string = 'Error adjusting line search direction for bounds')
+        case (NLESOLVER_VECTOR_BOUNDS)
+            ! here was are staying on the original search direction vector, just walking back
+            if (t <= 0.0_wp) then ! something wrong
+                call me%set_status(istat = -17, string = 'Error adjusting line search direction for bounds')
+                pnew = p
+            else
+                pnew = p / t
+            end if
+        end select
+        if (me%verbose) write(me%iunit, '(A)') 'Search direction modified to be within bounds'
+    else
+        pnew = p
+    end if
+
+    end subroutine adjust_search_direction
+!*****************************************************************************************
+
+!*****************************************************************************************
+!>
+!  Compute the next step.
+
+    subroutine compute_next_step(me, xold, search_direction, alpha, modified, xnew)
+
+    class(nlesolver_type),intent(inout)  :: me
+    real(wp),dimension(me%n),intent(in)  :: xold  !! initial `x`
+    real(wp),dimension(me%n),intent(in)  :: search_direction  !! search direction vector
+    real(wp),intent(in)                  :: alpha !! step length
+    logical,dimension(me%n),intent(in)   :: modified  !! indicates the elements of `p` that were
+                                                      !! modified because they violated the bounds
+    real(wp),dimension(me%n),intent(out) :: xnew  !! final `x`
+
+    if (me%bounds_mode == NLESOLVER_WALL_BOUNDS) then
+        ! for the 'wall' mode, the modified variables are held fixed during the step
+        where (modified)
+            xnew = xold
+        else where
+            xnew = xold + search_direction * me%alpha
+        end where
+    else
+        ! all other modes just use the computed search direction
+        xnew = xold + search_direction * alpha
+    end if
+
+    end subroutine compute_next_step
 !*****************************************************************************************
 
 !*****************************************************************************************
@@ -1129,8 +1263,14 @@
     real(wp),dimension(:,:),intent(in),optional :: fjac !! jacobian matrix [dense]
     real(wp),dimension(:),intent(in),optional :: fjac_sparse !! jacobian matrix [sparse]
 
-    x = xold + p * me%alpha
-    call me%adjust_x_for_bounds(x)
+    real(wp),dimension(:),allocatable :: search_direction
+    logical,dimension(:),allocatable :: modified  !! indicates the elements of p that were modified
+
+    allocate(search_direction(me%n))
+    allocate(modified(me%n))
+
+    call me%adjust_search_direction(xold,p,search_direction,modified)
+    call me%compute_next_step(xold, search_direction, me%alpha, modified, x)
 
     !evaluate the function at the new point:
     call me%func(x,fvec)
@@ -1170,11 +1310,18 @@
     real(wp),dimension(:),allocatable :: gradf      !! line search objective function gradient vector
     real(wp),dimension(:),allocatable :: xtmp       !! `x` value for linesearch
     real(wp),dimension(:),allocatable :: fvectmp    !! `fvec` value for linesearch
+    real(wp),dimension(:),allocatable :: search_direction  !! search direction to use (can be modified from `p` if bounds are violated)
+    logical,dimension(:),allocatable :: modified  !! indicates the elements of p that were modified
 
     ! allocate arrays:
     allocate(gradf(me%n))
     allocate(xtmp(me%n))
     allocate(fvectmp(me%m))
+    allocate(search_direction(me%n))
+    allocate(modified(me%n))
+
+    ! set the search direction:
+    call me%adjust_search_direction(xold,p,search_direction,modified)
 
     ! compute the gradient of the function to be minimized
     ! (which in this case is 1/2 the norm of fvec). Use the chain
@@ -1190,7 +1337,7 @@
             gradf(i) = dot_product(fvec,pack(fjac_sparse,mask=me%icol==i))
         end do
     end if
-    slope = dot_product(p, gradf)
+    slope = dot_product(search_direction, gradf)
     t = -me%c * slope
 
     if (me%verbose) then
@@ -1199,12 +1346,12 @@
     end if
 
     ! perform the line search:
-    min_alpha_reached = .false.
-    alpha = me%alpha_max  ! start with the largest step
+
+    min_alpha_reached = .false.   ! initialize
+    alpha = me%alpha_max          ! start with the largest step
     do
 
-        xtmp = xold + p * alpha
-        call me%adjust_x_for_bounds(xtmp)
+        call me%compute_next_step(xold, search_direction, alpha, modified, xtmp)
         call me%func(xtmp,fvectmp)
         ftmp = norm2(fvectmp)
 
@@ -1264,16 +1411,20 @@
 
     real(wp),dimension(:),allocatable :: xnew !! used in [[func_for_fmin]]
     real(wp) :: alpha_min
+    real(wp),dimension(:),allocatable :: search_direction !! search direction to use (may be modified from `p` if bounds are violated)
+    logical,dimension(:),allocatable :: modified  !! indicates the elements of p that were modified
 
     allocate(xnew(me%n))
+    allocate(search_direction(me%n))
+    allocate(modified(me%n))
 
     ! find the minimum value of f in the range of alphas:
     alpha_min = fmin(func_for_fmin,me%alpha_min,me%alpha_max,me%fmin_tol)
 
     if (me%verbose) write(me%iunit,'(1P,*(A,1X,E16.6))') '        alpha_min = ', alpha_min
 
-    x = xold + p * alpha_min
-    call me%adjust_x_for_bounds(x)
+    call me%adjust_search_direction(xold,p,search_direction,modified)
+    call me%compute_next_step(xold, search_direction, alpha_min, modified, x)
     if (all(x==xnew)) then
         ! already computed in the func
     else
@@ -1288,8 +1439,7 @@ contains
     implicit none
     real(wp),intent(in) :: alpha !! indep variable
 
-    xnew = xold + p * alpha
-    call me%adjust_x_for_bounds(xnew)
+    call me%compute_next_step(xold, search_direction, alpha, modified, xnew)
     call me%func(xnew,fvec)
     func_for_fmin = norm2(fvec) ! return result
 
@@ -1326,6 +1476,8 @@ contains
     real(wp) :: f_tmp !! temp `f`
     real(wp) :: step_size !! step size for `alpha`
     integer :: n !! number of steps to divide the interval
+    real(wp),dimension(:),allocatable :: search_direction !! search direction to use (may be modified from `p` if bounds are violated)
+    logical,dimension(:),allocatable :: modified  !! indicates the elements of p that were modified
 
     ! 1 o-----------o
     ! 2 o-----o-----o
@@ -1337,6 +1489,8 @@ contains
     allocate(alphas_to_try(n_points))
     allocate(x_tmp(me%n))
     allocate(fvec_tmp(me%m))
+    allocate(search_direction(me%n))
+    allocate(modified(me%n))
 
     step_size = (me%alpha_max - me%alpha_min) / real(n,wp)
 
@@ -1349,10 +1503,10 @@ contains
 
     ! now compute the functions at these alphas:
     f = big
+    call me%adjust_search_direction(xold,p,search_direction,modified)
     do i = 1, n_points
 
-        x_tmp = xold + p * alphas_to_try(i)
-        call me%adjust_x_for_bounds(x_tmp)
+        call me%compute_next_step(xold, search_direction, alphas_to_try(i), modified, x_tmp)
 
         ! evaluate the function at tthis point:
         call me%func(x_tmp,fvec_tmp)

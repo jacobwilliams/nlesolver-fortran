@@ -99,7 +99,7 @@
                                 n_intervals = n_intervals, &
                                 fmin_tol = fmin_tol, &
                                 verbose = verbose, &
-                                bounds_mode = 1, &
+                                bounds_mode = NLESOLVER_SCALAR_BOUNDS, &
                                 xlow = [0.0_wp, -5.0_wp], &
                                 xupp = [1.0_wp, 0.0_wp])
         call solver%status(istat, message)
