@@ -31,9 +31,15 @@ A work in progress.
      * backtracking linesearch method
      * exact linesearch method using [fmin](https://github.com/jacobwilliams/fmin) minimizer
      * evaluate function at specified fixed points
-  * Has two options for variable bounds (`xlow<=x<=xupp`):
+  * Has four options for variable bounds (`xlow<=x<=xupp`):
      * Ignore bounds
-     * Crude method: manually adjust `x` vector at each function evaluation so that `x = min(max(x,xlow),xupp)`.
+     * Scalar method: The Newton search direction is changed by checking each `x` component individually. If a component is on a bound, its value is set to the bound. The result is the new line search direction.
+     * Vector mode: The Newton search direction is not changed, but, the magnitude is walked back so that no variable violates their bounds.
+     * "Wall" mode: Similar to scalar mode, except after modifying the search direction vector, each line search step keeps any values constant that were put on the bounds.
+  * Has three options for computing the function vector norm:
+     * 2-norm (`norm2(fvec)`)
+     * Infinity-norm (`maxval(abs(fvec))`)
+     * 1-norm (`sum(abs(fvec))`)
 
 ### Compiling
 
