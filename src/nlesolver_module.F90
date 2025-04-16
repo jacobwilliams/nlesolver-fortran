@@ -192,6 +192,8 @@
         ! custom sparse solver:
         procedure(sparse_solver_func),pointer :: custom_solver_sparse => null() !! user-supplied sparse linear solver routine (used for `sparsity_mode=5`)
 
+        procedure(norm_func),pointer :: norm => null() !! function for computing the norm of the `f` vector
+
         contains
 
         private
@@ -205,7 +207,6 @@
         procedure :: adjust_x_for_bounds
         procedure :: adjust_search_direction
         procedure :: compute_next_step
-        procedure :: norm
 
         end type nlesolver_type
     !*********************************************************
@@ -289,6 +290,15 @@
             real(wp),dimension(:,:),intent(in),optional :: fjac !! jacobian matrix [dense]
             real(wp),dimension(:),intent(in),optional :: fjac_sparse !! jacobian matrix [sparse]
         end subroutine linesearch_func
+
+        pure function norm_func(me, fvec) result(f)
+            !! function vector norm.
+            import :: wp,nlesolver_type
+            implicit none
+            class(nlesolver_type),intent(in) :: me
+            real(wp),dimension(me%m),intent(in) :: fvec  !! the function vector
+            real(wp) :: f  !! norm of the vector
+        end function norm_func
 
     end interface
 
@@ -552,15 +562,17 @@
     end if
 
     if (present(norm_mode)) then
-        if (norm_mode>=1 .and. norm_mode<=3) then   ! only valid values are 1,2,3
-            me%norm_mode = norm_mode
-        else
+        select case (norm_mode)
+        case(NLESOLVER_2_NORM   ); me%norm => norm_2
+        case(NLESOLVER_INF_NORM ); me%norm => norm_inf
+        case(NLESOLVER_1_NORM   ); me%norm => norm_1
+        case default
             status_ok = .false.
             call me%set_status(istat = -18, string = 'Error: invalid norm_mode:',i=norm_mode)
             return
-        end if
+        end select
     else
-        me%norm_mode = NLESOLVER_2_NORM ! default
+        me%norm => norm_2 ! default
     end if
 
     if (present(step_mode)) then
@@ -1177,21 +1189,47 @@
 
 !*****************************************************************************************
 !>
-!  Compute the norm of the function vector.
+!  2-norm function
 
-    pure function norm(me, fvec) result(f)
+    pure function norm_2(me, fvec) result(f)
 
     class(nlesolver_type),intent(in) :: me
     real(wp),dimension(me%m),intent(in) :: fvec  !! the function vector
     real(wp) :: f  !! norm of the vector
 
-    select case (me%norm_mode)
-    case(NLESOLVER_2_NORM);   f = norm2(fvec)
-    case(NLESOLVER_INF_NORM); f = maxval(abs(fvec))
-    case(NLESOLVER_1_NORM);   f = sum(abs(fvec))
-    end select
+    f = norm2(fvec)
 
-    end function norm
+    end function norm_2
+!*****************************************************************************************
+
+!*****************************************************************************************
+!>
+!  1-norm function
+
+    pure function norm_1(me, fvec) result(f)
+
+    class(nlesolver_type),intent(in) :: me
+    real(wp),dimension(me%m),intent(in) :: fvec  !! the function vector
+    real(wp) :: f  !! norm of the vector
+
+    f = sum(abs(fvec))
+
+    end function norm_1
+!*****************************************************************************************
+
+!*****************************************************************************************
+!>
+!  Infinity-norm function
+
+    pure function norm_inf(me, fvec) result(f)
+
+    class(nlesolver_type),intent(in) :: me
+    real(wp),dimension(me%m),intent(in) :: fvec  !! the function vector
+    real(wp) :: f  !! norm of the vector
+
+    f = maxval(abs(fvec))
+
+    end function norm_inf
 !*****************************************************************************************
 
 !*****************************************************************************************
