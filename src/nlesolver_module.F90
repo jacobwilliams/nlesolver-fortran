@@ -1094,11 +1094,13 @@
     end if
 
     allocate(xnew(me%n))
-    xnew = x + p
-    search_direction_modifed = .false.
-    t = 1.0_wp ! for mode 2, start with full newton step
-               ! note: have to check each variable and choose the smallest t.
-    modified = .false.  ! initialize
+    xnew = x + p  ! this is the full Newton step
+    search_direction_modifed = .false.  ! will be set to true if any bounds are violated
+    if (me%bounds_mode==NLESOLVER_VECTOR_BOUNDS) t = 1.0_wp ! for mode 2, start with full newton step
+                                                            ! note: have to check each variable and
+                                                            ! choose the smallest t. don't need to
+                                                            ! keep track of xnew.
+    modified = .false.
 
     do i = 1, me%n
         if (xnew(i)<me%xlow(i)) then
@@ -1106,20 +1108,16 @@
             modified(i) = .true.
             if (me%verbose) write(me%iunit, '(A)') 'x('//int2str(i)//') < xlow(i) : adjusting to lower bound'
             select case (me%bounds_mode)
-            case(NLESOLVER_SCALAR_BOUNDS,NLESOLVER_WALL_BOUNDS)
-                xnew(i) = me%xlow(i)
-            case(NLESOLVER_VECTOR_BOUNDS)
-                t = min(t,(me%xlow(i)-x(i))/p(i))
+            case(NLESOLVER_SCALAR_BOUNDS,NLESOLVER_WALL_BOUNDS); xnew(i) = me%xlow(i)
+            case(NLESOLVER_VECTOR_BOUNDS);                       t = min(t,(me%xlow(i)-x(i))/p(i))
             end select
         else if (xnew(i)>me%xupp(i)) then
             search_direction_modifed = .true.
             modified(i) = .true.
             if (me%verbose) write(me%iunit, '(A)') 'x('//int2str(i)//') > xupp(i) : adjusting to upper bound'
             select case (me%bounds_mode)
-            case(NLESOLVER_SCALAR_BOUNDS,NLESOLVER_WALL_BOUNDS)
-                xnew(i) = me%xupp(i)
-            case(NLESOLVER_VECTOR_BOUNDS)
-                t = min(t,(me%xupp(i)-x(i))/p(i))
+            case(NLESOLVER_SCALAR_BOUNDS,NLESOLVER_WALL_BOUNDS); xnew(i) = me%xupp(i)
+            case(NLESOLVER_VECTOR_BOUNDS);                       t = min(t,(me%xupp(i)-x(i))/p(i))
             end select
         end if
     end do
@@ -1156,9 +1154,10 @@
     class(nlesolver_type),intent(inout)  :: me
     real(wp),dimension(me%n),intent(in)  :: xold  !! initial `x`
     real(wp),dimension(me%n),intent(in)  :: search_direction  !! search direction vector
-    real(wp),intent(in)                  :: alpha !! step length
+    real(wp),intent(in)                  :: alpha !! step length to take in the search direction
     logical,dimension(me%n),intent(in)   :: modified  !! indicates the elements of `p` that were
-                                                      !! modified because they violated the bounds
+                                                      !! modified because they violated the bounds.
+                                                      !! Output of [[adjust_search_direction]].
     real(wp),dimension(me%n),intent(out) :: xnew  !! final `x`
 
     if (me%bounds_mode == NLESOLVER_WALL_BOUNDS) then
@@ -1166,7 +1165,7 @@
         where (modified)
             xnew = xold
         else where
-            xnew = xold + search_direction * me%alpha
+            xnew = xold + search_direction * alpha
         end where
     else
         ! all other modes just use the computed search direction
