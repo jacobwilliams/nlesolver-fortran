@@ -26,6 +26,7 @@
     integer :: i
     character(len=:),allocatable :: description
     real(wp) :: fmin_tol
+    integer :: bounds_mode
 
     fmin_tol = 1.0e-2_wp ! don't need a tight tol for this
     n_intervals = 2
@@ -36,7 +37,9 @@
     write(*,*) '* nlesolver_test_1    *'
     write(*,*) '***********************'
     write(*,*) ''
-    do i = 1, 8
+    do i = 1, 11
+
+        bounds_mode = NLESOLVER_IGNORE_BOUNDS ! default
 
         select case (i)
         case(1)
@@ -79,6 +82,26 @@
             use_broyden = .true.
             f_evals = 0
             description = 'Fixed point search + broyden'
+
+        case(9)
+            step_mode = 4
+            use_broyden = .true.
+            f_evals = 0
+            description = 'Fixed point search + broyden + scalar bounds'
+            bounds_mode = NLESOLVER_SCALAR_BOUNDS
+        case(10)
+            step_mode = 4
+            use_broyden = .true.
+            f_evals = 0
+            description = 'Fixed point search + broyden + vector bounds'
+            bounds_mode = NLESOLVER_VECTOR_BOUNDS
+        case(11)
+            step_mode = 4
+            use_broyden = .true.
+            f_evals = 0
+            description = 'Fixed point search + broyden + wall bounds'
+            bounds_mode = NLESOLVER_WALL_BOUNDS
+
         case default
             error stop 'invalid case'
         end select
