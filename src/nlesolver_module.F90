@@ -87,6 +87,12 @@
     integer,parameter,public :: NLESOLVER_INF_NORM = 2 !! [[nlesolver_type:norm_mode]] : infinity-norm
     integer,parameter,public :: NLESOLVER_1_NORM   = 3 !! [[nlesolver_type:norm_mode]] : 1-norm
 
+    ! options for linesearch step mode:
+    integer,parameter,public :: NLESOLVER_LINESEARCH_SIMPLE       = 1 !! [[nlesolver_type:linesearch]] : use the specified `alpha` (0,1]
+    integer,parameter,public :: NLESOLVER_LINESEARCH_BACKTRACKING = 2 !! [[nlesolver_type:linesearch]] : backtracking linesearch (between `alpha_min` and `alpha_max`)
+    integer,parameter,public :: NLESOLVER_LINESEARCH_EXACT        = 3 !! [[nlesolver_type:linesearch]] : exact linesearch (between `alpha_min` and `alpha_max`)
+    integer,parameter,public :: NLESOLVER_LINESEARCH_FIXEDPOINT   = 4 !! [[nlesolver_type:linesearch]] : evaluate function at specified fixed points (between `alpha_min` and `alpha_max`)
+
     !*********************************************************
         type,public :: nlesolver_type
 
@@ -577,14 +583,10 @@
 
     if (present(step_mode)) then
         select case (step_mode)
-        case(1) ! = use the specified `alpha` (0,1]
-            me%linesearch => simple_step
-        case(2) ! = backtracking linesearch (between `alpha_min` and `alpha_max`)
-            me%linesearch => backtracking_linesearch
-        case(3) ! = exact linesearch (between `alpha_min` and `alpha_max`)
-            me%linesearch => exact_linesearch
-        case(4) ! = evaluate function at specified fixed points (between `alpha_min` and `alpha_max`)
-            me%linesearch => fixed_point_linesearch
+        case(NLESOLVER_LINESEARCH_SIMPLE);       me%linesearch => simple_step
+        case(NLESOLVER_LINESEARCH_BACKTRACKING); me%linesearch => backtracking_linesearch
+        case(NLESOLVER_LINESEARCH_EXACT);        me%linesearch => exact_linesearch
+        case(NLESOLVER_LINESEARCH_FIXEDPOINT);   me%linesearch => fixed_point_linesearch
         case default
             status_ok = .false.
             call me%set_status(istat = -5, string = 'Error: invalid step_mode:',i=step_mode)
