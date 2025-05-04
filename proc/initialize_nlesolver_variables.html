@@ -1,0 +1,1297 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Nonlinear Equation Solver with Modern Fortran">
+    <meta name="author" content="Jacob Williams" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>initialize_nlesolver_variables &ndash; nlesolver-fortran</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">nlesolver-fortran </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../sourcefile/nlesolver_module.f90.html">Source File</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>initialize_nlesolver_variables
+      <small>Subroutine</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title="22.3% of total for procedures.">182 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/nlesolver_module.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/nlesolver_module.f90.html'>nlesolver_module.F90</a></li>
+                <li class="breadcrumb-item"><a href='../module/nlesolver_module.html'>nlesolver_module</a></li>
+            <li class="breadcrumb-item active" aria-current="page">initialize_nlesolver_variables</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+      <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/initialize_nlesolver_variables.html#src">initialize_nlesolver_variables</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>private  subroutine initialize_nlesolver_variables(me, n, m, max_iter, tol, alpha, alpha_min, alpha_max, tolx, fmin_tol, backtrack_c, backtrack_tau, use_broyden, broyden_update_n, step_mode, func, grad, grad_sparse, export_iteration, user_input_check, verbose, iunit, n_uphill_max, n_intervals, sparsity_mode, irow, icol, atol, btol, conlim, damp, itnlim, nout, lusol_method, localSize, custom_solver_sparse, bounds_mode, xlow, xupp, norm_mode)  
+</h2>
+    
+
+    <p>Constructor for the class.</p>
+
+    <h3>Type Bound</h3>
+    <p><a href='../type/nlesolver_type.html'>nlesolver_type</a></p>
+
+    <h3>Arguments</h3>
+        <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~11"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~2"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+                <p>number of optimization variables</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-m~2"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>m</strong></td>
+            <td>
+                <p>number of constraints</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-max_iter~2"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>max_iter</strong></td>
+            <td>
+                <p>maximum number of iterations</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-tol~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>tol</strong></td>
+            <td>
+                <p>function convergence tolerance</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-alpha~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alpha</strong></td>
+            <td>
+                <p>constant step length for <code>step_mode=1</code> (0,1]</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-alpha_min~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alpha_min</strong></td>
+            <td>
+                <p>minimum step length (0,1]</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-alpha_max~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alpha_max</strong></td>
+            <td>
+                <p>maximum step length (0,1]</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-tolx~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>tolx</strong></td>
+            <td>
+                <p>convergence tolerance for changes in <code>x</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fmin_tol~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>fmin_tol</strong></td>
+            <td>
+                <p>convergence tolerance for <a href="https://jacobwilliams.github.io/fmin/proc/fmin.html">fmin</a> (used when <code>step_mode=3</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-backtrack_c"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>backtrack_c</strong></td>
+            <td>
+                <p>backtracking linesearch parameter (0,1)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-backtrack_tau"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>backtrack_tau</strong></td>
+            <td>
+                <p>backtracking linesearch parameter (0,1)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-use_broyden~2"></span>
+              logical,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>use_broyden</strong></td>
+            <td>
+                <p>use a Broyden update (default is False)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-broyden_update_n~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>broyden_update_n</strong></td>
+            <td>
+                <p>For Broyden mode, update the full Jacobian
+at most every this many iterations (must be &gt;1)
+If &lt;=1 then Jacobian is only computed on the
+first iteration.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-step_mode"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>step_mode</strong></td>
+            <td>
+                <p>step mode:</p>
+<ul>
+<li>1 = use the specified <code>alpha</code> (0,1]</li>
+<li>2 = backtracking linesearch (between <code>alpha_min</code> and <code>alpha_max</code>)</li>
+<li>3 = exact linesearch (between <code>alpha_min</code> and <code>alpha_max</code>)</li>
+<li>4 = evaluate function at specified fixed points  (between <code>alpha_min</code> and <code>alpha_max</code>)</li>
+</ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-func~2"></span>
+              procedure(<a href='../interface/func_func.html'>func_func</a>)
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>func</strong></td>
+            <td>
+                <p>computes the function vector</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-grad~2"></span>
+              procedure(<a href='../interface/grad_func.html'>grad_func</a>),
+            </td>
+<td></td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>grad</strong></td>
+            <td>
+                <p>computes the jacobian [required for dense mode: <code>sparsity_mode=1</code>]</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-grad_sparse~2"></span>
+              procedure(<a href='../interface/grad_func_sparse.html'>grad_func_sparse</a>),
+            </td>
+<td></td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>grad_sparse</strong></td>
+            <td>
+                <p>computes the jacobian [required for sparse mode: <code>sparsity_mode&gt;1</code>]</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-export_iteration~2"></span>
+              procedure(<a href='../interface/export_func.html'>export_func</a>),
+            </td>
+<td></td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>export_iteration</strong></td>
+            <td>
+                <p>function to export each iteration</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-user_input_check~2"></span>
+              procedure(<a href='../interface/wait_func.html'>wait_func</a>),
+            </td>
+<td></td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>user_input_check</strong></td>
+            <td>
+                <p>check for user input (to stop solver if necessary)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-verbose~2"></span>
+              logical,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>verbose</strong></td>
+            <td>
+                <p>for verbose status printing</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-iunit~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>iunit</strong></td>
+            <td>
+                <p>unit for verbose printing (assumed to be open).
+by default this is <code>output_unit</code>.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n_uphill_max~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n_uphill_max</strong></td>
+            <td>
+                <p>maximum number of consecutive steps
+to allow where the value of <code>f</code> increases</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n_intervals~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n_intervals</strong></td>
+            <td>
+                <p>number of intervals for fixed point linesearch</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-sparsity_mode~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>sparsity_mode</strong></td>
+            <td>
+                <p>sparsity mode:</p>
+<ul>
+<li>1 - assume dense (use dense solver)
+  Must specify <code>grad</code> for this mode.</li>
+<li>2 - assume sparse (use LSQR sparse solver).</li>
+<li>3 - assume sparse (use LUSOL sparse solver).</li>
+<li>4 - assume sparse (use LSMR sparse solver).</li>
+<li>5 - assume sparse (use the user provided sparse
+  solver <code>custom_solver_sparse</code>).
+Must also specify <code>grad_sparse</code> and the <code>irow</code> and <code>icol</code>
+sparsity pattern for <code>mode&gt;1</code>.</li>
+</ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-irow~3"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>irow</strong></td>
+            <td>
+                <p>sparsity pattern nonzero elements row indices.
+must be specified with <code>icol</code> and be the same length (<code>n_nonzeros</code>).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-icol~3"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>icol</strong></td>
+            <td>
+                <p>sparsity pattern nonzero elements column indices
+must be specified with <code>icol</code> and be the same length (<code>n_nonzeros</code>).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-atol~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>atol</strong></td>
+            <td>
+                <p><code>LSQR</code>: relative error in definition of <code>A</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-btol~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>btol</strong></td>
+            <td>
+                <p><code>LSQR</code>: relative error in definition of <code>b</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-conlim~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>conlim</strong></td>
+            <td>
+                <p><code>LSQR</code>: An upper limit on <code>cond(Abar)</code>, the apparent
+condition number of the matrix <code>Abar</code>.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-damp~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>damp</strong></td>
+            <td>
+                <p><code>LSQR</code>: damp factor</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-itnlim~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>itnlim</strong></td>
+            <td>
+                <p><code>LSQR</code>: max iterations</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nout~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>nout</strong></td>
+            <td>
+                <p><code>LSQR</code>: output unit for printing</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-lusol_method~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>lusol_method</strong></td>
+            <td>
+                <p><code>LUSOL</code> method:</p>
+<ul>
+<li>0 =&gt; TPP: Threshold Partial   Pivoting.</li>
+<li>1 =&gt; TRP: Threshold Rook      Pivoting.</li>
+<li>2 =&gt; TCP: Threshold Complete  Pivoting.</li>
+</ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-localsize~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>localSize</strong></td>
+            <td>
+                <p><code>LSMR</code>: Number of vectors for local reorthogonalization:</p>
+<ul>
+<li>0    No reorthogonalization is performed.</li>
+<li>
+<blockquote>
+<p>0    This many n-vectors "v" (the most recent ones)
+         are saved for reorthogonalizing the next v.</p>
+</blockquote>
+</li>
+</ul>
+<p>localSize need not be more than <code>min(m,n)</code>.
+At most <code>min(m,n)</code> vectors will be allocated.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-custom_solver_sparse~2"></span>
+              procedure(<a href='../interface/sparse_solver_func.html'>sparse_solver_func</a>),
+            </td>
+<td></td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>custom_solver_sparse</strong></td>
+            <td>
+                <p>for <code>sparsity_mode=5</code>, this is the
+user-provided linear solver.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-bounds_mode~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>bounds_mode</strong></td>
+            <td>
+                <p>how to handle the <code>x</code> variable bounds:</p>
+<ul>
+<li>0 = ignore bounds</li>
+<li>1 = scalar mode</li>
+<li>2 = vector mode</li>
+<li>3 = wall mode</li>
+</ul>
+<p>See <a href="../type/nlesolver_type.html#variable-bounds_mode">bounds_mode</a> for full descriptions.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-xlow~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(n)
+            </td>
+            <td>::</td>
+            <td><strong>xlow</strong></td>
+            <td>
+                <p>lower bounds for <code>x</code> (size is <code>n</code>). only used if <code>bounds_mode&gt;0</code> and
+both <code>xlow</code> and <code>xupp</code> are specified.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-xupp~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(n)
+            </td>
+            <td>::</td>
+            <td><strong>xupp</strong></td>
+            <td>
+                <p>upper bounds for <code>x</code> (size is <code>n</code>). only used if <code>bounds_mode&gt;0</code> and
+both <code>xlow</code> and <code>xupp</code> are specified.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-norm_mode~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>norm_mode</strong></td>
+            <td>
+                <p>how to compute the norm of the function vector:</p>
+<ul>
+<li>1 = 2-norm (optional)</li>
+<li>2 = infinity-norm</li>
+<li>3 = 1-norm</li>
+</ul>
+<p>See <a href="../type/nlesolver_type.html#variable-norm_mode">norm_mode</a> for full descriptions.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <br>
+    <div class="card">
+      <div class="card-header">
+  <h3 class="card-title">Calls</h3>
+      </div>
+      <div class="card-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: proc~~initialize_nlesolver_variables~~CallsGraph Pages: 1 -->
+<svg id="procinitialize_nlesolver_variablesCallsGraph" width="538pt" height="74pt"
+ viewBox="0.00 0.00 538.00 74.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~initialize_nlesolver_variables~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 70)">
+<title>proc~~initialize_nlesolver_variables~~CallsGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-70 534,-70 534,4 -4,4"/>
+<!-- proc~initialize_nlesolver_variables -->
+<g id="proc~~initialize_nlesolver_variables~~CallsGraph_node1" class="node">
+<title>proc~initialize_nlesolver_variables</title>
+<polygon fill="none" stroke="black" points="252,-45 0,-45 0,-21 252,-21 252,-45"/>
+<text text-anchor="middle" x="126" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50">nlesolver_type%initialize_nlesolver_variables</text>
+</g>
+<!-- proc~set_status -->
+<g id="proc~~initialize_nlesolver_variables~~CallsGraph_node2" class="node">
+<title>proc~set_status</title>
+<g id="a_proc~~initialize_nlesolver_variables~~CallsGraph_node2"><a xlink:href="../proc/set_status.html" xlink:title="nlesolver_type%set_status">
+<polygon fill="#d9534f" stroke="#d9534f" points="440,-45 288,-45 288,-21 440,-21 440,-45"/>
+<text text-anchor="middle" x="364" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%set_status</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_nlesolver_variables&#45;&gt;proc~set_status -->
+<g id="proc~~initialize_nlesolver_variables~~CallsGraph_edge1" class="edge">
+<title>proc~initialize_nlesolver_variables&#45;&gt;proc~set_status</title>
+<path fill="none" stroke="#000000" d="M252.26,-33C260.88,-33 269.46,-33 277.8,-33"/>
+<polygon fill="#000000" stroke="#000000" points="277.84,-36.5 287.84,-33 277.84,-29.5 277.84,-36.5"/>
+</g>
+<!-- proc~int2str -->
+<g id="proc~~initialize_nlesolver_variables~~CallsGraph_node3" class="node">
+<title>proc~int2str</title>
+<g id="a_proc~~initialize_nlesolver_variables~~CallsGraph_node3"><a xlink:href="../proc/int2str.html" xlink:title="int2str">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="530,-66 476,-66 476,-42 530,-42 530,-66"/>
+<text text-anchor="middle" x="503" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">int2str</text>
+</a>
+</g>
+</g>
+<!-- proc~set_status&#45;&gt;proc~int2str -->
+<g id="proc~~initialize_nlesolver_variables~~CallsGraph_edge2" class="edge">
+<title>proc~set_status&#45;&gt;proc~int2str</title>
+<path fill="none" stroke="#000000" d="M440.31,-44.54C449.22,-45.91 457.97,-47.25 465.96,-48.47"/>
+<polygon fill="#000000" stroke="#000000" points="465.55,-51.95 475.96,-50.01 466.61,-45.03 465.55,-51.95"/>
+</g>
+<!-- proc~real2str -->
+<g id="proc~~initialize_nlesolver_variables~~CallsGraph_node4" class="node">
+<title>proc~real2str</title>
+<g id="a_proc~~initialize_nlesolver_variables~~CallsGraph_node4"><a xlink:href="../proc/real2str.html" xlink:title="real2str">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="530,-24 476,-24 476,0 530,0 530,-24"/>
+<text text-anchor="middle" x="503" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">real2str</text>
+</a>
+</g>
+</g>
+<!-- proc~set_status&#45;&gt;proc~real2str -->
+<g id="proc~~initialize_nlesolver_variables~~CallsGraph_edge3" class="edge">
+<title>proc~set_status&#45;&gt;proc~real2str</title>
+<path fill="none" stroke="#000000" d="M440.31,-21.46C449.22,-20.09 457.97,-18.75 465.96,-17.53"/>
+<polygon fill="#000000" stroke="#000000" points="466.61,-20.97 475.96,-15.99 465.55,-14.05 466.61,-20.97"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CallsGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="CallsGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.51" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(0.86 0.86) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 741.5,-28 741.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="146,-24 88,-24 88,0 146,0 146,-24"/>
+<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="225.5,-24 164.5,-24 164.5,0 225.5,0 225.5,-24"/>
+<text text-anchor="middle" x="195" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Type Bound Procedure -->
+<g id="node4" class="node">
+<title>Type Bound Procedure</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="374,-24 244,-24 244,0 374,0 374,-24"/>
+<text text-anchor="middle" x="309" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type Bound Procedure</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node5" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="537.5,-24 392.5,-24 392.5,0 537.5,0 537.5,-24"/>
+<text text-anchor="middle" x="465" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node6" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="614,-24 556,-24 556,0 614,0 614,-24"/>
+<text text-anchor="middle" x="585" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node7" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="737.5,-24 632.5,-24 632.5,0 737.5,0 737.5,-24"/>
+<text text-anchor="middle" x="685" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.
+</p>
+ </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+
+
+    
+    
+
+    
+    
+
+
+
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl codehilite"><pre><span></span><span class="w">    </span><span class="k">subroutine </span><span class="n">initialize_nlesolver_variables</span><span class="p">(</span><span class="n">me</span><span class="p">,&amp;</span>
+<span class="w">                    </span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">max_iter</span><span class="p">,</span><span class="n">tol</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">alpha_min</span><span class="p">,</span><span class="n">alpha_max</span><span class="p">,</span><span class="n">tolx</span><span class="p">,</span><span class="n">fmin_tol</span><span class="p">,&amp;</span>
+<span class="w">                    </span><span class="n">backtrack_c</span><span class="p">,</span><span class="n">backtrack_tau</span><span class="p">,&amp;</span>
+<span class="w">                    </span><span class="n">use_broyden</span><span class="p">,</span><span class="n">broyden_update_n</span><span class="p">,</span><span class="n">step_mode</span><span class="p">,&amp;</span>
+<span class="w">                    </span><span class="n">func</span><span class="p">,</span><span class="n">grad</span><span class="p">,</span><span class="n">grad_sparse</span><span class="p">,&amp;</span>
+<span class="w">                    </span><span class="n">export_iteration</span><span class="p">,</span><span class="n">user_input_check</span><span class="p">,&amp;</span>
+<span class="w">                    </span><span class="n">verbose</span><span class="p">,</span><span class="n">iunit</span><span class="p">,</span><span class="n">n_uphill_max</span><span class="p">,</span><span class="n">n_intervals</span><span class="p">,&amp;</span>
+<span class="w">                    </span><span class="n">sparsity_mode</span><span class="p">,</span><span class="n">irow</span><span class="p">,</span><span class="n">icol</span><span class="p">,&amp;</span>
+<span class="w">                    </span><span class="n">atol</span><span class="p">,</span><span class="n">btol</span><span class="p">,</span><span class="n">conlim</span><span class="p">,</span><span class="n">damp</span><span class="p">,</span><span class="n">itnlim</span><span class="p">,</span><span class="n">nout</span><span class="p">,&amp;</span>
+<span class="w">                    </span><span class="n">lusol_method</span><span class="p">,</span><span class="n">localSize</span><span class="p">,</span><span class="n">custom_solver_sparse</span><span class="p">,&amp;</span>
+<span class="w">                    </span><span class="n">bounds_mode</span><span class="p">,</span><span class="n">xlow</span><span class="p">,</span><span class="n">xupp</span><span class="p">,</span><span class="n">norm_mode</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">implicit none</span>
+
+<span class="k">    class</span><span class="p">(</span><span class="n">nlesolver_type</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">me</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">                </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span><span class="w">                  </span><span class="c">!! number of optimization variables</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">                </span><span class="kd">::</span><span class="w"> </span><span class="n">m</span><span class="w">                  </span><span class="c">!! number of constraints</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">                </span><span class="kd">::</span><span class="w"> </span><span class="n">max_iter</span><span class="w">           </span><span class="c">!! maximum number of iterations</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">               </span><span class="kd">::</span><span class="w"> </span><span class="n">tol</span><span class="w">                </span><span class="c">!! function convergence tolerance</span>
+<span class="w">    </span><span class="k">procedure</span><span class="p">(</span><span class="n">func_func</span><span class="p">)</span><span class="w">              </span><span class="kd">::</span><span class="w"> </span><span class="n">func</span><span class="w">               </span><span class="c">!! computes the function vector</span>
+<span class="w">    </span><span class="k">procedure</span><span class="p">(</span><span class="n">grad_func</span><span class="p">),</span><span class="k">optional</span><span class="w">        </span><span class="kd">::</span><span class="w"> </span><span class="n">grad</span><span class="w">            </span><span class="c">!! computes the jacobian [required for dense mode: `sparsity_mode=1`]</span>
+<span class="w">    </span><span class="k">procedure</span><span class="p">(</span><span class="n">grad_func_sparse</span><span class="p">),</span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">grad_sparse</span><span class="w">     </span><span class="c">!! computes the jacobian [required for sparse mode: `sparsity_mode&gt;1`]</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">step_mode</span><span class="w">          </span><span class="c">!! step mode:</span>
+<span class="w">                                                            </span><span class="c">!!</span>
+<span class="w">                                                            </span><span class="c">!!  * 1 = use the specified `alpha` (0,1]</span>
+<span class="w">                                                            </span><span class="c">!!  * 2 = backtracking linesearch (between `alpha_min` and `alpha_max`)</span>
+<span class="w">                                                            </span><span class="c">!!  * 3 = exact linesearch (between `alpha_min` and `alpha_max`)</span>
+<span class="w">                                                            </span><span class="c">!!  * 4 = evaluate function at specified fixed points  (between `alpha_min` and `alpha_max`)</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">alpha</span><span class="w">              </span><span class="c">!! constant step length for `step_mode=1` (0,1]</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">alpha_min</span><span class="w">          </span><span class="c">!! minimum step length (0,1]</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">alpha_max</span><span class="w">          </span><span class="c">!! maximum step length (0,1]</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">tolx</span><span class="w">               </span><span class="c">!! convergence tolerance for changes in `x`</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">fmin_tol</span><span class="w">           </span><span class="c">!! convergence tolerance for [[fmin]] (used when `step_mode=3`)</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">backtrack_c</span><span class="w">        </span><span class="c">!! backtracking linesearch parameter (0,1)</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">backtrack_tau</span><span class="w">      </span><span class="c">!! backtracking linesearch parameter (0,1)</span>
+<span class="w">    </span><span class="kt">logical</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">use_broyden</span><span class="w">        </span><span class="c">!! use a Broyden update (default is False)</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">broyden_update_n</span><span class="w">   </span><span class="c">!! For Broyden mode, update the full Jacobian</span>
+<span class="w">                                                            </span><span class="c">!! at most every this many iterations (must be &gt;1)</span>
+<span class="w">                                                            </span><span class="c">!! If &lt;=1 then Jacobian is only computed on the</span>
+<span class="w">                                                            </span><span class="c">!! first iteration.</span>
+<span class="w">    </span><span class="k">procedure</span><span class="p">(</span><span class="n">export_func</span><span class="p">),</span><span class="k">optional</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">export_iteration</span><span class="w">   </span><span class="c">!! function to export each iteration</span>
+<span class="w">    </span><span class="k">procedure</span><span class="p">(</span><span class="n">wait_func</span><span class="p">),</span><span class="k">optional</span><span class="w">     </span><span class="kd">::</span><span class="w"> </span><span class="n">user_input_check</span><span class="w">   </span><span class="c">!! check for user input (to stop solver if necessary)</span>
+<span class="w">    </span><span class="kt">logical</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">verbose</span><span class="w">            </span><span class="c">!! for verbose status printing</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">iunit</span><span class="w">              </span><span class="c">!! unit for verbose printing (assumed to be open).</span>
+<span class="w">                                                            </span><span class="c">!! by default this is `output_unit`.</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">n_uphill_max</span><span class="w">       </span><span class="c">!! maximum number of consecutive steps</span>
+<span class="w">                                                            </span><span class="c">!! to allow where the value of `f` increases</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">n_intervals</span><span class="w">        </span><span class="c">!! number of intervals for fixed point linesearch</span>
+
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">sparsity_mode</span><span class="w"> </span><span class="c">!! sparsity mode:</span>
+<span class="w">                                                 </span><span class="c">!!</span>
+<span class="w">                                                 </span><span class="c">!! * 1 - assume dense (use dense solver)</span>
+<span class="w">                                                 </span><span class="c">!!   Must specify `grad` for this mode.</span>
+<span class="w">                                                 </span><span class="c">!! * 2 - assume sparse (use LSQR sparse solver).</span>
+<span class="w">                                                 </span><span class="c">!! * 3 - assume sparse (use LUSOL sparse solver).</span>
+<span class="w">                                                 </span><span class="c">!! * 4 - assume sparse (use LSMR sparse solver).</span>
+<span class="w">                                                 </span><span class="c">!! * 5 - assume sparse (use the user provided sparse</span>
+<span class="w">                                                 </span><span class="c">!!   solver `custom_solver_sparse`).</span>
+<span class="w">                                                 </span><span class="c">!! Must also specify `grad_sparse` and the `irow` and `icol`</span>
+<span class="w">                                                 </span><span class="c">!! sparsity pattern for `mode&gt;1`.</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">irow</span><span class="w"> </span><span class="c">!! sparsity pattern nonzero elements row indices.</span>
+<span class="w">                                                     </span><span class="c">!! must be specified with `icol` and be the same length (`n_nonzeros`).</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">icol</span><span class="w"> </span><span class="c">!! sparsity pattern nonzero elements column indices</span>
+<span class="w">                                                     </span><span class="c">!! must be specified with `icol` and be the same length (`n_nonzeros`).</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">atol</span><span class="w">    </span><span class="c">!! `LSQR`: relative error in definition of `A`</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">btol</span><span class="w">    </span><span class="c">!! `LSQR`: relative error in definition of `b`</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">conlim</span><span class="w">  </span><span class="c">!! `LSQR`: An upper limit on `cond(Abar)`, the apparent</span>
+<span class="w">                                                 </span><span class="c">!! condition number of the matrix `Abar`.</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">      </span><span class="kd">::</span><span class="w"> </span><span class="n">damp</span><span class="w">    </span><span class="c">!! `LSQR`: damp factor</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">itnlim</span><span class="w">  </span><span class="c">!! `LSQR`: max iterations</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">nout</span><span class="w">    </span><span class="c">!! `LSQR`: output unit for printing</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">lusol_method</span><span class="w"> </span><span class="c">!! `LUSOL` method:</span>
+<span class="w">                                                      </span><span class="c">!!</span>
+<span class="w">                                                      </span><span class="c">!! * 0 =&gt; TPP: Threshold Partial   Pivoting.</span>
+<span class="w">                                                      </span><span class="c">!! * 1 =&gt; TRP: Threshold Rook      Pivoting.</span>
+<span class="w">                                                      </span><span class="c">!! * 2 =&gt; TCP: Threshold Complete  Pivoting.</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">localSize</span><span class="w"> </span><span class="c">!! `LSMR`: Number of vectors for local reorthogonalization:</span>
+<span class="w">                                             </span><span class="c">!!</span>
+<span class="w">                                             </span><span class="c">!!  *  0    No reorthogonalization is performed.</span>
+<span class="w">                                             </span><span class="c">!!  * &gt;0    This many n-vectors &quot;v&quot; (the most recent ones)</span>
+<span class="w">                                             </span><span class="c">!!          are saved for reorthogonalizing the next v.</span>
+<span class="w">                                             </span><span class="c">!!</span>
+<span class="w">                                             </span><span class="c">!! localSize need not be more than `min(m,n)`.</span>
+<span class="w">                                             </span><span class="c">!! At most `min(m,n)` vectors will be allocated.</span>
+<span class="w">    </span><span class="k">procedure</span><span class="p">(</span><span class="n">sparse_solver_func</span><span class="p">),</span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">custom_solver_sparse</span><span class="w"> </span><span class="c">!! for `sparsity_mode=5`, this is the</span>
+<span class="w">                                                                   </span><span class="c">!! user-provided linear solver.</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bounds_mode</span><span class="w">  </span><span class="c">!! how to handle the `x` variable bounds:</span>
+<span class="w">                                                </span><span class="c">!!</span>
+<span class="w">                                                </span><span class="c">!!  * 0 = ignore bounds</span>
+<span class="w">                                                </span><span class="c">!!  * 1 = scalar mode</span>
+<span class="w">                                                </span><span class="c">!!  * 2 = vector mode</span>
+<span class="w">                                                </span><span class="c">!!  * 3 = wall mode</span>
+<span class="w">                                                </span><span class="c">!!</span>
+<span class="w">                                                </span><span class="c">!! See [[nlesolver_type:bounds_mode]] for full descriptions.</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">xlow</span><span class="w">  </span><span class="c">!! lower bounds for `x` (size is `n`). only used if `bounds_mode&gt;0` and</span>
+<span class="w">                                                       </span><span class="c">!! both `xlow` and `xupp` are specified.</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">xupp</span><span class="w">  </span><span class="c">!! upper bounds for `x` (size is `n`). only used if `bounds_mode&gt;0` and</span>
+<span class="w">                                                       </span><span class="c">!! both `xlow` and `xupp` are specified.</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">norm_mode</span><span class="w"> </span><span class="c">!! how to compute the norm of the function vector:</span>
+<span class="w">                                             </span><span class="c">!!</span>
+<span class="w">                                             </span><span class="c">!!  * 1 = 2-norm (optional)</span>
+<span class="w">                                             </span><span class="c">!!  * 2 = infinity-norm</span>
+<span class="w">                                             </span><span class="c">!!  * 3 = 1-norm</span>
+<span class="w">                                             </span><span class="c">!!</span>
+<span class="w">                                             </span><span class="c">!! See [[nlesolver_type:norm_mode]] for full descriptions.</span>
+
+<span class="w">    </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status_ok</span><span class="w"> </span><span class="c">!! true if there were no errors</span>
+
+<span class="w">    </span><span class="n">status_ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+
+<span class="w">    </span><span class="c">!required:</span>
+<span class="w">    </span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="w">    </span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="w">    </span><span class="n">me</span><span class="p">%</span><span class="n">max_iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">max_iter</span><span class="p">)</span>
+<span class="w">    </span><span class="n">me</span><span class="p">%</span><span class="n">tol</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">tol</span><span class="p">)</span>
+<span class="w">    </span><span class="n">me</span><span class="p">%</span><span class="n">func</span><span class="w">     </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">func</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">grad</span><span class="p">))</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">grad</span><span class="w">               </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">grad</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">grad_sparse</span><span class="p">))</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">grad_sparse</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">grad_sparse</span>
+
+<span class="w">    </span><span class="c">!optional:</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">bounds_mode</span><span class="p">)</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="nb">present</span><span class="p">(</span><span class="n">xlow</span><span class="p">)</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="nb">present</span><span class="p">(</span><span class="n">xupp</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">        if</span><span class="w"> </span><span class="p">(</span><span class="nb">any</span><span class="p">(</span><span class="n">xlow</span><span class="o">&gt;</span><span class="n">xupp</span><span class="p">))</span><span class="w"> </span><span class="k">then</span><span class="w">  </span><span class="c">! check for consistency</span>
+<span class="w">            </span><span class="n">status_ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<span class="w">            </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: xlow &gt; xupp&#39;</span><span class="p">)</span>
+<span class="w">            </span><span class="k">return</span>
+<span class="k">        end if</span>
+<span class="k">        </span><span class="n">me</span><span class="p">%</span><span class="n">bounds_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bounds_mode</span>
+<span class="w">        </span><span class="n">me</span><span class="p">%</span><span class="n">xupp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xupp</span>
+<span class="w">        </span><span class="n">me</span><span class="p">%</span><span class="n">xlow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xlow</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="k">        </span><span class="n">me</span><span class="p">%</span><span class="n">bounds_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">NLESOLVER_IGNORE_BOUNDS</span><span class="w">  </span><span class="c">! default</span>
+<span class="w">    </span><span class="k">end if</span>
+
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">norm_mode</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">        select case</span><span class="w"> </span><span class="p">(</span><span class="n">norm_mode</span><span class="p">)</span>
+<span class="w">        </span><span class="k">case</span><span class="p">(</span><span class="n">NLESOLVER_2_NORM</span><span class="w">   </span><span class="p">);</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">norm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">norm_2</span>
+<span class="w">        </span><span class="k">case</span><span class="p">(</span><span class="n">NLESOLVER_INF_NORM</span><span class="w"> </span><span class="p">);</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">norm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">norm_inf</span>
+<span class="w">        </span><span class="k">case</span><span class="p">(</span><span class="n">NLESOLVER_1_NORM</span><span class="w">   </span><span class="p">);</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">norm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">norm_1</span>
+<span class="w">        </span><span class="k">case </span><span class="n">default</span>
+<span class="w">            </span><span class="n">status_ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<span class="w">            </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: invalid norm_mode:&#39;</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="n">norm_mode</span><span class="p">)</span>
+<span class="w">            </span><span class="k">return</span>
+<span class="k">        end select</span>
+<span class="k">    else</span>
+<span class="k">        </span><span class="n">me</span><span class="p">%</span><span class="n">norm</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">norm_2</span><span class="w"> </span><span class="c">! default</span>
+<span class="w">    </span><span class="k">end if</span>
+
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">step_mode</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">        select case</span><span class="w"> </span><span class="p">(</span><span class="n">step_mode</span><span class="p">)</span>
+<span class="w">        </span><span class="k">case</span><span class="p">(</span><span class="n">NLESOLVER_LINESEARCH_SIMPLE</span><span class="p">);</span><span class="w">       </span><span class="n">me</span><span class="p">%</span><span class="n">linesearch</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">simple_step</span>
+<span class="w">        </span><span class="k">case</span><span class="p">(</span><span class="n">NLESOLVER_LINESEARCH_BACKTRACKING</span><span class="p">);</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">linesearch</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">backtracking_linesearch</span>
+<span class="w">        </span><span class="k">case</span><span class="p">(</span><span class="n">NLESOLVER_LINESEARCH_EXACT</span><span class="p">);</span><span class="w">        </span><span class="n">me</span><span class="p">%</span><span class="n">linesearch</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">exact_linesearch</span>
+<span class="w">        </span><span class="k">case</span><span class="p">(</span><span class="n">NLESOLVER_LINESEARCH_FIXEDPOINT</span><span class="p">);</span><span class="w">   </span><span class="n">me</span><span class="p">%</span><span class="n">linesearch</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">fixed_point_linesearch</span>
+<span class="w">        </span><span class="k">case </span><span class="n">default</span>
+<span class="w">            </span><span class="n">status_ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<span class="w">            </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: invalid step_mode:&#39;</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="n">step_mode</span><span class="p">)</span>
+<span class="w">            </span><span class="k">return</span>
+<span class="k">        end select</span>
+<span class="k">    else</span>
+<span class="k">        </span><span class="n">me</span><span class="p">%</span><span class="n">linesearch</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">simple_step</span>
+<span class="w">    </span><span class="k">end if</span>
+
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">alpha</span><span class="p">))</span><span class="w">             </span><span class="n">me</span><span class="p">%</span><span class="n">alpha</span><span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">alpha_min</span><span class="p">))</span><span class="w">         </span><span class="n">me</span><span class="p">%</span><span class="n">alpha_min</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">alpha_min</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">alpha_max</span><span class="p">))</span><span class="w">         </span><span class="n">me</span><span class="p">%</span><span class="n">alpha_max</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">alpha_max</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">tolx</span><span class="p">))</span><span class="w">              </span><span class="n">me</span><span class="p">%</span><span class="n">tolx</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">tolx</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">backtrack_c</span><span class="p">))</span><span class="w">       </span><span class="n">me</span><span class="p">%</span><span class="n">c</span><span class="w">                 </span><span class="o">=</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">backtrack_c</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">backtrack_tau</span><span class="p">))</span><span class="w">     </span><span class="n">me</span><span class="p">%</span><span class="n">tau</span><span class="w">               </span><span class="o">=</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">backtrack_tau</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">use_broyden</span><span class="p">))</span><span class="w">       </span><span class="n">me</span><span class="p">%</span><span class="n">use_broyden</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="n">use_broyden</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">broyden_update_n</span><span class="p">))</span><span class="w">  </span><span class="n">me</span><span class="p">%</span><span class="n">broyden_update_n</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">broyden_update_n</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">verbose</span><span class="p">))</span><span class="w">           </span><span class="n">me</span><span class="p">%</span><span class="n">verbose</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="n">verbose</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">iunit</span><span class="p">))</span><span class="w">             </span><span class="n">me</span><span class="p">%</span><span class="n">iunit</span><span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="n">iunit</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">n_uphill_max</span><span class="p">))</span><span class="w">      </span><span class="n">me</span><span class="p">%</span><span class="n">n_uphill_max</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">n_uphill_max</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">n_intervals</span><span class="p">))</span><span class="w">       </span><span class="n">me</span><span class="p">%</span><span class="n">n_intervals</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">n_intervals</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">fmin_tol</span><span class="p">))</span><span class="w">          </span><span class="n">me</span><span class="p">%</span><span class="n">fmin_tol</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">fmin_tol</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">export_iteration</span><span class="p">))</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">export_iteration</span><span class="w">  </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">export_iteration</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">user_input_check</span><span class="p">))</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">user_input_check</span><span class="w">  </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">user_input_check</span>
+
+<span class="w">    </span><span class="c">! error checks:</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">alpha</span><span class="o">&lt;</span><span class="n">zero</span><span class="w"> </span><span class="p">.</span><span class="nb">or</span><span class="p">.</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">alpha</span><span class="o">&gt;</span><span class="n">one</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">        </span><span class="n">status_ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<span class="w">        </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: invalid alpha:&#39;</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="n">me</span><span class="p">%</span><span class="n">alpha</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="k">    end if</span>
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">alpha_min</span><span class="o">&lt;</span><span class="n">zero</span><span class="w"> </span><span class="p">.</span><span class="nb">or</span><span class="p">.</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">alpha_min</span><span class="o">&gt;</span><span class="n">one</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">        </span><span class="n">status_ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<span class="w">        </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: invalid alpha_min:&#39;</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="n">me</span><span class="p">%</span><span class="n">alpha_min</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="k">    end if</span>
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">alpha_max</span><span class="o">&lt;</span><span class="n">zero</span><span class="w"> </span><span class="p">.</span><span class="nb">or</span><span class="p">.</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">alpha_max</span><span class="o">&gt;</span><span class="n">one</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">        </span><span class="n">status_ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<span class="w">        </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: invalid alpha_max:&#39;</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="n">me</span><span class="p">%</span><span class="n">alpha_max</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="k">    end if</span>
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">alpha_max</span><span class="o">&lt;=</span><span class="n">me</span><span class="p">%</span><span class="n">alpha_min</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">        </span><span class="n">status_ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<span class="w">        </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: alpha_min must be &lt; alpha_max&#39;</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="k">    end if</span>
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">c</span><span class="o">&lt;</span><span class="n">zero</span><span class="w"> </span><span class="p">.</span><span class="nb">or</span><span class="p">.</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">c</span><span class="o">&gt;</span><span class="n">one</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">        </span><span class="n">status_ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<span class="w">        </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: backtracking linesearch c must be in range (0, 1):&#39;</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="n">me</span><span class="p">%</span><span class="n">c</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="k">    end if</span>
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">tau</span><span class="o">&lt;</span><span class="n">zero</span><span class="w"> </span><span class="p">.</span><span class="nb">or</span><span class="p">.</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">tau</span><span class="o">&gt;</span><span class="n">one</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">        </span><span class="n">status_ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<span class="w">        </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: backtracking linesearch tau must be in range (0, 1):&#39;</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="n">me</span><span class="p">%</span><span class="n">tau</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="k">    end if</span>
+
+<span class="w">    </span><span class="c">! initialize:</span>
+<span class="w">    </span><span class="n">me</span><span class="p">%</span><span class="n">n_nonzeros</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="c">! not used</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">irow</span><span class="p">))</span><span class="w"> </span><span class="k">deallocate</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">irow</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">icol</span><span class="p">))</span><span class="w"> </span><span class="k">deallocate</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">icol</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">custom_solver_sparse</span><span class="p">))</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">custom_solver_sparse</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">custom_solver_sparse</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">sparsity_mode</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">        </span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sparsity_mode</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sparsity_mode</span><span class="o">&gt;</span><span class="n">NLESOLVER_SPARSITY_DENSE</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! sparse solver method</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">irow</span><span class="p">)</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="nb">present</span><span class="p">(</span><span class="n">icol</span><span class="p">)</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="nb">present</span><span class="p">(</span><span class="n">grad_sparse</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                if</span><span class="w"> </span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">irow</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">icol</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                    </span><span class="n">me</span><span class="p">%</span><span class="n">n_nonzeros</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">irow</span><span class="p">)</span>
+<span class="w">                    </span><span class="n">me</span><span class="p">%</span><span class="n">irow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">irow</span>
+<span class="w">                    </span><span class="n">me</span><span class="p">%</span><span class="n">icol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">icol</span>
+<span class="w">                </span><span class="k">else</span>
+<span class="k">                    call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: irow and icol must be the same length&#39;</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">return</span>
+<span class="k">                end if</span>
+<span class="k">            else</span>
+<span class="k">                call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: must specify grad_sparse, irow, and icol for sparsity_mode &gt; 1&#39;</span><span class="p">)</span>
+<span class="w">                </span><span class="k">return</span>
+<span class="k">            end if</span>
+<span class="w">            </span><span class="c">! LSQR optional inputs:</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">atol</span><span class="p">))</span><span class="w">   </span><span class="n">me</span><span class="p">%</span><span class="n">atol</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">atol</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">btol</span><span class="p">))</span><span class="w">   </span><span class="n">me</span><span class="p">%</span><span class="n">btol</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">btol</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">conlim</span><span class="p">))</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">conlim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conlim</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">damp</span><span class="p">))</span><span class="w">   </span><span class="n">me</span><span class="p">%</span><span class="n">damp</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">damp</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">itnlim</span><span class="p">))</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">itnlim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">itnlim</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">nout</span><span class="p">))</span><span class="w">   </span><span class="n">me</span><span class="p">%</span><span class="n">nout</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">nout</span>
+
+<span class="w">            </span><span class="c">! LUSOL method</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">nout</span><span class="p">))</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">lusol_method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lusol_method</span>
+
+<span class="w">            </span><span class="c">! LSMR optional inputs:</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">localSize</span><span class="p">))</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">localSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">localSize</span>
+
+<span class="w">        </span><span class="k">end if</span>
+<span class="k">        if</span><span class="w"> </span><span class="p">(</span><span class="n">sparsity_mode</span><span class="o">==</span><span class="n">NLESOLVER_SPARSITY_CUSTOM_SPARSE</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">            if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="nb">associated</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">custom_solver_sparse</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: must specify custom_solver_sparse for sparsity_mode = 5&#39;</span><span class="p">)</span>
+<span class="w">                </span><span class="k">return</span>
+<span class="k">            end if</span>
+<span class="k">        end if</span>
+<span class="k">    end if</span>
+
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">status_ok</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">        call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Class successfully initialized&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">end if</span>
+
+<span class="k">    end subroutine </span><span class="n">initialize_nlesolver_variables</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              nlesolver-fortran
+ was developed by Jacob Williams<br>              &copy; 2025 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+            </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

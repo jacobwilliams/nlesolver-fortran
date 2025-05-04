@@ -1,0 +1,696 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Nonlinear Equation Solver with Modern Fortran">
+    <meta name="author" content="Jacob Williams" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>adjust_search_direction &ndash; nlesolver-fortran</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">nlesolver-fortran </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../sourcefile/nlesolver_module.f90.html">Source File</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>adjust_search_direction
+      <small>Subroutine</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 7.6% of total for procedures.">62 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/nlesolver_module.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/nlesolver_module.f90.html'>nlesolver_module.F90</a></li>
+                <li class="breadcrumb-item"><a href='../module/nlesolver_module.html'>nlesolver_module</a></li>
+            <li class="breadcrumb-item active" aria-current="page">adjust_search_direction</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+      <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/adjust_search_direction.html#src">adjust_search_direction</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>private  subroutine adjust_search_direction(me, x, p, pnew, modified)  
+</h2>
+    
+
+    <p>if necessary, adjust the search direction vector <code>p</code> so that bounds are not violated.</p>
+<h3>Reference</h3>
+<ul>
+<li>https://openmdao.org/newdocs/versions/latest/features/building_blocks/solvers/bounds_enforce.html</li>
+</ul>
+
+    <h3>Type Bound</h3>
+    <p><a href='../type/nlesolver_type.html'>nlesolver_type</a></p>
+
+    <h3>Arguments</h3>
+        <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~14"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~9"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>initial <code>x</code>. it is assumed that this does not violate any bounds.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-p~3"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>p</strong></td>
+            <td>
+                <p>search direction <code>p = xnew - x</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-pnew"></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>pnew</strong></td>
+            <td>
+                <p>new search direction</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-modified"></span>
+              logical,
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>modified</strong></td>
+            <td>
+                <p>indicates the elements of <code>p</code> that were modified</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <br>
+    <div class="card">
+      <div class="card-header">
+  <h3 class="card-title">Calls</h3>
+      </div>
+      <div class="card-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: proc~~adjust_search_direction~~CallsGraph Pages: 1 -->
+<svg id="procadjust_search_directionCallsGraph" width="510pt" height="74pt"
+ viewBox="0.00 0.00 510.00 74.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~adjust_search_direction~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 70)">
+<title>proc~~adjust_search_direction~~CallsGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-70 506,-70 506,4 -4,4"/>
+<!-- proc~adjust_search_direction -->
+<g id="proc~~adjust_search_direction~~CallsGraph_node1" class="node">
+<title>proc~adjust_search_direction</title>
+<polygon fill="none" stroke="black" points="224,-46 0,-46 0,-22 224,-22 224,-46"/>
+<text text-anchor="middle" x="112" y="-31.6" font-family="Helvetica,sans-Serif" font-size="10.50">nlesolver_type%adjust_search_direction</text>
+</g>
+<!-- proc~int2str -->
+<g id="proc~~adjust_search_direction~~CallsGraph_node2" class="node">
+<title>proc~int2str</title>
+<g id="a_proc~~adjust_search_direction~~CallsGraph_node2"><a xlink:href="../proc/int2str.html" xlink:title="int2str">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="502,-66 448,-66 448,-42 502,-42 502,-66"/>
+<text text-anchor="middle" x="475" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">int2str</text>
+</a>
+</g>
+</g>
+<!-- proc~adjust_search_direction&#45;&gt;proc~int2str -->
+<g id="proc~~adjust_search_direction~~CallsGraph_edge1" class="edge">
+<title>proc~adjust_search_direction&#45;&gt;proc~int2str</title>
+<path fill="none" stroke="#000000" d="M224.26,-40.16C297.21,-44.21 387.96,-49.23 437.51,-51.98"/>
+<polygon fill="#000000" stroke="#000000" points="437.55,-55.49 447.73,-52.54 437.94,-48.5 437.55,-55.49"/>
+</g>
+<!-- proc~set_status -->
+<g id="proc~~adjust_search_direction~~CallsGraph_node3" class="node">
+<title>proc~set_status</title>
+<g id="a_proc~~adjust_search_direction~~CallsGraph_node3"><a xlink:href="../proc/set_status.html" xlink:title="nlesolver_type%set_status">
+<polygon fill="#d9534f" stroke="#d9534f" points="412,-26 260,-26 260,-2 412,-2 412,-26"/>
+<text text-anchor="middle" x="336" y="-11.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%set_status</text>
+</a>
+</g>
+</g>
+<!-- proc~adjust_search_direction&#45;&gt;proc~set_status -->
+<g id="proc~~adjust_search_direction~~CallsGraph_edge2" class="edge">
+<title>proc~adjust_search_direction&#45;&gt;proc~set_status</title>
+<path fill="none" stroke="#000000" d="M224,-24C232.63,-23.22 241.26,-22.44 249.68,-21.69"/>
+<polygon fill="#000000" stroke="#000000" points="250.2,-25.15 259.84,-20.77 249.57,-18.18 250.2,-25.15"/>
+</g>
+<!-- proc~set_status&#45;&gt;proc~int2str -->
+<g id="proc~~adjust_search_direction~~CallsGraph_edge3" class="edge">
+<title>proc~set_status&#45;&gt;proc~int2str</title>
+<path fill="none" stroke="#000000" d="M378.1,-26C397.12,-31.55 419.52,-38.09 437.88,-43.45"/>
+<polygon fill="#000000" stroke="#000000" points="437.04,-46.85 447.62,-46.3 439,-40.13 437.04,-46.85"/>
+</g>
+<!-- proc~real2str -->
+<g id="proc~~adjust_search_direction~~CallsGraph_node4" class="node">
+<title>proc~real2str</title>
+<g id="a_proc~~adjust_search_direction~~CallsGraph_node4"><a xlink:href="../proc/real2str.html" xlink:title="real2str">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="502,-24 448,-24 448,0 502,0 502,-24"/>
+<text text-anchor="middle" x="475" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">real2str</text>
+</a>
+</g>
+</g>
+<!-- proc~set_status&#45;&gt;proc~real2str -->
+<g id="proc~~adjust_search_direction~~CallsGraph_edge4" class="edge">
+<title>proc~set_status&#45;&gt;proc~real2str</title>
+<path fill="none" stroke="#000000" d="M412.31,-12.9C421.22,-12.77 429.97,-12.64 437.96,-12.53"/>
+<polygon fill="#000000" stroke="#000000" points="438.01,-16.03 447.96,-12.38 437.91,-9.03 438.01,-16.03"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CallsGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="CallsGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.51" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(0.86 0.86) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 741.5,-28 741.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="146,-24 88,-24 88,0 146,0 146,-24"/>
+<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="225.5,-24 164.5,-24 164.5,0 225.5,0 225.5,-24"/>
+<text text-anchor="middle" x="195" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Type Bound Procedure -->
+<g id="node4" class="node">
+<title>Type Bound Procedure</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="374,-24 244,-24 244,0 374,0 374,-24"/>
+<text text-anchor="middle" x="309" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type Bound Procedure</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node5" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="537.5,-24 392.5,-24 392.5,0 537.5,0 537.5,-24"/>
+<text text-anchor="middle" x="465" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node6" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="614,-24 556,-24 556,0 614,0 614,-24"/>
+<text text-anchor="middle" x="585" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node7" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="737.5,-24 632.5,-24 632.5,0 737.5,0 737.5,-24"/>
+<text text-anchor="middle" x="685" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.
+</p>
+ </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+  <h3 class="card-title">Called by</h3>
+      </div>
+      <div class="card-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: proc~~adjust_search_direction~~CalledByGraph Pages: 1 -->
+<svg id="procadjust_search_directionCalledByGraph" width="410pt" height="158pt"
+ viewBox="0.00 0.00 410.00 158.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~adjust_search_direction~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 154)">
+<title>proc~~adjust_search_direction~~CalledByGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-154 406,-154 406,4 -4,4"/>
+<!-- proc~adjust_search_direction -->
+<g id="proc~~adjust_search_direction~~CalledByGraph_node1" class="node">
+<title>proc~adjust_search_direction</title>
+<polygon fill="none" stroke="black" points="402,-87 178,-87 178,-63 402,-63 402,-87"/>
+<text text-anchor="middle" x="290" y="-72.6" font-family="Helvetica,sans-Serif" font-size="10.50">nlesolver_type%adjust_search_direction</text>
+</g>
+<!-- proc~backtracking_linesearch -->
+<g id="proc~~adjust_search_direction~~CalledByGraph_node2" class="node">
+<title>proc~backtracking_linesearch</title>
+<g id="a_proc~~adjust_search_direction~~CalledByGraph_node2"><a xlink:href="../proc/backtracking_linesearch.html" xlink:title="backtracking_linesearch">
+<polygon fill="#d9534f" stroke="#d9534f" points="142,-150 0,-150 0,-126 142,-126 142,-150"/>
+<text text-anchor="middle" x="71" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">backtracking_linesearch</text>
+</a>
+</g>
+</g>
+<!-- proc~backtracking_linesearch&#45;&gt;proc~adjust_search_direction -->
+<g id="proc~~adjust_search_direction~~CalledByGraph_edge1" class="edge">
+<title>proc~backtracking_linesearch&#45;&gt;proc~adjust_search_direction</title>
+<path fill="none" stroke="#000000" d="M113.58,-125.93C148.94,-115.66 199.86,-100.88 237.74,-89.88"/>
+<polygon fill="#000000" stroke="#000000" points="238.93,-93.18 247.56,-87.03 236.98,-86.46 238.93,-93.18"/>
+</g>
+<!-- proc~exact_linesearch -->
+<g id="proc~~adjust_search_direction~~CalledByGraph_node3" class="node">
+<title>proc~exact_linesearch</title>
+<g id="a_proc~~adjust_search_direction~~CalledByGraph_node3"><a xlink:href="../proc/exact_linesearch.html" xlink:title="exact_linesearch">
+<polygon fill="#d9534f" stroke="#d9534f" points="121.5,-108 20.5,-108 20.5,-84 121.5,-84 121.5,-108"/>
+<text text-anchor="middle" x="71" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exact_linesearch</text>
+</a>
+</g>
+</g>
+<!-- proc~exact_linesearch&#45;&gt;proc~adjust_search_direction -->
+<g id="proc~~adjust_search_direction~~CalledByGraph_edge2" class="edge">
+<title>proc~exact_linesearch&#45;&gt;proc~adjust_search_direction</title>
+<path fill="none" stroke="#000000" d="M121.51,-91.21C135.5,-89.86 151.36,-88.32 167.61,-86.75"/>
+<polygon fill="#000000" stroke="#000000" points="168.16,-90.21 177.77,-85.76 167.48,-83.24 168.16,-90.21"/>
+</g>
+<!-- proc~fixed_point_linesearch -->
+<g id="proc~~adjust_search_direction~~CalledByGraph_node4" class="node">
+<title>proc~fixed_point_linesearch</title>
+<g id="a_proc~~adjust_search_direction~~CalledByGraph_node4"><a xlink:href="../proc/fixed_point_linesearch.html" xlink:title="fixed_point_linesearch">
+<polygon fill="#d9534f" stroke="#d9534f" points="136.5,-66 5.5,-66 5.5,-42 136.5,-42 136.5,-66"/>
+<text text-anchor="middle" x="71" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">fixed_point_linesearch</text>
+</a>
+</g>
+</g>
+<!-- proc~fixed_point_linesearch&#45;&gt;proc~adjust_search_direction -->
+<g id="proc~~adjust_search_direction~~CalledByGraph_edge3" class="edge">
+<title>proc~fixed_point_linesearch&#45;&gt;proc~adjust_search_direction</title>
+<path fill="none" stroke="#000000" d="M136.52,-60.24C146.56,-61.22 157.21,-62.25 168.03,-63.29"/>
+<polygon fill="#000000" stroke="#000000" points="167.71,-66.78 178,-64.26 168.38,-59.81 167.71,-66.78"/>
+</g>
+<!-- proc~simple_step -->
+<g id="proc~~adjust_search_direction~~CalledByGraph_node5" class="node">
+<title>proc~simple_step</title>
+<g id="a_proc~~adjust_search_direction~~CalledByGraph_node5"><a xlink:href="../proc/simple_step.html" xlink:title="simple_step">
+<polygon fill="#d9534f" stroke="#d9534f" points="109,-24 33,-24 33,0 109,0 109,-24"/>
+<text text-anchor="middle" x="71" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">simple_step</text>
+</a>
+</g>
+</g>
+<!-- proc~simple_step&#45;&gt;proc~adjust_search_direction -->
+<g id="proc~~adjust_search_direction~~CalledByGraph_edge4" class="edge">
+<title>proc~simple_step&#45;&gt;proc~adjust_search_direction</title>
+<path fill="none" stroke="#000000" d="M109.3,-22.83C144.72,-33.11 198.25,-48.65 237.67,-60.1"/>
+<polygon fill="#000000" stroke="#000000" points="236.79,-63.49 247.37,-62.91 238.75,-56.77 236.79,-63.49"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CalledByGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="CalledByGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.51" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(0.86 0.86) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 741.5,-28 741.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="146,-24 88,-24 88,0 146,0 146,-24"/>
+<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="225.5,-24 164.5,-24 164.5,0 225.5,0 225.5,-24"/>
+<text text-anchor="middle" x="195" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Type Bound Procedure -->
+<g id="node4" class="node">
+<title>Type Bound Procedure</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="374,-24 244,-24 244,0 374,0 374,-24"/>
+<text text-anchor="middle" x="309" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type Bound Procedure</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node5" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="537.5,-24 392.5,-24 392.5,0 537.5,0 537.5,-24"/>
+<text text-anchor="middle" x="465" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node6" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="614,-24 556,-24 556,0 614,0 614,-24"/>
+<text text-anchor="middle" x="585" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node7" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="737.5,-24 632.5,-24 632.5,0 737.5,0 737.5,-24"/>
+<text text-anchor="middle" x="685" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.
+</p>
+ </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+
+
+    
+    
+
+    
+    
+
+
+
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl codehilite"><pre><span></span><span class="w">    </span><span class="k">subroutine </span><span class="n">adjust_search_direction</span><span class="p">(</span><span class="n">me</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">pnew</span><span class="p">,</span><span class="n">modified</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">implicit none</span>
+
+<span class="k">    class</span><span class="p">(</span><span class="n">nlesolver_type</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">me</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="w">  </span><span class="c">!! initial `x`. it is assumed that this does not violate any bounds.</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">p</span><span class="w">  </span><span class="c">!! search direction `p = xnew - x`</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">pnew</span><span class="w">  </span><span class="c">!! new search direction</span>
+<span class="w">    </span><span class="kt">logical</span><span class="p">,</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">modified</span><span class="w">  </span><span class="c">!! indicates the elements of `p` that were modified</span>
+
+<span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="w">  </span><span class="c">!! counter</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">xnew</span><span class="w">  </span><span class="c">!! `x + pnew`</span>
+<span class="w">    </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">search_direction_modifed</span><span class="w"> </span><span class="c">!! if `p` has been modified</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="c">!! indep var in the step equation: `xnew = x + t*p`</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">bounds_mode</span><span class="o">==</span><span class="n">NLESOLVER_IGNORE_BOUNDS</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! no change</span>
+<span class="w">        </span><span class="n">modified</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<span class="w">        </span><span class="n">pnew</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="k">    end if</span>
+
+<span class="k">    allocate</span><span class="p">(</span><span class="n">xnew</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">))</span>
+<span class="w">    </span><span class="n">xnew</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">p</span><span class="w">  </span><span class="c">! this is the full Newton step</span>
+<span class="w">    </span><span class="n">search_direction_modifed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w">  </span><span class="c">! will be set to true if any bounds are violated</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">bounds_mode</span><span class="o">==</span><span class="n">NLESOLVER_VECTOR_BOUNDS</span><span class="p">)</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0_wp</span><span class="w"> </span><span class="c">! for mode 2, start with full newton step</span>
+<span class="w">                                                            </span><span class="c">! note: have to check each variable and</span>
+<span class="w">                                                            </span><span class="c">! choose the smallest t. don&#39;t need to</span>
+<span class="w">                                                            </span><span class="c">! keep track of xnew.</span>
+<span class="w">    </span><span class="n">modified</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+
+<span class="w">    </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">n</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">xnew</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">&lt;</span><span class="n">me</span><span class="p">%</span><span class="n">xlow</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">            </span><span class="n">search_direction_modifed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+<span class="w">            </span><span class="n">modified</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">verbose</span><span class="p">)</span><span class="w"> </span><span class="k">write</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">iunit</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39;x(&#39;</span><span class="o">//</span><span class="n">int2str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;) &lt; xlow(i) : adjusting to lower bound&#39;</span>
+<span class="w">            </span><span class="k">select case</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">bounds_mode</span><span class="p">)</span>
+<span class="w">            </span><span class="k">case</span><span class="p">(</span><span class="n">NLESOLVER_SCALAR_BOUNDS</span><span class="p">,</span><span class="n">NLESOLVER_WALL_BOUNDS</span><span class="p">);</span><span class="w"> </span><span class="n">xnew</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">xlow</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="w">            </span><span class="k">case</span><span class="p">(</span><span class="n">NLESOLVER_VECTOR_BOUNDS</span><span class="p">);</span><span class="w">                       </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">min</span><span class="p">(</span><span class="n">t</span><span class="p">,(</span><span class="n">me</span><span class="p">%</span><span class="n">xlow</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-</span><span class="n">x</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="o">/</span><span class="n">p</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+<span class="w">            </span><span class="k">end select</span>
+<span class="k">        else if</span><span class="w"> </span><span class="p">(</span><span class="n">xnew</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">&gt;</span><span class="n">me</span><span class="p">%</span><span class="n">xupp</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">            </span><span class="n">search_direction_modifed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+<span class="w">            </span><span class="n">modified</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">verbose</span><span class="p">)</span><span class="w"> </span><span class="k">write</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">iunit</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39;x(&#39;</span><span class="o">//</span><span class="n">int2str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;) &gt; xupp(i) : adjusting to upper bound&#39;</span>
+<span class="w">            </span><span class="k">select case</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">bounds_mode</span><span class="p">)</span>
+<span class="w">            </span><span class="k">case</span><span class="p">(</span><span class="n">NLESOLVER_SCALAR_BOUNDS</span><span class="p">,</span><span class="n">NLESOLVER_WALL_BOUNDS</span><span class="p">);</span><span class="w"> </span><span class="n">xnew</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">xupp</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="w">            </span><span class="k">case</span><span class="p">(</span><span class="n">NLESOLVER_VECTOR_BOUNDS</span><span class="p">);</span><span class="w">                       </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">min</span><span class="p">(</span><span class="n">t</span><span class="p">,(</span><span class="n">me</span><span class="p">%</span><span class="n">xupp</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-</span><span class="n">x</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="o">/</span><span class="n">p</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+<span class="w">            </span><span class="k">end select</span>
+<span class="k">        end if</span>
+<span class="k">    end do</span>
+
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">search_direction_modifed</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span><span class="c">! adjust the search direction:</span>
+<span class="w">        </span><span class="k">select case</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">bounds_mode</span><span class="p">)</span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">NLESOLVER_SCALAR_BOUNDS</span><span class="p">,</span><span class="n">NLESOLVER_WALL_BOUNDS</span><span class="p">)</span>
+<span class="w">            </span><span class="n">pnew</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xnew</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">x</span><span class="w">  </span><span class="c">! here we have changed the search direction vector</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">all</span><span class="p">(</span><span class="n">pnew</span><span class="o">==</span><span class="mf">0.0_wp</span><span class="p">))</span><span class="w"> </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error adjusting line search direction for bounds&#39;</span><span class="p">)</span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">NLESOLVER_VECTOR_BOUNDS</span><span class="p">)</span>
+<span class="w">            </span><span class="c">! here was are staying on the original search direction vector, just walking back</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mf">0.0_wp</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! something wrong</span>
+<span class="w">                </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error adjusting line search direction for bounds&#39;</span><span class="p">)</span>
+<span class="w">                </span><span class="n">pnew</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span>
+<span class="w">            </span><span class="k">else</span>
+<span class="k">                </span><span class="n">pnew</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">t</span>
+<span class="w">            </span><span class="k">end if</span>
+<span class="k">        end select</span>
+<span class="k">        if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">verbose</span><span class="p">)</span><span class="w"> </span><span class="k">write</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">iunit</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39;Search direction modified to be within bounds&#39;</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="k">        </span><span class="n">pnew</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span>
+<span class="w">    </span><span class="k">end if</span>
+
+<span class="k">    end subroutine </span><span class="n">adjust_search_direction</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              nlesolver-fortran
+ was developed by Jacob Williams<br>              &copy; 2025 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+            </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

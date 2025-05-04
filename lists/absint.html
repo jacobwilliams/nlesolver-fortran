@@ -1,0 +1,157 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Nonlinear Equation Solver with Modern Fortran">
+    <meta name="author" content="Jacob Williams" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>All Abstract Interfaces &ndash; nlesolver-fortran
+</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">nlesolver-fortran </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../sourcefile/nlesolver_module.f90.html">Source File</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12" id='text'>
+			 <h1>Abstract Interfaces</h1>
+			 <table class="table table-striped nostretched">
+			 <thead>
+			 <tr><th>Abstract Interface</th><th>Location</th><th>Description</th></tr>
+			 </thead><tbody>
+			   <tr>
+                 <td><a href='../interface/export_func.html'>export_func</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td><p>export an iteration:</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/func_func.html'>func_func</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td><p>compute the function</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/grad_func.html'>grad_func</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td><p>compute the gradient of the function (Jacobian). Dense version.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/grad_func_sparse.html'>grad_func_sparse</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td><p>compute the gradient of the function (Jacobian). Sparse version.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/linesearch_func.html'>linesearch_func</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td><p>line search method. Note that not all inputs/outputs are
+used by all methods.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/norm_func.html'>norm_func</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td><p>function vector norm.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/sparse_solver_func.html'>sparse_solver_func</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td><p>for a custom user-provided linear solver (sparse version)
+solve <code>Ax = b</code> for <code>x</code>, given <code>A</code> and <code>b</code>.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../interface/wait_func.html'>wait_func</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td><p>enable a user-triggered stop of the iterations:</p></td>
+               </tr>
+			 </tbody></table>
+        </div>
+      </div>
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              nlesolver-fortran
+ was developed by Jacob Williams<br>              &copy; 2025 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+            </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

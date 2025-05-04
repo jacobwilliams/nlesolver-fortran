@@ -1,0 +1,633 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Nonlinear Equation Solver with Modern Fortran">
+    <meta name="author" content="Jacob Williams" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>All Procedures &ndash; nlesolver-fortran
+</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">nlesolver-fortran </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../sourcefile/nlesolver_module.f90.html">Source File</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12" id='text'>
+			 <h1>Procedures</h1>
+			 <table class="table table-striped">
+			 <thead><tr><th>Procedure</th><th>Location</th><th>Procedure Type</th><th>Description</th></tr></thead>
+			 <tbody>
+			   <tr>
+                 <td><a href='../proc/adjust_search_direction.html'>adjust_search_direction</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>if necessary, adjust the search direction vector <code>p</code> so that bounds are not violated.</p><a href="../proc/adjust_search_direction.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/adjust_x_for_bounds.html'>adjust_x_for_bounds</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>if necessary, adjust the <code>x</code> vector to be within the bounds.
+used for the initial guess.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/backtracking_linesearch.html'>backtracking_linesearch</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Backtracking line search.</p><a href="../proc/backtracking_linesearch.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/compute_next_step.html'>compute_next_step</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Compute the next step.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/destroy_nlesolver_variables.html'>destroy_nlesolver_variables</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Destructor</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/exact_linesearch.html'>exact_linesearch</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>An exact linesearch that uses a derivative-free minimizer to
+find the minimum value of <code>f(x)</code> between
+<code>x = xold + p * alpha_min</code> and
+<code>x = xold + p * alpha_max</code>.</p><a href="../proc/exact_linesearch.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/fixed_point_linesearch.html'>fixed_point_linesearch</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>A simple search that just evaluates the function at a specified
+number of points and picks the one with the minimum function value.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/get_status.html'>get_status</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Return the status code and message from the <a href="../type/nlesolver_type.html">nlesolver_type</a> class.</p><a href="../proc/get_status.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/initialize_nlesolver_variables.html'>initialize_nlesolver_variables</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Constructor for the class.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/int2str.html'>int2str</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Function</td>
+                 <td><p>Convert an integer to a string. Works for up to 256 digits.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/linear_solver.html'>linear_solver</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Solve the linear system: <script type="math/tex"> Ax = b </script>, using a dense, direct method.</p><a href="../proc/linear_solver.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/nlesolver_solver.html'>nlesolver_solver</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Main solver.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/norm_1.html'>norm_1</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Function</td>
+                 <td><p>1-norm function</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/norm_2.html'>norm_2</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Function</td>
+                 <td><p>2-norm function</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/norm_inf.html'>norm_inf</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Function</td>
+                 <td><p>Infinity-norm function</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/real2str.html'>real2str</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Function</td>
+                 <td><p>Convert a real to a string. Works for up to 256 digits.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/set_status.html'>set_status</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Set status flag and message.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/simple_step.html'>simple_step</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Take a simple step in the search direction of <code>p * alpha</code>.</p></td>
+               </tr>
+			 </tbody></table>
+             <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: call~~graph~~CallGraph Pages: 1 -->
+<svg id="callgraphCallGraph" width="855pt" height="501pt"
+ viewBox="0.00 0.00 855.00 501.11" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="call~~graph~~CallGraph" class="graph" transform="scale(0.97 0.97) rotate(0) translate(4 510)">
+<title>call~~graph~~CallGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-510 873,-510 873,4 -4,4"/>
+<!-- proc~adjust_search_direction -->
+<g id="call~~graph~~CallGraph_node1" class="node">
+<title>proc~adjust_search_direction</title>
+<g id="a_call~~graph~~CallGraph_node1"><a xlink:href="../proc/adjust_search_direction.html" xlink:title="nlesolver_type%adjust_search_direction">
+<polygon fill="#d9534f" stroke="#d9534f" points="521,-212 297,-212 297,-188 521,-188 521,-212"/>
+<text text-anchor="middle" x="409" y="-197.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%adjust_search_direction</text>
+</a>
+</g>
+</g>
+<!-- proc~int2str -->
+<g id="call~~graph~~CallGraph_node10" class="node">
+<title>proc~int2str</title>
+<g id="a_call~~graph~~CallGraph_node10"><a xlink:href="../proc/int2str.html" xlink:title="int2str">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="869,-231 815,-231 815,-207 869,-207 869,-231"/>
+<text text-anchor="middle" x="842" y="-216.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">int2str</text>
+</a>
+</g>
+</g>
+<!-- proc~adjust_search_direction&#45;&gt;proc~int2str -->
+<g id="call~~graph~~CallGraph_edge1" class="edge">
+<title>proc~adjust_search_direction&#45;&gt;proc~int2str</title>
+<path fill="none" stroke="#000000" d="M521.27,-204.91C614.88,-209.03 743.04,-214.68 804.81,-217.4"/>
+<polygon fill="#000000" stroke="#000000" points="804.7,-220.9 814.84,-217.85 805.01,-213.91 804.7,-220.9"/>
+</g>
+<!-- proc~set_status -->
+<g id="call~~graph~~CallGraph_node17" class="node">
+<title>proc~set_status</title>
+<g id="a_call~~graph~~CallGraph_node17"><a xlink:href="../proc/set_status.html" xlink:title="nlesolver_type%set_status">
+<polygon fill="#d9534f" stroke="#d9534f" points="751,-272 599,-272 599,-248 751,-248 751,-272"/>
+<text text-anchor="middle" x="675" y="-257.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%set_status</text>
+</a>
+</g>
+</g>
+<!-- proc~adjust_search_direction&#45;&gt;proc~set_status -->
+<g id="call~~graph~~CallGraph_edge2" class="edge">
+<title>proc~adjust_search_direction&#45;&gt;proc~set_status</title>
+<path fill="none" stroke="#000000" d="M494.15,-212C507.89,-214.57 521.91,-217.57 535,-221 551.45,-225.32 554.73,-229.02 571,-234 584.27,-238.06 598.64,-241.98 612.31,-245.49"/>
+<polygon fill="#000000" stroke="#000000" points="611.56,-248.91 622.12,-247.97 613.28,-242.12 611.56,-248.91"/>
+</g>
+<!-- proc~adjust_x_for_bounds -->
+<g id="call~~graph~~CallGraph_node2" class="node">
+<title>proc~adjust_x_for_bounds</title>
+<g id="a_call~~graph~~CallGraph_node2"><a xlink:href="../proc/adjust_x_for_bounds.html" xlink:title="nlesolver_type%adjust_x_for_bounds">
+<polygon fill="#d9534f" stroke="#d9534f" points="779,-192 571,-192 571,-168 779,-168 779,-192"/>
+<text text-anchor="middle" x="675" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%adjust_x_for_bounds</text>
+</a>
+</g>
+</g>
+<!-- proc~adjust_x_for_bounds&#45;&gt;proc~int2str -->
+<g id="call~~graph~~CallGraph_edge3" class="edge">
+<title>proc~adjust_x_for_bounds&#45;&gt;proc~int2str</title>
+<path fill="none" stroke="#000000" d="M726.85,-192.02C752.14,-198 782.11,-205.08 804.99,-210.49"/>
+<polygon fill="#000000" stroke="#000000" points="804.43,-213.95 814.97,-212.85 806.04,-207.14 804.43,-213.95"/>
+</g>
+<!-- proc~backtracking_linesearch -->
+<g id="call~~graph~~CallGraph_node3" class="node">
+<title>proc~backtracking_linesearch</title>
+<g id="a_call~~graph~~CallGraph_node3"><a xlink:href="../proc/backtracking_linesearch.html" xlink:title="backtracking_linesearch">
+<polygon fill="#d9534f" stroke="#d9534f" points="194.5,-296 52.5,-296 52.5,-272 194.5,-272 194.5,-296"/>
+<text text-anchor="middle" x="123.5" y="-281.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">backtracking_linesearch</text>
+</a>
+</g>
+</g>
+<!-- proc~backtracking_linesearch&#45;&gt;proc~adjust_search_direction -->
+<g id="call~~graph~~CallGraph_edge4" class="edge">
+<title>proc~backtracking_linesearch&#45;&gt;proc~adjust_search_direction</title>
+<path fill="none" stroke="#000000" d="M194.74,-280.41C212.63,-277.28 231.23,-271.94 247,-263 268.38,-250.87 261.6,-233.09 283,-221 286.31,-219.13 289.74,-217.42 293.26,-215.85"/>
+<polygon fill="#000000" stroke="#000000" points="294.8,-219 302.77,-212.03 292.19,-212.51 294.8,-219"/>
+</g>
+<!-- proc~compute_next_step -->
+<g id="call~~graph~~CallGraph_node4" class="node">
+<title>proc~compute_next_step</title>
+<g id="a_call~~graph~~CallGraph_node4"><a xlink:href="../proc/compute_next_step.html" xlink:title="nlesolver_type%compute_next_step">
+<polygon fill="#d9534f" stroke="#d9534f" points="510,-254 308,-254 308,-230 510,-230 510,-254"/>
+<text text-anchor="middle" x="409" y="-239.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%compute_next_step</text>
+</a>
+</g>
+</g>
+<!-- proc~backtracking_linesearch&#45;&gt;proc~compute_next_step -->
+<g id="call~~graph~~CallGraph_edge5" class="edge">
+<title>proc~backtracking_linesearch&#45;&gt;proc~compute_next_step</title>
+<path fill="none" stroke="#000000" d="M194.58,-273.62C231.54,-268.14 277.32,-261.36 316.99,-255.48"/>
+<polygon fill="#000000" stroke="#000000" points="317.55,-258.94 326.93,-254.01 316.53,-252.01 317.55,-258.94"/>
+</g>
+<!-- proc~destroy_nlesolver_variables -->
+<g id="call~~graph~~CallGraph_node5" class="node">
+<title>proc~destroy_nlesolver_variables</title>
+<g id="a_call~~graph~~CallGraph_node5"><a xlink:href="../proc/destroy_nlesolver_variables.html" xlink:title="nlesolver_type%destroy_nlesolver_variables">
+<polygon fill="#d9534f" stroke="#d9534f" points="247,-338 0,-338 0,-314 247,-314 247,-338"/>
+<text text-anchor="middle" x="123.5" y="-323.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%destroy_nlesolver_variables</text>
+</a>
+</g>
+</g>
+<!-- proc~exact_linesearch -->
+<g id="call~~graph~~CallGraph_node6" class="node">
+<title>proc~exact_linesearch</title>
+<g id="a_call~~graph~~CallGraph_node6"><a xlink:href="../proc/exact_linesearch.html" xlink:title="exact_linesearch">
+<polygon fill="#d9534f" stroke="#d9534f" points="174,-170 73,-170 73,-146 174,-146 174,-170"/>
+<text text-anchor="middle" x="123.5" y="-155.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exact_linesearch</text>
+</a>
+</g>
+</g>
+<!-- proc~exact_linesearch&#45;&gt;proc~adjust_search_direction -->
+<g id="call~~graph~~CallGraph_edge7" class="edge">
+<title>proc~exact_linesearch&#45;&gt;proc~adjust_search_direction</title>
+<path fill="none" stroke="#000000" d="M174.21,-165.36C213.57,-171.2 269.61,-179.5 316.96,-186.51"/>
+<polygon fill="#000000" stroke="#000000" points="316.52,-189.99 326.93,-187.99 317.55,-183.06 316.52,-189.99"/>
+</g>
+<!-- proc~exact_linesearch&#45;&gt;proc~compute_next_step -->
+<g id="call~~graph~~CallGraph_edge8" class="edge">
+<title>proc~exact_linesearch&#45;&gt;proc~compute_next_step</title>
+<path fill="none" stroke="#000000" d="M174.2,-158.83C197.57,-161.09 225.04,-166.54 247,-179 268.38,-191.13 261.6,-208.91 283,-221 287.85,-223.74 292.96,-226.14 298.24,-228.25"/>
+<polygon fill="#000000" stroke="#000000" points="297.3,-231.63 307.89,-231.73 299.67,-225.05 297.3,-231.63"/>
+</g>
+<!-- fmin -->
+<g id="call~~graph~~CallGraph_node19" class="node">
+<title>fmin</title>
+<polygon fill="#777777" stroke="#777777" points="436,-108 382,-108 382,-84 436,-84 436,-108"/>
+<text text-anchor="middle" x="409" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">fmin</text>
+</g>
+<!-- proc~exact_linesearch&#45;&gt;fmin -->
+<g id="call~~graph~~CallGraph_edge6" class="edge">
+<title>proc~exact_linesearch&#45;&gt;fmin</title>
+<path fill="none" stroke="#000000" d="M166.98,-145.94C198.76,-137.18 243.39,-125.43 283,-117 312.57,-110.7 346.4,-105.12 371.4,-101.29"/>
+<polygon fill="#000000" stroke="#000000" points="372.17,-104.72 381.54,-99.76 371.13,-97.79 372.17,-104.72"/>
+</g>
+<!-- proc~fixed_point_linesearch -->
+<g id="call~~graph~~CallGraph_node7" class="node">
+<title>proc~fixed_point_linesearch</title>
+<g id="a_call~~graph~~CallGraph_node7"><a xlink:href="../proc/fixed_point_linesearch.html" xlink:title="fixed_point_linesearch">
+<polygon fill="#d9534f" stroke="#d9534f" points="189,-254 58,-254 58,-230 189,-230 189,-254"/>
+<text text-anchor="middle" x="123.5" y="-239.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">fixed_point_linesearch</text>
+</a>
+</g>
+</g>
+<!-- proc~fixed_point_linesearch&#45;&gt;proc~adjust_search_direction -->
+<g id="call~~graph~~CallGraph_edge9" class="edge">
+<title>proc~fixed_point_linesearch&#45;&gt;proc~adjust_search_direction</title>
+<path fill="none" stroke="#000000" d="M189.19,-232.42C226.93,-226.83 275.15,-219.68 316.71,-213.52"/>
+<polygon fill="#000000" stroke="#000000" points="317.46,-216.95 326.84,-212.02 316.44,-210.03 317.46,-216.95"/>
+</g>
+<!-- proc~fixed_point_linesearch&#45;&gt;proc~compute_next_step -->
+<g id="call~~graph~~CallGraph_edge10" class="edge">
+<title>proc~fixed_point_linesearch&#45;&gt;proc~compute_next_step</title>
+<path fill="none" stroke="#000000" d="M189.19,-242C221.23,-242 260.82,-242 297.47,-242"/>
+<polygon fill="#000000" stroke="#000000" points="297.73,-245.5 307.73,-242 297.73,-238.5 297.73,-245.5"/>
+</g>
+<!-- proc~get_status -->
+<g id="call~~graph~~CallGraph_node8" class="node">
+<title>proc~get_status</title>
+<g id="a_call~~graph~~CallGraph_node8"><a xlink:href="../proc/get_status.html" xlink:title="nlesolver_type%get_status">
+<polygon fill="#d9534f" stroke="#d9534f" points="200.5,-380 46.5,-380 46.5,-356 200.5,-356 200.5,-380"/>
+<text text-anchor="middle" x="123.5" y="-365.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%get_status</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_nlesolver_variables -->
+<g id="call~~graph~~CallGraph_node9" class="node">
+<title>proc~initialize_nlesolver_variables</title>
+<g id="a_call~~graph~~CallGraph_node9"><a xlink:href="../proc/initialize_nlesolver_variables.html" xlink:title="nlesolver_type%initialize_nlesolver_variables">
+<polygon fill="#d9534f" stroke="#d9534f" points="535,-296 283,-296 283,-272 535,-272 535,-296"/>
+<text text-anchor="middle" x="409" y="-281.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%initialize_nlesolver_variables</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_nlesolver_variables&#45;&gt;proc~set_status -->
+<g id="call~~graph~~CallGraph_edge11" class="edge">
+<title>proc~initialize_nlesolver_variables&#45;&gt;proc~set_status</title>
+<path fill="none" stroke="#000000" d="M535.04,-272.63C553.31,-270.97 571.76,-269.29 588.98,-267.73"/>
+<polygon fill="#000000" stroke="#000000" points="589.33,-271.21 598.97,-266.82 588.7,-264.24 589.33,-271.21"/>
+</g>
+<!-- proc~linear_solver -->
+<g id="call~~graph~~CallGraph_node11" class="node">
+<title>proc~linear_solver</title>
+<g id="a_call~~graph~~CallGraph_node11"><a xlink:href="../proc/linear_solver.html" xlink:title="linear_solver">
+<polygon fill="#d9534f" stroke="#d9534f" points="715.5,-150 634.5,-150 634.5,-126 715.5,-126 715.5,-150"/>
+<text text-anchor="middle" x="675" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">linear_solver</text>
+</a>
+</g>
+</g>
+<!-- proc~nlesolver_solver -->
+<g id="call~~graph~~CallGraph_node12" class="node">
+<title>proc~nlesolver_solver</title>
+<g id="a_call~~graph~~CallGraph_node12"><a xlink:href="../proc/nlesolver_solver.html" xlink:title="nlesolver_type%nlesolver_solver">
+<polygon fill="#d9534f" stroke="#d9534f" points="502,-150 316,-150 316,-126 502,-126 502,-150"/>
+<text text-anchor="middle" x="409" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%nlesolver_solver</text>
+</a>
+</g>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;proc~adjust_x_for_bounds -->
+<g id="call~~graph~~CallGraph_edge14" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;proc~adjust_x_for_bounds</title>
+<path fill="none" stroke="#000000" d="M485.65,-150.04C517.69,-155.13 555.17,-161.1 588.23,-166.35"/>
+<polygon fill="#000000" stroke="#000000" points="587.91,-169.85 598.34,-167.96 589.01,-162.93 587.91,-169.85"/>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;proc~linear_solver -->
+<g id="call~~graph~~CallGraph_edge15" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;proc~linear_solver</title>
+<path fill="none" stroke="#000000" d="M502.33,-138C543.3,-138 589.88,-138 624.18,-138"/>
+<polygon fill="#000000" stroke="#000000" points="624.41,-141.5 634.41,-138 624.41,-134.5 624.41,-141.5"/>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;proc~set_status -->
+<g id="call~~graph~~CallGraph_edge16" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;proc~set_status</title>
+<path fill="none" stroke="#000000" d="M455.22,-150.07C479.4,-157.21 509.39,-167.17 535,-179 552.02,-186.86 554.86,-191.45 571,-201 595.3,-215.38 623.09,-231.27 643.68,-242.93"/>
+<polygon fill="#000000" stroke="#000000" points="642.17,-246.1 652.59,-247.97 645.61,-240 642.17,-246.1"/>
+</g>
+<!-- initialize -->
+<g id="call~~graph~~CallGraph_node20" class="node">
+<title>initialize</title>
+<polygon fill="#777777" stroke="#777777" points="703.5,-108 646.5,-108 646.5,-84 703.5,-84 703.5,-108"/>
+<text text-anchor="middle" x="675" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">initialize</text>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;initialize -->
+<g id="call~~graph~~CallGraph_edge12" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;initialize</title>
+<path fill="none" stroke="#000000" d="M485.65,-125.96C535.03,-118.11 597.35,-108.19 636.45,-101.97"/>
+<polygon fill="#000000" stroke="#000000" points="637.02,-105.43 646.35,-100.4 635.92,-98.51 637.02,-105.43"/>
+</g>
+<!-- lsmr_ez -->
+<g id="call~~graph~~CallGraph_node21" class="node">
+<title>lsmr_ez</title>
+<polygon fill="#777777" stroke="#777777" points="702,-66 648,-66 648,-42 702,-42 702,-66"/>
+<text text-anchor="middle" x="675" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lsmr_ez</text>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;lsmr_ez -->
+<g id="call~~graph~~CallGraph_edge13" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;lsmr_ez</title>
+<path fill="none" stroke="#000000" d="M502.32,-130.06C513.75,-126.92 524.94,-122.68 535,-117 556.4,-104.91 549.81,-87.46 571,-75 591.19,-63.13 617.01,-57.88 637.76,-55.6"/>
+<polygon fill="#000000" stroke="#000000" points="638.14,-59.08 647.78,-54.68 637.51,-52.11 638.14,-59.08"/>
+</g>
+<!-- solve -->
+<g id="call~~graph~~CallGraph_node22" class="node">
+<title>solve</title>
+<polygon fill="#777777" stroke="#777777" points="702,-24 648,-24 648,0 702,0 702,-24"/>
+<text text-anchor="middle" x="675" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">solve</text>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;solve -->
+<g id="call~~graph~~CallGraph_edge17" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;solve</title>
+<path fill="none" stroke="#000000" d="M502.25,-133.42C514.08,-129.81 525.4,-124.55 535,-117 566.93,-91.9 539.51,-58.65 571,-33 589.61,-17.85 616.27,-12.72 637.81,-11.32"/>
+<polygon fill="#000000" stroke="#000000" points="638.06,-14.81 647.91,-10.9 637.77,-7.81 638.06,-14.81"/>
+</g>
+<!-- proc~norm_1 -->
+<g id="call~~graph~~CallGraph_node13" class="node">
+<title>proc~norm_1</title>
+<g id="a_call~~graph~~CallGraph_node13"><a xlink:href="../proc/norm_1.html" xlink:title="norm_1">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="150.5,-422 96.5,-422 96.5,-398 150.5,-398 150.5,-422"/>
+<text text-anchor="middle" x="123.5" y="-407.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">norm_1</text>
+</a>
+</g>
+</g>
+<!-- proc~norm_2 -->
+<g id="call~~graph~~CallGraph_node14" class="node">
+<title>proc~norm_2</title>
+<g id="a_call~~graph~~CallGraph_node14"><a xlink:href="../proc/norm_2.html" xlink:title="norm_2">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="150.5,-464 96.5,-464 96.5,-440 150.5,-440 150.5,-464"/>
+<text text-anchor="middle" x="123.5" y="-449.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">norm_2</text>
+</a>
+</g>
+</g>
+<!-- proc~norm_inf -->
+<g id="call~~graph~~CallGraph_node15" class="node">
+<title>proc~norm_inf</title>
+<g id="a_call~~graph~~CallGraph_node15"><a xlink:href="../proc/norm_inf.html" xlink:title="norm_inf">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="153.5,-506 93.5,-506 93.5,-482 153.5,-482 153.5,-506"/>
+<text text-anchor="middle" x="123.5" y="-491.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">norm_inf</text>
+</a>
+</g>
+</g>
+<!-- proc~real2str -->
+<g id="call~~graph~~CallGraph_node16" class="node">
+<title>proc~real2str</title>
+<g id="a_call~~graph~~CallGraph_node16"><a xlink:href="../proc/real2str.html" xlink:title="real2str">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="869,-273 815,-273 815,-249 869,-249 869,-273"/>
+<text text-anchor="middle" x="842" y="-258.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">real2str</text>
+</a>
+</g>
+</g>
+<!-- proc~set_status&#45;&gt;proc~int2str -->
+<g id="call~~graph~~CallGraph_edge18" class="edge">
+<title>proc~set_status&#45;&gt;proc~int2str</title>
+<path fill="none" stroke="#000000" d="M724.61,-247.92C750.28,-241.54 781.25,-233.85 804.79,-228"/>
+<polygon fill="#000000" stroke="#000000" points="805.85,-231.34 814.71,-225.53 804.16,-224.55 805.85,-231.34"/>
+</g>
+<!-- proc~set_status&#45;&gt;proc~real2str -->
+<g id="call~~graph~~CallGraph_edge19" class="edge">
+<title>proc~set_status&#45;&gt;proc~real2str</title>
+<path fill="none" stroke="#000000" d="M751.26,-260.46C769.76,-260.57 788.76,-260.68 804.49,-260.78"/>
+<polygon fill="#000000" stroke="#000000" points="804.78,-264.28 814.8,-260.84 804.82,-257.28 804.78,-264.28"/>
+</g>
+<!-- proc~simple_step -->
+<g id="call~~graph~~CallGraph_node18" class="node">
+<title>proc~simple_step</title>
+<g id="a_call~~graph~~CallGraph_node18"><a xlink:href="../proc/simple_step.html" xlink:title="simple_step">
+<polygon fill="#d9534f" stroke="#d9534f" points="161.5,-212 85.5,-212 85.5,-188 161.5,-188 161.5,-212"/>
+<text text-anchor="middle" x="123.5" y="-197.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">simple_step</text>
+</a>
+</g>
+</g>
+<!-- proc~simple_step&#45;&gt;proc~adjust_search_direction -->
+<g id="call~~graph~~CallGraph_edge20" class="edge">
+<title>proc~simple_step&#45;&gt;proc~adjust_search_direction</title>
+<path fill="none" stroke="#000000" d="M161.56,-200C193.52,-200 241.51,-200 286.67,-200"/>
+<polygon fill="#000000" stroke="#000000" points="286.86,-203.5 296.86,-200 286.86,-196.5 286.86,-203.5"/>
+</g>
+<!-- proc~simple_step&#45;&gt;proc~compute_next_step -->
+<g id="call~~graph~~CallGraph_edge21" class="edge">
+<title>proc~simple_step&#45;&gt;proc~compute_next_step</title>
+<path fill="none" stroke="#000000" d="M161.56,-205.49C200.76,-211.3 264.09,-220.68 316.74,-228.48"/>
+<polygon fill="#000000" stroke="#000000" points="316.37,-231.96 326.77,-229.97 317.39,-225.04 316.37,-231.96"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var pancallgraphCallGraph = svgPanZoom('#callgraphCallGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CallGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="CallGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.51" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(0.86 0.86) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 741.5,-28 741.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="146,-24 88,-24 88,0 146,0 146,-24"/>
+<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="225.5,-24 164.5,-24 164.5,0 225.5,0 225.5,-24"/>
+<text text-anchor="middle" x="195" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Type Bound Procedure -->
+<g id="node4" class="node">
+<title>Type Bound Procedure</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="374,-24 244,-24 244,0 374,0 374,-24"/>
+<text text-anchor="middle" x="309" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type Bound Procedure</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node5" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="537.5,-24 392.5,-24 392.5,0 537.5,0 537.5,-24"/>
+<text text-anchor="middle" x="465" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node6" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="614,-24 556,-24 556,0 614,0 614,-24"/>
+<text text-anchor="middle" x="585" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node7" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="737.5,-24 632.5,-24 632.5,0 737.5,0 737.5,-24"/>
+<text text-anchor="middle" x="685" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.
+</p>
+ </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              nlesolver-fortran
+ was developed by Jacob Williams<br>              &copy; 2025 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+            </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

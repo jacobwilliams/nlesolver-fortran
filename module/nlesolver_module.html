@@ -1,0 +1,4681 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Nonlinear Equation Solver with Modern Fortran">
+    <meta name="author" content="Jacob Williams" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>nlesolver_module &ndash; nlesolver-fortran</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">nlesolver-fortran </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../sourcefile/nlesolver_module.f90.html">Source File</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>nlesolver_module
+      <small>Module</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title="100.0% of total for modules and submodules.">973 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/nlesolver_module.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/nlesolver_module.f90.html'>nlesolver_module.F90</a></li>
+            <li class="breadcrumb-item active" aria-current="page">nlesolver_module</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#vars-0"
+         aria-expanded="false" aria-controls="vars-0">
+         <h4 class="card-header bg-primary text-white">Variables</h4>
+      </a>
+      <div id="vars-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_rk">nlesolver_rk</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-wp">wp</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-zero">zero</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-one">one</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-two">two</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-eps">eps</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-big">big</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_sparsity_dense">NLESOLVER_SPARSITY_DENSE</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_sparsity_lsqr">NLESOLVER_SPARSITY_LSQR</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_sparsity_lusol">NLESOLVER_SPARSITY_LUSOL</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_sparsity_lsmr">NLESOLVER_SPARSITY_LSMR</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_sparsity_custom_sparse">NLESOLVER_SPARSITY_CUSTOM_SPARSE</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_ignore_bounds">NLESOLVER_IGNORE_BOUNDS</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_scalar_bounds">NLESOLVER_SCALAR_BOUNDS</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_vector_bounds">NLESOLVER_VECTOR_BOUNDS</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_wall_bounds">NLESOLVER_WALL_BOUNDS</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_2_norm">NLESOLVER_2_NORM</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_inf_norm">NLESOLVER_INF_NORM</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_1_norm">NLESOLVER_1_NORM</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_linesearch_simple">NLESOLVER_LINESEARCH_SIMPLE</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_linesearch_backtracking">NLESOLVER_LINESEARCH_BACKTRACKING</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_linesearch_exact">NLESOLVER_LINESEARCH_EXACT</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#variable-nlesolver_linesearch_fixedpoint">NLESOLVER_LINESEARCH_FIXEDPOINT</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#absints-0"
+         aria-expanded="false" aria-controls="absints-0">
+         <h4 class="card-header bg-primary text-white">Abstract Interfaces</h4>
+      </a>
+      <div id="absints-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/nlesolver_module.html#interface-norm_func">norm_func</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#interface-sparse_solver_func">sparse_solver_func</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#interface-func_func">func_func</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#interface-grad_func">grad_func</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#interface-grad_func_sparse">grad_func_sparse</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#interface-export_func">export_func</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#interface-wait_func">wait_func</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#interface-linesearch_func">linesearch_func</a>
+        </div>
+      </div>
+    </div>
+
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#types-0"
+         aria-expanded="false" aria-controls="types-0">
+         <h4 class="card-header bg-primary text-white">Derived Types</h4>
+      </a>
+      <div id="types-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/nlesolver_module.html#type-nlesolver_type">nlesolver_type</a>
+        </div>
+      </div>
+    </div>
+
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#funcs-0"
+         aria-expanded="false" aria-controls="funcs-0">
+         <h4 class="card-header bg-primary text-white">Functions</h4>
+      </a>
+      <div id="funcs-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/nlesolver_module.html#proc-int2str">int2str</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#proc-real2str">real2str</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#proc-norm_2">norm_2</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#proc-norm_1">norm_1</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#proc-norm_inf">norm_inf</a>
+        </div>
+      </div>
+    </div>
+
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#subs-0"
+         aria-expanded="false" aria-controls="subs-0">
+         <h4 class="card-header bg-primary text-white">Subroutines</h4>
+      </a>
+      <div id="subs-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/nlesolver_module.html#proc-set_status">set_status</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#proc-get_status">get_status</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#proc-initialize_nlesolver_variables">initialize_nlesolver_variables</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#proc-nlesolver_solver">nlesolver_solver</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#proc-adjust_x_for_bounds">adjust_x_for_bounds</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#proc-adjust_search_direction">adjust_search_direction</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#proc-compute_next_step">compute_next_step</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#proc-destroy_nlesolver_variables">destroy_nlesolver_variables</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#proc-linear_solver">linear_solver</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#proc-simple_step">simple_step</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#proc-backtracking_linesearch">backtracking_linesearch</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#proc-exact_linesearch">exact_linesearch</a>
+            <a class="list-group-item" href="../module/nlesolver_module.html#proc-fixed_point_linesearch">fixed_point_linesearch</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+
+
+  </div>
+
+    </div>
+
+    <div class="col-md-9" id='text'>
+      <p>A basic multidimensional nonlinear equation solver, using a Newton-Raphson type direct method.</p>
+<h3>Features</h3>
+<ul>
+<li>Works with square, under-determined, or over-determined systems.</li>
+<li>Uses LAPACK routines (<code>dgesv</code> or <code>dgels</code>) to solve the linear system.</li>
+<li>Has a Broyden update option.</li>
+<li>Has various line search options.</li>
+</ul>
+<h3>References</h3>
+<ul>
+<li>https://en.wikipedia.org/wiki/Backtracking_line_search</li>
+<li>http://projecteuclid.org/download/pdf_1/euclid.pjm/1102995080</li>
+<li>http://help.agi.com/stk/index.htm#gator/eq-diffcorr.htm</li>
+<li>http://gmat.sourceforge.net/doc/R2015a/html/DifferentialCorrector.html</li>
+<li>https://openmdao.org/newdocs/versions/latest/features/building_blocks/solvers/bounds_enforce.html</li>
+</ul>
+<h3>Author</h3>
+<ul>
+<li>Jacob Williams</li>
+</ul>
+<h3>License</h3>
+<ul>
+<li>BSD-3</li>
+</ul>
+<div class="alert alert-success">
+<p class="alert-title h4">Todo</p>
+<p>add an <code>istat</code> output to func and grad, for user stopping
+      or to take a smaller stop (if istat&gt;0 take a smaller step, if istat&lt;0 abort)</p>
+</div>
+<div class="alert alert-info">
+<p class="alert-title h4">Note</p>
+<p>The default real kind (<code>wp</code>) can be
+      changed using optional preprocessor flags.
+      This library was built with real kind:
+      <code>real(kind=real64)</code> [8 bytes]</p>
+</div>
+<br>          <div class="card mb-4">
+      <h3 class="card-header card-title bg-light">Uses</h3>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <ul class="list-inline">
+                  <li class="list-inline-item"><a href='https://jacobwilliams.github.io/lusol'>lusol_ez_module</a></li>
+                  <li class="list-inline-item"><a href='https://jacobwilliams.github.io/fmin'>fmin_module</a></li>
+                  <li class="list-inline-item"><a href='https://jacobwilliams.github.io/LSMR'>lsmrModule</a></li>
+                  <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_fortran_env'>iso_fortran_env</a></li>
+                  <li class="list-inline-item"><a href='https://jacobwilliams.github.io/LSQR'>lsqr_module</a></li>
+              </ul>
+            </li>
+            <li class="list-group-item">
+              <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: module~~nlesolver_module~~UsesGraph Pages: 1 -->
+<svg id="modulenlesolver_moduleUsesGraph" width="251pt" height="200pt"
+ viewBox="0.00 0.00 251.00 200.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~nlesolver_module~~UsesGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 196)">
+<title>module~~nlesolver_module~~UsesGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-196 247,-196 247,4 -4,4"/>
+<!-- module~nlesolver_module -->
+<g id="module~~nlesolver_module~~UsesGraph_node1" class="node">
+<title>module~nlesolver_module</title>
+<polygon fill="none" stroke="black" points="243,-108 136,-108 136,-84 243,-84 243,-108"/>
+<text text-anchor="middle" x="189.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50">nlesolver_module</text>
+</g>
+<!-- fmin_module -->
+<g id="module~~nlesolver_module~~UsesGraph_node2" class="node">
+<title>fmin_module</title>
+<g id="a_module~~nlesolver_module~~UsesGraph_node2"><a xlink:href="https://jacobwilliams.github.io/fmin" xlink:title="fmin_module">
+<polygon fill="#337ab7" stroke="#337ab7" points="91,-192 9,-192 9,-168 91,-168 91,-192"/>
+<text text-anchor="middle" x="50" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">fmin_module</text>
+</a>
+</g>
+</g>
+<!-- module~nlesolver_module&#45;&gt;fmin_module -->
+<g id="module~~nlesolver_module~~UsesGraph_edge1" class="edge">
+<title>module~nlesolver_module&#45;&gt;fmin_module</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M173.5,-108.2C156.4,-121.73 127.3,-143.67 100,-159 97.14,-160.61 94.12,-162.18 91.06,-163.68"/>
+<polygon fill="#000000" stroke="#000000" points="89.39,-160.6 81.81,-167.99 92.35,-166.94 89.39,-160.6"/>
+</g>
+<!-- iso_fortran_env -->
+<g id="module~~nlesolver_module~~UsesGraph_node3" class="node">
+<title>iso_fortran_env</title>
+<g id="a_module~~nlesolver_module~~UsesGraph_node3"><a xlink:href="http://fortranwiki.org/fortran/show/iso_fortran_env" xlink:title="iso_fortran_env">
+<polygon fill="#337ab7" stroke="#337ab7" points="97,-150 3,-150 3,-126 97,-126 97,-150"/>
+<text text-anchor="middle" x="50" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">iso_fortran_env</text>
+</a>
+</g>
+</g>
+<!-- module~nlesolver_module&#45;&gt;iso_fortran_env -->
+<g id="module~~nlesolver_module~~UsesGraph_edge2" class="edge">
+<title>module~nlesolver_module&#45;&gt;iso_fortran_env</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M149.1,-108.04C133.85,-112.69 116.23,-118.07 100.17,-122.98"/>
+<polygon fill="#000000" stroke="#000000" points="98.95,-119.69 90.41,-125.96 100.99,-126.39 98.95,-119.69"/>
+</g>
+<!-- lsmrModule -->
+<g id="module~~nlesolver_module~~UsesGraph_node4" class="node">
+<title>lsmrModule</title>
+<g id="a_module~~nlesolver_module~~UsesGraph_node4"><a xlink:href="https://jacobwilliams.github.io/LSMR" xlink:title="lsmrModule">
+<polygon fill="#337ab7" stroke="#337ab7" points="87.5,-108 12.5,-108 12.5,-84 87.5,-84 87.5,-108"/>
+<text text-anchor="middle" x="50" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lsmrModule</text>
+</a>
+</g>
+</g>
+<!-- module~nlesolver_module&#45;&gt;lsmrModule -->
+<g id="module~~nlesolver_module~~UsesGraph_edge3" class="edge">
+<title>module~nlesolver_module&#45;&gt;lsmrModule</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M135.73,-96C123.19,-96 109.89,-96 97.65,-96"/>
+<polygon fill="#000000" stroke="#000000" points="97.64,-92.5 87.64,-96 97.64,-99.5 97.64,-92.5"/>
+</g>
+<!-- lsqr_module -->
+<g id="module~~nlesolver_module~~UsesGraph_node5" class="node">
+<title>lsqr_module</title>
+<g id="a_module~~nlesolver_module~~UsesGraph_node5"><a xlink:href="https://jacobwilliams.github.io/LSQR" xlink:title="lsqr_module">
+<polygon fill="#337ab7" stroke="#337ab7" points="89,-66 11,-66 11,-42 89,-42 89,-66"/>
+<text text-anchor="middle" x="50" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lsqr_module</text>
+</a>
+</g>
+</g>
+<!-- module~nlesolver_module&#45;&gt;lsqr_module -->
+<g id="module~~nlesolver_module~~UsesGraph_edge4" class="edge">
+<title>module~nlesolver_module&#45;&gt;lsqr_module</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M149.1,-83.96C133.59,-79.23 115.63,-73.74 99.34,-68.77"/>
+<polygon fill="#000000" stroke="#000000" points="100.04,-65.32 89.46,-65.75 98,-72.02 100.04,-65.32"/>
+</g>
+<!-- lusol_ez_module -->
+<g id="module~~nlesolver_module~~UsesGraph_node6" class="node">
+<title>lusol_ez_module</title>
+<g id="a_module~~nlesolver_module~~UsesGraph_node6"><a xlink:href="https://jacobwilliams.github.io/lusol" xlink:title="lusol_ez_module">
+<polygon fill="#337ab7" stroke="#337ab7" points="100,-24 0,-24 0,0 100,0 100,-24"/>
+<text text-anchor="middle" x="50" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lusol_ez_module</text>
+</a>
+</g>
+</g>
+<!-- module~nlesolver_module&#45;&gt;lusol_ez_module -->
+<g id="module~~nlesolver_module~~UsesGraph_edge5" class="edge">
+<title>module~nlesolver_module&#45;&gt;lusol_ez_module</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M173.5,-83.8C156.4,-70.27 127.3,-48.33 100,-33 97.14,-31.39 94.12,-29.82 91.06,-28.32"/>
+<polygon fill="#000000" stroke="#000000" points="92.35,-25.06 81.81,-24.01 89.39,-31.4 92.35,-25.06"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#UsesGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="UsesGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="518pt" height="32pt"
+ viewBox="0.00 0.00 517.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 513.5,-28 513.5,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="145.5,-24 72.5,-24 72.5,0 145.5,0 145.5,-24"/>
+<text text-anchor="middle" x="109" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="234,-24 164,-24 164,0 234,0 234,-24"/>
+<text text-anchor="middle" x="199" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="310,-24 252,-24 252,0 310,0 310,-24"/>
+<text text-anchor="middle" x="281" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="386,-24 328,-24 328,0 386,0 386,-24"/>
+<text text-anchor="middle" x="357" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="509.5,-24 404.5,-24 404.5,0 509.5,0 509.5,-24"/>
+<text text-anchor="middle" x="457" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a submodule to the (sub)module which it is
+descended from. Dashed arrows point from a module or program unit to 
+modules which it uses.
+</p>
+ </div>
+            </div>
+          </div>
+        </div>
+            </li>
+        </ul>
+      </div>
+    </div>
+
+      
+      <br>
+
+
+        <section>
+          <h2>Variables</h2>
+            <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_rk"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>nlesolver_rk</strong></td>
+<td> =</td>
+                <td>real64</td>
+            <td>
+                <p>real kind used by this module [8 bytes]</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-wp"></span>
+              integer,
+            </td>
+              <td>private,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>wp</strong></td>
+<td> =</td>
+                <td>nlesolver_rk</td>
+            <td>
+                <p>local copy of <code>nlesolver_rk</code> with a shorter name</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-zero"></span>
+              real(kind=wp),
+            </td>
+              <td>private,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>zero</strong></td>
+<td> =</td>
+                <td>0.0_wp</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-one"></span>
+              real(kind=wp),
+            </td>
+              <td>private,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>one</strong></td>
+<td> =</td>
+                <td>1.0_wp</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-two"></span>
+              real(kind=wp),
+            </td>
+              <td>private,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>two</strong></td>
+<td> =</td>
+                <td>2.0_wp</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-eps"></span>
+              real(kind=wp),
+            </td>
+              <td>private,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>eps</strong></td>
+<td> =</td>
+                <td>epsilon(one)</td>
+            <td>
+                <p>machine <script type="math/tex"> \epsilon </script>
+</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-big"></span>
+              real(kind=wp),
+            </td>
+              <td>private,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>big</strong></td>
+<td> =</td>
+                <td>huge(one)</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_sparsity_dense"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>NLESOLVER_SPARSITY_DENSE</strong></td>
+<td> =</td>
+                <td>1</td>
+            <td>
+                <p><a href="../type/nlesolver_type.html#variable-sparsity_mode">sparsity_mode</a> : assume dense (use dense solver).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_sparsity_lsqr"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>NLESOLVER_SPARSITY_LSQR</strong></td>
+<td> =</td>
+                <td>2</td>
+            <td>
+                <p><a href="../type/nlesolver_type.html#variable-sparsity_mode">sparsity_mode</a> : assume sparse (use LSQR sparse solver).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_sparsity_lusol"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>NLESOLVER_SPARSITY_LUSOL</strong></td>
+<td> =</td>
+                <td>3</td>
+            <td>
+                <p><a href="../type/nlesolver_type.html#variable-sparsity_mode">sparsity_mode</a> : assume sparse (use LUSOL sparse solver).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_sparsity_lsmr"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>NLESOLVER_SPARSITY_LSMR</strong></td>
+<td> =</td>
+                <td>4</td>
+            <td>
+                <p><a href="../type/nlesolver_type.html#variable-sparsity_mode">sparsity_mode</a> : assume sparse (use LSMR sparse solver).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_sparsity_custom_sparse"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>NLESOLVER_SPARSITY_CUSTOM_SPARSE</strong></td>
+<td> =</td>
+                <td>5</td>
+            <td>
+                <p><a href="../type/nlesolver_type.html#variable-sparsity_mode">sparsity_mode</a> : assume sparse (use a user provided sparse solver).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_ignore_bounds"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>NLESOLVER_IGNORE_BOUNDS</strong></td>
+<td> =</td>
+                <td>0</td>
+            <td>
+                <p><a href="../type/nlesolver_type.html#variable-bounds_mode">bounds_mode</a> : ignore bounds</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_scalar_bounds"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>NLESOLVER_SCALAR_BOUNDS</strong></td>
+<td> =</td>
+                <td>1</td>
+            <td>
+                <p><a href="../type/nlesolver_type.html#variable-bounds_mode">bounds_mode</a> : scalar mode</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_vector_bounds"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>NLESOLVER_VECTOR_BOUNDS</strong></td>
+<td> =</td>
+                <td>2</td>
+            <td>
+                <p><a href="../type/nlesolver_type.html#variable-bounds_mode">bounds_mode</a> : vector mode</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_wall_bounds"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>NLESOLVER_WALL_BOUNDS</strong></td>
+<td> =</td>
+                <td>3</td>
+            <td>
+                <p><a href="../type/nlesolver_type.html#variable-bounds_mode">bounds_mode</a> : wall mode</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_2_norm"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>NLESOLVER_2_NORM</strong></td>
+<td> =</td>
+                <td>1</td>
+            <td>
+                <p><a href="../type/nlesolver_type.html#variable-norm_mode">norm_mode</a> : 2-norm</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_inf_norm"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>NLESOLVER_INF_NORM</strong></td>
+<td> =</td>
+                <td>2</td>
+            <td>
+                <p><a href="../type/nlesolver_type.html#variable-norm_mode">norm_mode</a> : infinity-norm</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_1_norm"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>NLESOLVER_1_NORM</strong></td>
+<td> =</td>
+                <td>3</td>
+            <td>
+                <p><a href="../type/nlesolver_type.html#variable-norm_mode">norm_mode</a> : 1-norm</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_linesearch_simple"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>NLESOLVER_LINESEARCH_SIMPLE</strong></td>
+<td> =</td>
+                <td>1</td>
+            <td>
+                <p><a href="../type/nlesolver_type.html#variable-linesearch">linesearch</a> : use the specified <code>alpha</code> (0,1]</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_linesearch_backtracking"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>NLESOLVER_LINESEARCH_BACKTRACKING</strong></td>
+<td> =</td>
+                <td>2</td>
+            <td>
+                <p><a href="../type/nlesolver_type.html#variable-linesearch">linesearch</a> : backtracking linesearch (between <code>alpha_min</code> and <code>alpha_max</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_linesearch_exact"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>NLESOLVER_LINESEARCH_EXACT</strong></td>
+<td> =</td>
+                <td>3</td>
+            <td>
+                <p><a href="../type/nlesolver_type.html#variable-linesearch">linesearch</a> : exact linesearch (between <code>alpha_min</code> and <code>alpha_max</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nlesolver_linesearch_fixedpoint"></span>
+              integer,
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>NLESOLVER_LINESEARCH_FIXEDPOINT</strong></td>
+<td> =</td>
+                <td>4</td>
+            <td>
+                <p><a href="../type/nlesolver_type.html#variable-linesearch">linesearch</a> : evaluate function at specified fixed points (between <code>alpha_min</code> and <code>alpha_max</code>)</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+        </section>
+        <br>
+
+
+
+        <section>
+          <h2>Abstract Interfaces</h2>
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="interface-norm_func"></span><h3>abstract interface
+        
+    </h3></div>
+    <ul class="list-group">
+      <li class="list-group-item">
+            <h3>
+    private pure function norm_func(me, fvec) result(f)  
+
+    </h3>
+  <p>function vector norm.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~8"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fvec~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%m)
+            </td>
+            <td>::</td>
+            <td><strong>fvec</strong></td>
+            <td>
+                <p>the function vector</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=wp)</small>
+    </h4>
+    <p>norm of the vector</p>
+
+      </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="interface-sparse_solver_func"></span><h3>abstract interface
+        
+    </h3></div>
+    <ul class="list-group">
+      <li class="list-group-item">
+            <h3>
+    private  subroutine sparse_solver_func(me, n_cols, n_rows, n_nonzero, irow, icol, a, b, x, istat)  
+
+    </h3>
+  <p>for a custom user-provided linear solver (sparse version)
+solve <code>Ax = b</code> for <code>x</code>, given <code>A</code> and <code>b</code>.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n_cols"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n_cols</strong></td>
+            <td>
+                <p><code>n</code>: number of columns in A.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n_rows"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n_rows</strong></td>
+            <td>
+                <p><code>m</code>: number of rows in A.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n_nonzero"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n_nonzero</strong></td>
+            <td>
+                <p>number of nonzero elements of A.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-irow~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(n_nonzero)
+            </td>
+            <td>::</td>
+            <td><strong>irow</strong></td>
+            <td>
+                <p>sparsity pattern (size is <code>n_nonzero</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-icol~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(n_nonzero)
+            </td>
+            <td>::</td>
+            <td><strong>icol</strong></td>
+            <td>
+                <p>sparsity pattern (size is <code>n_nonzero</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-a"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(n_nonzero)
+            </td>
+            <td>::</td>
+            <td><strong>a</strong></td>
+            <td>
+                <p>matrix elements (size is <code>n_nonzero</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-b"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(n_rows)
+            </td>
+            <td>::</td>
+            <td><strong>b</strong></td>
+            <td>
+                <p>right hand side (size is <code>m</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x"></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(n_cols)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>solution (size is <code>n</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-istat~2"></span>
+              integer,
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>istat</strong></td>
+            <td>
+                <p>status code (=0 for success)</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+      </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="interface-func_func"></span><h3>abstract interface
+        
+    </h3></div>
+    <ul class="list-group">
+      <li class="list-group-item">
+            <h3>
+    private  subroutine func_func(me, x, f)  
+
+    </h3>
+  <p>compute the function</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~2"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-f"></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>f</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+      </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="interface-grad_func"></span><h3>abstract interface
+        
+    </h3></div>
+    <ul class="list-group">
+      <li class="list-group-item">
+            <h3>
+    private  subroutine grad_func(me, x, g)  
+
+    </h3>
+  <p>compute the gradient of the function (Jacobian). Dense version.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~3"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~3"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-g"></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(:,:)
+            </td>
+            <td>::</td>
+            <td><strong>g</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+      </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="interface-grad_func_sparse"></span><h3>abstract interface
+        
+    </h3></div>
+    <ul class="list-group">
+      <li class="list-group-item">
+            <h3>
+    private  subroutine grad_func_sparse(me, x, g)  
+
+    </h3>
+  <p>compute the gradient of the function (Jacobian). Sparse version.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~4"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~4"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-g~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>g</strong></td>
+            <td>
+                <p>sparse jacobian. length is <code>n_nonzeros</code></p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+      </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="interface-export_func"></span><h3>abstract interface
+        
+    </h3></div>
+    <ul class="list-group">
+      <li class="list-group-item">
+            <h3>
+    private  subroutine export_func(me, x, f, iter)  
+
+    </h3>
+  <p>export an iteration:</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~5"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~5"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-f~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>f</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-iter"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>iter</strong></td>
+            <td>
+                <p>iteration number</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+      </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="interface-wait_func"></span><h3>abstract interface
+        
+    </h3></div>
+    <ul class="list-group">
+      <li class="list-group-item">
+            <h3>
+    private  subroutine wait_func(me, user_stop)  
+
+    </h3>
+  <p>enable a user-triggered stop of the iterations:</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~6"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-user_stop"></span>
+              logical,
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>user_stop</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+      </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="interface-linesearch_func"></span><h3>abstract interface
+        
+    </h3></div>
+    <ul class="list-group">
+      <li class="list-group-item">
+            <h3>
+    private  subroutine linesearch_func(me, xold, p, x, f, fvec, fjac, fjac_sparse)  
+
+    </h3>
+  <p>line search method. Note that not all inputs/outputs are
+used by all methods.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~7"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-xold"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>xold</strong></td>
+            <td>
+                <p>previous value of <code>x</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-p"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>p</strong></td>
+            <td>
+                <p>search direction</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~6"></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>new <code>x</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-f~3"></span>
+              real(kind=wp),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>f</strong></td>
+            <td>
+                <ul>
+<li>input: current magnitude of <code>fvec</code>,</li>
+<li>output: new value of <code>f</code></li>
+</ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fvec"></span>
+              real(kind=wp),
+            </td>
+<td>intent(inout),</td>
+              <td></td>            <td>
+              dimension(me%m)
+            </td>
+            <td>::</td>
+            <td><strong>fvec</strong></td>
+            <td>
+                <ul>
+<li>input: current function vector,</li>
+<li>output: new function vector</li>
+</ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fjac"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(:,:)
+            </td>
+            <td>::</td>
+            <td><strong>fjac</strong></td>
+            <td>
+                <p>jacobian matrix [dense]</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fjac_sparse"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>fjac_sparse</strong></td>
+            <td>
+                <p>jacobian matrix [sparse]</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+      </li>
+    </ul>
+  </div>
+
+        </section>
+        <br>
+
+        <section>
+          <h2>Derived Types</h2>
+              <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="type-nlesolver_type"></span>
+      <h3>
+        type, public&nbsp;::&nbsp;
+        <a href='../type/nlesolver_type.html'>nlesolver_type</a>
+        
+      </h3>
+    </div>
+    <div class="card-body">
+      <p>Nonlinear equations solver class.</p>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n"></span>
+              integer,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+<td> =</td>
+                <td>0</td>
+            <td>
+<p>number of opt vars</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-m"></span>
+              integer,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>m</strong></td>
+<td> =</td>
+                <td>0</td>
+            <td>
+<p>number of constraints</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-max_iter"></span>
+              integer,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>max_iter</strong></td>
+<td> =</td>
+                <td>100</td>
+            <td>
+<p>maximum number of iterations</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-tol"></span>
+              real(kind=wp),
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>tol</strong></td>
+<td> =</td>
+                <td>1.0e-6_wp</td>
+            <td>
+<p>convergence tolerance for function values</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-alpha"></span>
+              real(kind=wp),
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alpha</strong></td>
+<td> =</td>
+                <td>1.0_wp</td>
+            <td>
+<p>step length (when specified constant)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-alpha_min"></span>
+              real(kind=wp),
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alpha_min</strong></td>
+<td> =</td>
+                <td>0.1_wp</td>
+            <td>
+<p>minimum step length (when allowed to vary)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-alpha_max"></span>
+              real(kind=wp),
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alpha_max</strong></td>
+<td> =</td>
+                <td>1.0_wp</td>
+            <td>
+<p>maximum step length (when allowed to vary)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-tolx"></span>
+              real(kind=wp),
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>tolx</strong></td>
+<td> =</td>
+                <td>1.0e-8_wp</td>
+            <td>
+<p>convergence tolerance for <code>x</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-c"></span>
+              real(kind=wp),
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>c</strong></td>
+<td> =</td>
+                <td>0.5_wp</td>
+            <td>
+<p>backtracking linesearch parameter (0,1)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-tau"></span>
+              real(kind=wp),
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>tau</strong></td>
+<td> =</td>
+                <td>0.5_wp</td>
+            <td>
+<p>backtracking linesearch parameter (0,1)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fmin_tol"></span>
+              real(kind=wp),
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>fmin_tol</strong></td>
+<td> =</td>
+                <td>1.0e-5_wp</td>
+            <td>
+<p>tolerance for "exact" linesearch</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n_intervals"></span>
+              integer,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n_intervals</strong></td>
+<td> =</td>
+                <td>2</td>
+            <td>
+<p>number of intervals for fixed point linesearch</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-use_broyden"></span>
+              logical,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>use_broyden</strong></td>
+<td> =</td>
+                <td>.false.</td>
+            <td>
+<p>if true, a Broyden update is used
+rather than computing the Jacobian
+at every step. The <code>grad</code> function is
+only called for the initial evaluation.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-broyden_update_n"></span>
+              integer,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>broyden_update_n</strong></td>
+<td> =</td>
+                <td>4</td>
+            <td>
+<p>if this value is <code>&gt;0</code>, the Broyden update
+is computed at most this many times before
+the full Jacobian is recomputed.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n_uphill_max"></span>
+              integer,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n_uphill_max</strong></td>
+<td> =</td>
+                <td>5</td>
+            <td>
+<p>maximum number of consecutive steps
+to allow where the value of <code>f</code> increases</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-verbose"></span>
+              logical,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>verbose</strong></td>
+<td> =</td>
+                <td>.false.</td>
+            <td>
+<p>verbose output printing</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-iunit"></span>
+              integer,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>iunit</strong></td>
+<td> =</td>
+                <td>output_unit</td>
+            <td>
+<p>output unit for printing (assumed to be open).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-message"></span>
+              character(len=:),
+            </td>
+              <td>private,</td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>message</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>latest status message</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-istat"></span>
+              integer,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>istat</strong></td>
+<td> =</td>
+                <td>-999</td>
+            <td>
+<p>latest status message</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-norm_mode"></span>
+              integer,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>norm_mode</strong></td>
+<td> =</td>
+                <td>NLESOLVER_2_NORM</td>
+            <td>
+<p>how to compute the norm of the function vector:</p><a href="../type/nlesolver_type.html#variable-norm_mode" class="pull-right"><emph>Read more&hellip;</emph></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-bounds_mode"></span>
+              integer,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>bounds_mode</strong></td>
+<td> =</td>
+                <td>NLESOLVER_IGNORE_BOUNDS</td>
+            <td>
+<p>how to handle the <code>x</code> variable bounds:</p><a href="../type/nlesolver_type.html#variable-bounds_mode" class="pull-right"><emph>Read more&hellip;</emph></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-xlow"></span>
+              real(kind=wp),
+            </td>
+              <td>private,</td>
+            <td>
+              dimension(:), allocatable
+            </td>
+            <td>::</td>
+            <td><strong>xlow</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>lower bounds for <code>x</code> (size is <code>n</code>). only used if <code>bounds_mode&gt;0</code>.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-xupp"></span>
+              real(kind=wp),
+            </td>
+              <td>private,</td>
+            <td>
+              dimension(:), allocatable
+            </td>
+            <td>::</td>
+            <td><strong>xupp</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>upper bounds for <code>x</code> (size is <code>n</code>). only used if <code>bounds_mode&gt;0</code>.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-func"></span>
+              procedure(<a href='../interface/func_func.html'>func_func</a>),
+            </td>
+              <td>private,</td>
+            <td>
+              pointer
+            </td>
+            <td>::</td>
+            <td><strong>func</strong></td>
+<td>=&gt; </td>
+                <td>null()</td>
+            <td>
+<p>user-supplied routine to compute the function</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-export_iteration"></span>
+              procedure(<a href='../interface/export_func.html'>export_func</a>),
+            </td>
+              <td>private,</td>
+            <td>
+              pointer
+            </td>
+            <td>::</td>
+            <td><strong>export_iteration</strong></td>
+<td>=&gt; </td>
+                <td>null()</td>
+            <td>
+<p>user-supplied routine to export iterations</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-user_input_check"></span>
+              procedure(<a href='../interface/wait_func.html'>wait_func</a>),
+            </td>
+              <td>private,</td>
+            <td>
+              pointer
+            </td>
+            <td>::</td>
+            <td><strong>user_input_check</strong></td>
+<td>=&gt; </td>
+                <td>null()</td>
+            <td>
+<p>user-supplied routine to enable user to stop iterations</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-linesearch"></span>
+              procedure(<a href='../interface/linesearch_func.html'>linesearch_func</a>),
+            </td>
+              <td>private,</td>
+            <td>
+              pointer
+            </td>
+            <td>::</td>
+            <td><strong>linesearch</strong></td>
+<td>=&gt; </td>
+                <td>null()</td>
+            <td>
+<p>line search method (determined by <code>step_mode</code> user input in <a href="../type/nlesolver_type.html#boundprocedure-initialize">initialize</a>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-sparsity_mode"></span>
+              integer,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>sparsity_mode</strong></td>
+<td> =</td>
+                <td>NLESOLVER_SPARSITY_DENSE</td>
+            <td>
+<p>sparsity mode:</p><a href="../type/nlesolver_type.html#variable-sparsity_mode" class="pull-right"><emph>Read more&hellip;</emph></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n_nonzeros"></span>
+              integer,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n_nonzeros</strong></td>
+<td> =</td>
+                <td>-1</td>
+            <td>
+<p>number of nonzero Jacobian elements (used for <code>sparsity_mode &gt; 1</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-irow"></span>
+              integer,
+            </td>
+              <td>private,</td>
+            <td>
+              dimension(:), allocatable
+            </td>
+            <td>::</td>
+            <td><strong>irow</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>sparsity pattern nonzero elements row indices.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-icol"></span>
+              integer,
+            </td>
+              <td>private,</td>
+            <td>
+              dimension(:), allocatable
+            </td>
+            <td>::</td>
+            <td><strong>icol</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+<p>sparsity pattern nonzero elements column indices</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-atol"></span>
+              real(kind=wp),
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>atol</strong></td>
+<td> =</td>
+                <td>zero</td>
+            <td>
+<p>relative error in definition of <code>A</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-btol"></span>
+              real(kind=wp),
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>btol</strong></td>
+<td> =</td>
+                <td>zero</td>
+            <td>
+<p>relative error in definition of <code>b</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-conlim"></span>
+              real(kind=wp),
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>conlim</strong></td>
+<td> =</td>
+                <td>zero</td>
+            <td>
+<p>An upper limit on <code>cond(Abar)</code>, the apparent
+condition number of the matrix <code>Abar</code>.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-itnlim"></span>
+              integer,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>itnlim</strong></td>
+<td> =</td>
+                <td>100</td>
+            <td>
+<p>max iterations</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nout"></span>
+              integer,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>nout</strong></td>
+<td> =</td>
+                <td>0</td>
+            <td>
+<p>output unit for printing</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-damp"></span>
+              real(kind=wp),
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>damp</strong></td>
+<td> =</td>
+                <td>zero</td>
+            <td>
+<p>damp parameter for LSQR</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-localsize"></span>
+              integer,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>localSize</strong></td>
+<td> =</td>
+                <td>0</td>
+            <td>
+<p>0    This many n-vectors "v" (the most recent ones)
+         are saved for reorthogonalizing the next v.</p><a href="../type/nlesolver_type.html#variable-localsize" class="pull-right"><emph>Read more&hellip;</emph></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-lusol_method"></span>
+              integer,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>lusol_method</strong></td>
+<td> =</td>
+                <td>0</td>
+            <td>
+<a href="../type/nlesolver_type.html#variable-lusol_method" class="pull-right"><emph>Read more&hellip;</emph></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-grad"></span>
+              procedure(<a href='../interface/grad_func.html'>grad_func</a>),
+            </td>
+              <td>private,</td>
+            <td>
+              pointer
+            </td>
+            <td>::</td>
+            <td><strong>grad</strong></td>
+<td>=&gt; </td>
+                <td>null()</td>
+            <td>
+<p>user-supplied routine to compute the gradient of the function (dense version)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-grad_sparse"></span>
+              procedure(<a href='../interface/grad_func_sparse.html'>grad_func_sparse</a>),
+            </td>
+              <td>private,</td>
+            <td>
+              pointer
+            </td>
+            <td>::</td>
+            <td><strong>grad_sparse</strong></td>
+<td>=&gt; </td>
+                <td>null()</td>
+            <td>
+<p>user-supplied routine to compute the gradient of the function (sparse version)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-custom_solver_sparse"></span>
+              procedure(<a href='../interface/sparse_solver_func.html'>sparse_solver_func</a>),
+            </td>
+              <td>private,</td>
+            <td>
+              pointer
+            </td>
+            <td>::</td>
+            <td><strong>custom_solver_sparse</strong></td>
+<td>=&gt; </td>
+                <td>null()</td>
+            <td>
+<p>user-supplied sparse linear solver routine (used for <code>sparsity_mode=5</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-norm"></span>
+              procedure(<a href='../interface/norm_func.html'>norm_func</a>),
+            </td>
+              <td>private,</td>
+            <td>
+              pointer
+            </td>
+            <td>::</td>
+            <td><strong>norm</strong></td>
+<td>=&gt; </td>
+                <td>null()</td>
+            <td>
+<p>function for computing the norm of the <code>f</code> vector</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='../type/nlesolver_type.html#boundprocedure-initialize'>initialize</a></strong> => <a href='/home/runner/work/nlesolver-fortran/nlesolver-fortran/doc/proc/initialize_nlesolver_variables.html'>initialize_nlesolver_variables</a></td>
+                  <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='../type/nlesolver_type.html#boundprocedure-solve'>solve</a></strong> => <a href='/home/runner/work/nlesolver-fortran/nlesolver-fortran/doc/proc/nlesolver_solver.html'>nlesolver_solver</a></td>
+                  <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='../type/nlesolver_type.html#boundprocedure-destroy'>destroy</a></strong> => <a href='/home/runner/work/nlesolver-fortran/nlesolver-fortran/doc/proc/destroy_nlesolver_variables.html'>destroy_nlesolver_variables</a></td>
+                  <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public ::
+  <strong><a href='../type/nlesolver_type.html#boundprocedure-status'>status</a></strong> => <a href='/home/runner/work/nlesolver-fortran/nlesolver-fortran/doc/proc/get_status.html'>get_status</a></td>
+                  <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, private ::
+  <strong><a href='../type/nlesolver_type.html#boundprocedure-set_status'>set_status</a></strong></td>
+                  <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, private ::
+  <strong><a href='../type/nlesolver_type.html#boundprocedure-adjust_x_for_bounds'>adjust_x_for_bounds</a></strong></td>
+                  <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, private ::
+  <strong><a href='../type/nlesolver_type.html#boundprocedure-adjust_search_direction'>adjust_search_direction</a></strong></td>
+                  <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, private ::
+  <strong><a href='../type/nlesolver_type.html#boundprocedure-compute_next_step'>compute_next_step</a></strong></td>
+                  <td></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+        </section>
+        <br>
+
+        <section>
+          <h2>Functions</h2>
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-int2str"></span> <h3>private  function <a href='../proc/int2str.html'>int2str</a>(i) result(s)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Convert an integer to a string. Works for up to 256 digits.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-i~2"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>i</strong></td>
+            <td>
+<p>integer to convert</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>character(len=:), allocatable</small>
+    </h4>
+    <p>string result</p>
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-real2str"></span> <h3>private  function <a href='../proc/real2str.html'>real2str</a>(r) result(s)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Convert a real to a string. Works for up to 256 digits.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-r~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>r</strong></td>
+            <td>
+<p>real to convert</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>character(len=:), allocatable</small>
+    </h4>
+    <p>string result</p>
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-norm_2"></span> <h3>private pure function <a href='../proc/norm_2.html'>norm_2</a>(me, fvec) result(f)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>2-norm function</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~16"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fvec~4"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%m)
+            </td>
+            <td>::</td>
+            <td><strong>fvec</strong></td>
+            <td>
+<p>the function vector</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=wp)</small>
+    </h4>
+    <p>norm of the vector</p>
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-norm_1"></span> <h3>private pure function <a href='../proc/norm_1.html'>norm_1</a>(me, fvec) result(f)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>1-norm function</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~17"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fvec~5"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%m)
+            </td>
+            <td>::</td>
+            <td><strong>fvec</strong></td>
+            <td>
+<p>the function vector</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=wp)</small>
+    </h4>
+    <p>norm of the vector</p>
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-norm_inf"></span> <h3>private pure function <a href='../proc/norm_inf.html'>norm_inf</a>(me, fvec) result(f)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Infinity-norm function</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~18"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fvec~6"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%m)
+            </td>
+            <td>::</td>
+            <td><strong>fvec</strong></td>
+            <td>
+<p>the function vector</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real(kind=wp)</small>
+    </h4>
+    <p>norm of the vector</p>
+
+    </div>
+  </div>
+
+        </section>
+        <br>
+
+        <section>
+          <h2>Subroutines</h2>
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-set_status"></span> <h3>private  subroutine <a href='../proc/set_status.html'>set_status</a>(me, istat, string, i, r)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Set status flag and message.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~9"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-istat~3"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>istat</strong></td>
+            <td>
+<p>status code</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-string"></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>string</strong></td>
+            <td>
+<p>status message</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-i"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>i</strong></td>
+            <td>
+<p>an integer value to append</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-r"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>r</strong></td>
+            <td>
+<p>a real value to append</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-get_status"></span> <h3>private  subroutine <a href='../proc/get_status.html'>get_status</a>(me, istat, message)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Return the status code and message from the <a href="../type/nlesolver_type.html">nlesolver_type</a> class.</p><a href="../proc/get_status.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~10"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-istat~4"></span>
+              integer,
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>istat</strong></td>
+            <td>
+<p>Integer status code.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-message~3"></span>
+              character(len=:),
+            </td>
+<td>intent(out),</td>
+              <td>optional,</td>            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>message</strong></td>
+            <td>
+<p>Text status message</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-initialize_nlesolver_variables"></span> <h3>private  subroutine <a href='../proc/initialize_nlesolver_variables.html'>initialize_nlesolver_variables</a>(me, n, m, max_iter, tol, alpha, alpha_min, alpha_max, tolx, fmin_tol, backtrack_c, backtrack_tau, use_broyden, broyden_update_n, step_mode, func, grad, grad_sparse, export_iteration, user_input_check, verbose, iunit, n_uphill_max, n_intervals, sparsity_mode, irow, icol, atol, btol, conlim, damp, itnlim, nout, lusol_method, localSize, custom_solver_sparse, bounds_mode, xlow, xupp, norm_mode)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Constructor for the class.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~11"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~2"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+<p>number of optimization variables</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-m~2"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>m</strong></td>
+            <td>
+<p>number of constraints</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-max_iter~2"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>max_iter</strong></td>
+            <td>
+<p>maximum number of iterations</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-tol~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>tol</strong></td>
+            <td>
+<p>function convergence tolerance</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-alpha~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alpha</strong></td>
+            <td>
+<p>constant step length for <code>step_mode=1</code> (0,1]</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-alpha_min~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alpha_min</strong></td>
+            <td>
+<p>minimum step length (0,1]</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-alpha_max~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alpha_max</strong></td>
+            <td>
+<p>maximum step length (0,1]</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-tolx~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>tolx</strong></td>
+            <td>
+<p>convergence tolerance for changes in <code>x</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fmin_tol~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>fmin_tol</strong></td>
+            <td>
+<p>convergence tolerance for <a href="https://jacobwilliams.github.io/fmin/proc/fmin.html">fmin</a> (used when <code>step_mode=3</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-backtrack_c"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>backtrack_c</strong></td>
+            <td>
+<p>backtracking linesearch parameter (0,1)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-backtrack_tau"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>backtrack_tau</strong></td>
+            <td>
+<p>backtracking linesearch parameter (0,1)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-use_broyden~2"></span>
+              logical,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>use_broyden</strong></td>
+            <td>
+<p>use a Broyden update (default is False)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-broyden_update_n~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>broyden_update_n</strong></td>
+            <td>
+<p>For Broyden mode, update the full Jacobian
+at most every this many iterations (must be &gt;1)
+If &lt;=1 then Jacobian is only computed on the
+first iteration.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-step_mode"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>step_mode</strong></td>
+            <td>
+<p>step mode:</p><a href="../proc/initialize_nlesolver_variables.html#variable-step_mode" class="pull-right"><emph>Read more&hellip;</emph></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-func~2"></span>
+              procedure(<a href='../interface/func_func.html'>func_func</a>)
+            </td>
+<td></td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>func</strong></td>
+            <td>
+<p>computes the function vector</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-grad~2"></span>
+              procedure(<a href='../interface/grad_func.html'>grad_func</a>),
+            </td>
+<td></td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>grad</strong></td>
+            <td>
+<p>computes the jacobian [required for dense mode: <code>sparsity_mode=1</code>]</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-grad_sparse~2"></span>
+              procedure(<a href='../interface/grad_func_sparse.html'>grad_func_sparse</a>),
+            </td>
+<td></td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>grad_sparse</strong></td>
+            <td>
+<p>computes the jacobian [required for sparse mode: <code>sparsity_mode&gt;1</code>]</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-export_iteration~2"></span>
+              procedure(<a href='../interface/export_func.html'>export_func</a>),
+            </td>
+<td></td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>export_iteration</strong></td>
+            <td>
+<p>function to export each iteration</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-user_input_check~2"></span>
+              procedure(<a href='../interface/wait_func.html'>wait_func</a>),
+            </td>
+<td></td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>user_input_check</strong></td>
+            <td>
+<p>check for user input (to stop solver if necessary)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-verbose~2"></span>
+              logical,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>verbose</strong></td>
+            <td>
+<p>for verbose status printing</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-iunit~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>iunit</strong></td>
+            <td>
+<p>unit for verbose printing (assumed to be open).
+by default this is <code>output_unit</code>.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n_uphill_max~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n_uphill_max</strong></td>
+            <td>
+<p>maximum number of consecutive steps
+to allow where the value of <code>f</code> increases</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n_intervals~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n_intervals</strong></td>
+            <td>
+<p>number of intervals for fixed point linesearch</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-sparsity_mode~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>sparsity_mode</strong></td>
+            <td>
+<p>sparsity mode:</p><a href="../proc/initialize_nlesolver_variables.html#variable-sparsity_mode~2" class="pull-right"><emph>Read more&hellip;</emph></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-irow~3"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>irow</strong></td>
+            <td>
+<p>sparsity pattern nonzero elements row indices.
+must be specified with <code>icol</code> and be the same length (<code>n_nonzeros</code>).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-icol~3"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>icol</strong></td>
+            <td>
+<p>sparsity pattern nonzero elements column indices
+must be specified with <code>icol</code> and be the same length (<code>n_nonzeros</code>).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-atol~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>atol</strong></td>
+            <td>
+<p><code>LSQR</code>: relative error in definition of <code>A</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-btol~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>btol</strong></td>
+            <td>
+<p><code>LSQR</code>: relative error in definition of <code>b</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-conlim~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>conlim</strong></td>
+            <td>
+<p><code>LSQR</code>: An upper limit on <code>cond(Abar)</code>, the apparent
+condition number of the matrix <code>Abar</code>.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-damp~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>damp</strong></td>
+            <td>
+<p><code>LSQR</code>: damp factor</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-itnlim~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>itnlim</strong></td>
+            <td>
+<p><code>LSQR</code>: max iterations</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nout~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>nout</strong></td>
+            <td>
+<p><code>LSQR</code>: output unit for printing</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-lusol_method~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>lusol_method</strong></td>
+            <td>
+<p><code>LUSOL</code> method:</p><a href="../proc/initialize_nlesolver_variables.html#variable-lusol_method~2" class="pull-right"><emph>Read more&hellip;</emph></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-localsize~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>localSize</strong></td>
+            <td>
+<p><code>LSMR</code>: Number of vectors for local reorthogonalization:</p><a href="../proc/initialize_nlesolver_variables.html#variable-localsize~2" class="pull-right"><emph>Read more&hellip;</emph></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-custom_solver_sparse~2"></span>
+              procedure(<a href='../interface/sparse_solver_func.html'>sparse_solver_func</a>),
+            </td>
+<td></td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>custom_solver_sparse</strong></td>
+            <td>
+<p>for <code>sparsity_mode=5</code>, this is the
+user-provided linear solver.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-bounds_mode~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>bounds_mode</strong></td>
+            <td>
+<p>how to handle the <code>x</code> variable bounds:</p><a href="../proc/initialize_nlesolver_variables.html#variable-bounds_mode~2" class="pull-right"><emph>Read more&hellip;</emph></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-xlow~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(n)
+            </td>
+            <td>::</td>
+            <td><strong>xlow</strong></td>
+            <td>
+<p>lower bounds for <code>x</code> (size is <code>n</code>). only used if <code>bounds_mode&gt;0</code> and
+both <code>xlow</code> and <code>xupp</code> are specified.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-xupp~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(n)
+            </td>
+            <td>::</td>
+            <td><strong>xupp</strong></td>
+            <td>
+<p>upper bounds for <code>x</code> (size is <code>n</code>). only used if <code>bounds_mode&gt;0</code> and
+both <code>xlow</code> and <code>xupp</code> are specified.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-norm_mode~2"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>norm_mode</strong></td>
+            <td>
+<p>how to compute the norm of the function vector:</p><a href="../proc/initialize_nlesolver_variables.html#variable-norm_mode~2" class="pull-right"><emph>Read more&hellip;</emph></a>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-nlesolver_solver"></span> <h3>private  subroutine <a href='../proc/nlesolver_solver.html'>nlesolver_solver</a>(me, x)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Main solver.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~12"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~7"></span>
+              real(kind=wp),
+            </td>
+<td>intent(inout),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-adjust_x_for_bounds"></span> <h3>private  subroutine <a href='../proc/adjust_x_for_bounds.html'>adjust_x_for_bounds</a>(me, x)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>if necessary, adjust the <code>x</code> vector to be within the bounds.
+used for the initial guess.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~13"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~8"></span>
+              real(kind=wp),
+            </td>
+<td>intent(inout),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>the <code>x</code> vector to adjust</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-adjust_search_direction"></span> <h3>private  subroutine <a href='../proc/adjust_search_direction.html'>adjust_search_direction</a>(me, x, p, pnew, modified)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>if necessary, adjust the search direction vector <code>p</code> so that bounds are not violated.</p><a href="../proc/adjust_search_direction.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~14"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~9"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>initial <code>x</code>. it is assumed that this does not violate any bounds.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-p~3"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>p</strong></td>
+            <td>
+<p>search direction <code>p = xnew - x</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-pnew"></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>pnew</strong></td>
+            <td>
+<p>new search direction</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-modified"></span>
+              logical,
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>modified</strong></td>
+            <td>
+<p>indicates the elements of <code>p</code> that were modified</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-compute_next_step"></span> <h3>private  subroutine <a href='../proc/compute_next_step.html'>compute_next_step</a>(me, xold, search_direction, alpha, modified, xnew)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Compute the next step.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~15"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-xold~3"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>xold</strong></td>
+            <td>
+<p>initial <code>x</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-search_direction"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>search_direction</strong></td>
+            <td>
+<p>search direction vector</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-alpha~3"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alpha</strong></td>
+            <td>
+<p>step length to take in the search direction</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-modified~2"></span>
+              logical,
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>modified</strong></td>
+            <td>
+<p>indicates the elements of <code>p</code> that were
+modified because they violated the bounds.
+Output of <a href="../proc/adjust_search_direction.html">adjust_search_direction</a>.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-xnew~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>xnew</strong></td>
+            <td>
+<p>final <code>x</code></p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-destroy_nlesolver_variables"></span> <h3>private  subroutine <a href='../proc/destroy_nlesolver_variables.html'>destroy_nlesolver_variables</a>(me)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Destructor</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~19"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-linear_solver"></span> <h3>private  subroutine <a href='../proc/linear_solver.html'>linear_solver</a>(m, n, a, b, x, info)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Solve the linear system: <script type="math/tex"> Ax = b </script>, using a dense, direct method.</p><a href="../proc/linear_solver.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-m~3"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>m</strong></td>
+            <td>
+<p>number of rows in <code>a</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~3"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+<p>number of columns in <code>a</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-a~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(m,n)
+            </td>
+            <td>::</td>
+            <td><strong>a</strong></td>
+            <td>
+<p><code>A</code> matrix of the linear system</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-b~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(m)
+            </td>
+            <td>::</td>
+            <td><strong>b</strong></td>
+            <td>
+<p>RHS of the linear system</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~10"></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(n)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>the solution of the linear system.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-info~2"></span>
+              integer,
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>info</strong></td>
+            <td>
+<p>output status flag (<code>=0</code> if success)</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-simple_step"></span> <h3>private  subroutine <a href='../proc/simple_step.html'>simple_step</a>(me, xold, p, x, f, fvec, fjac, fjac_sparse)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Take a simple step in the search direction of <code>p * alpha</code>.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~20"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-xold~4"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>xold</strong></td>
+            <td>
+<p>previous value of <code>x</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-p~4"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>p</strong></td>
+            <td>
+<p>search direction</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~11"></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>new <code>x</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-f~9"></span>
+              real(kind=wp),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>f</strong></td>
+            <td>
+<p>magnitude of <code>fvec</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fvec~7"></span>
+              real(kind=wp),
+            </td>
+<td>intent(inout),</td>
+              <td></td>            <td>
+              dimension(me%m)
+            </td>
+            <td>::</td>
+            <td><strong>fvec</strong></td>
+            <td>
+<p>function vector</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fjac~3"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(:,:)
+            </td>
+            <td>::</td>
+            <td><strong>fjac</strong></td>
+            <td>
+<p>jacobian matrix [dense]</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fjac_sparse~3"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>fjac_sparse</strong></td>
+            <td>
+<p>jacobian matrix [sparse]</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-backtracking_linesearch"></span> <h3>private  subroutine <a href='../proc/backtracking_linesearch.html'>backtracking_linesearch</a>(me, xold, p, x, f, fvec, fjac, fjac_sparse)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Backtracking line search.</p><a href="../proc/backtracking_linesearch.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~21"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-xold~5"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>xold</strong></td>
+            <td>
+<p>previous value of <code>x</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-p~5"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>p</strong></td>
+            <td>
+<p>search direction</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~12"></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>new <code>x</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-f~10"></span>
+              real(kind=wp),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>f</strong></td>
+            <td>
+<p>magnitude of <code>fvec</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fvec~8"></span>
+              real(kind=wp),
+            </td>
+<td>intent(inout),</td>
+              <td></td>            <td>
+              dimension(me%m)
+            </td>
+            <td>::</td>
+            <td><strong>fvec</strong></td>
+            <td>
+<p>function vector</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fjac~4"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(:,:)
+            </td>
+            <td>::</td>
+            <td><strong>fjac</strong></td>
+            <td>
+<p>jacobian matrix [dense]</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fjac_sparse~4"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>fjac_sparse</strong></td>
+            <td>
+<p>jacobian matrix [sparse]</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-exact_linesearch"></span> <h3>private  subroutine <a href='../proc/exact_linesearch.html'>exact_linesearch</a>(me, xold, p, x, f, fvec, fjac, fjac_sparse)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>An exact linesearch that uses a derivative-free minimizer to
+find the minimum value of <code>f(x)</code> between
+<code>x = xold + p * alpha_min</code> and
+<code>x = xold + p * alpha_max</code>.</p><a href="../proc/exact_linesearch.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~22"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-xold~6"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>xold</strong></td>
+            <td>
+<p>previous value of <code>x</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-p~6"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>p</strong></td>
+            <td>
+<p>search direction</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~13"></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>new <code>x</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-f~11"></span>
+              real(kind=wp),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>f</strong></td>
+            <td>
+<p>magnitude of <code>fvec</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fvec~9"></span>
+              real(kind=wp),
+            </td>
+<td>intent(inout),</td>
+              <td></td>            <td>
+              dimension(me%m)
+            </td>
+            <td>::</td>
+            <td><strong>fvec</strong></td>
+            <td>
+<p>function vector</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fjac~5"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(:,:)
+            </td>
+            <td>::</td>
+            <td><strong>fjac</strong></td>
+            <td>
+<p>jacobian matrix [dense]</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fjac_sparse~5"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>fjac_sparse</strong></td>
+            <td>
+<p>jacobian matrix [sparse]</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-fixed_point_linesearch"></span> <h3>private  subroutine <a href='../proc/fixed_point_linesearch.html'>fixed_point_linesearch</a>(me, xold, p, x, f, fvec, fjac, fjac_sparse)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>A simple search that just evaluates the function at a specified
+number of points and picks the one with the minimum function value.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~23"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-xold~7"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>xold</strong></td>
+            <td>
+<p>previous value of <code>x</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-p~7"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>p</strong></td>
+            <td>
+<p>search direction</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~14"></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>new <code>x</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-f~12"></span>
+              real(kind=wp),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>f</strong></td>
+            <td>
+<p>magnitude of <code>fvec</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fvec~10"></span>
+              real(kind=wp),
+            </td>
+<td>intent(inout),</td>
+              <td></td>            <td>
+              dimension(me%m)
+            </td>
+            <td>::</td>
+            <td><strong>fvec</strong></td>
+            <td>
+<p>function vector</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fjac~6"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(:,:)
+            </td>
+            <td>::</td>
+            <td><strong>fjac</strong></td>
+            <td>
+<p>jacobian matrix [dense]</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fjac_sparse~6"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>fjac_sparse</strong></td>
+            <td>
+<p>jacobian matrix [sparse]</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+        </section>
+        <br>
+
+
+
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              nlesolver-fortran
+ was developed by Jacob Williams<br>              &copy; 2025 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+            </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

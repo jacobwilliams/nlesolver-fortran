@@ -1,0 +1,640 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Nonlinear Equation Solver with Modern Fortran">
+    <meta name="author" content="Jacob Williams" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>backtracking_linesearch &ndash; nlesolver-fortran</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">nlesolver-fortran </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../sourcefile/nlesolver_module.f90.html">Source File</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>backtracking_linesearch
+      <small>Subroutine</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 8.8% of total for procedures.">72 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/nlesolver_module.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/nlesolver_module.f90.html'>nlesolver_module.F90</a></li>
+                <li class="breadcrumb-item"><a href='../module/nlesolver_module.html'>nlesolver_module</a></li>
+            <li class="breadcrumb-item active" aria-current="page">backtracking_linesearch</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+      <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/backtracking_linesearch.html#src">backtracking_linesearch</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>private  subroutine backtracking_linesearch(me, xold, p, x, f, fvec, fjac, fjac_sparse)  
+</h2>
+    
+
+    <p>Backtracking line search.</p>
+<h3>See also</h3>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Backtracking_line_search">Backtracking line search</a></li>
+</ul>
+<div class="alert alert-info">
+<p class="alert-title h4">Note</p>
+<p>Either <code>fjac</code> or <code>fjac_sparse</code> should be present.</p>
+</div>
+
+
+    <h3>Arguments</h3>
+        <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~21"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-xold~5"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>xold</strong></td>
+            <td>
+                <p>previous value of <code>x</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-p~5"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>p</strong></td>
+            <td>
+                <p>search direction</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~12"></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>new <code>x</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-f~10"></span>
+              real(kind=wp),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>f</strong></td>
+            <td>
+                <p>magnitude of <code>fvec</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fvec~8"></span>
+              real(kind=wp),
+            </td>
+<td>intent(inout),</td>
+              <td></td>            <td>
+              dimension(me%m)
+            </td>
+            <td>::</td>
+            <td><strong>fvec</strong></td>
+            <td>
+                <p>function vector</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fjac~4"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(:,:)
+            </td>
+            <td>::</td>
+            <td><strong>fjac</strong></td>
+            <td>
+                <p>jacobian matrix [dense]</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fjac_sparse~4"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>fjac_sparse</strong></td>
+            <td>
+                <p>jacobian matrix [sparse]</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <br>
+    <div class="card">
+      <div class="card-header">
+  <h3 class="card-title">Calls</h3>
+      </div>
+      <div class="card-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: proc~~backtracking_linesearch~~CallsGraph Pages: 1 -->
+<svg id="procbacktracking_linesearchCallsGraph" width="641pt" height="88pt"
+ viewBox="0.00 0.00 641.00 87.58" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~backtracking_linesearch~~CallsGraph" class="graph" transform="scale(0.93 0.93) rotate(0) translate(4 90)">
+<title>proc~~backtracking_linesearch~~CallsGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-90 684,-90 684,4 -4,4"/>
+<!-- proc~backtracking_linesearch -->
+<g id="proc~~backtracking_linesearch~~CallsGraph_node1" class="node">
+<title>proc~backtracking_linesearch</title>
+<polygon fill="none" stroke="black" points="142,-45 0,-45 0,-21 142,-21 142,-45"/>
+<text text-anchor="middle" x="71" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50">backtracking_linesearch</text>
+</g>
+<!-- proc~adjust_search_direction -->
+<g id="proc~~backtracking_linesearch~~CallsGraph_node2" class="node">
+<title>proc~adjust_search_direction</title>
+<g id="a_proc~~backtracking_linesearch~~CallsGraph_node2"><a xlink:href="../proc/adjust_search_direction.html" xlink:title="nlesolver_type%adjust_search_direction">
+<polygon fill="#d9534f" stroke="#d9534f" points="402,-66 178,-66 178,-42 402,-42 402,-66"/>
+<text text-anchor="middle" x="290" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%adjust_search_direction</text>
+</a>
+</g>
+</g>
+<!-- proc~backtracking_linesearch&#45;&gt;proc~adjust_search_direction -->
+<g id="proc~~backtracking_linesearch~~CallsGraph_edge1" class="edge">
+<title>proc~backtracking_linesearch&#45;&gt;proc~adjust_search_direction</title>
+<path fill="none" stroke="#000000" d="M142.15,-39.79C150.34,-40.58 158.86,-41.41 167.5,-42.24"/>
+<polygon fill="#000000" stroke="#000000" points="167.38,-45.75 177.67,-43.23 168.06,-38.78 167.38,-45.75"/>
+</g>
+<!-- proc~compute_next_step -->
+<g id="proc~~backtracking_linesearch~~CallsGraph_node3" class="node">
+<title>proc~compute_next_step</title>
+<g id="a_proc~~backtracking_linesearch~~CallsGraph_node3"><a xlink:href="../proc/compute_next_step.html" xlink:title="nlesolver_type%compute_next_step">
+<polygon fill="#d9534f" stroke="#d9534f" points="391,-24 189,-24 189,0 391,0 391,-24"/>
+<text text-anchor="middle" x="290" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%compute_next_step</text>
+</a>
+</g>
+</g>
+<!-- proc~backtracking_linesearch&#45;&gt;proc~compute_next_step -->
+<g id="proc~~backtracking_linesearch~~CallsGraph_edge2" class="edge">
+<title>proc~backtracking_linesearch&#45;&gt;proc~compute_next_step</title>
+<path fill="none" stroke="#000000" d="M142.15,-26.21C153.88,-25.08 166.29,-23.88 178.73,-22.67"/>
+<polygon fill="#000000" stroke="#000000" points="179.09,-26.15 188.7,-21.71 178.41,-19.19 179.09,-26.15"/>
+</g>
+<!-- proc~int2str -->
+<g id="proc~~backtracking_linesearch~~CallsGraph_node4" class="node">
+<title>proc~int2str</title>
+<g id="a_proc~~backtracking_linesearch~~CallsGraph_node4"><a xlink:href="../proc/int2str.html" xlink:title="int2str">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="680,-86 626,-86 626,-62 680,-62 680,-86"/>
+<text text-anchor="middle" x="653" y="-71.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">int2str</text>
+</a>
+</g>
+</g>
+<!-- proc~adjust_search_direction&#45;&gt;proc~int2str -->
+<g id="proc~~backtracking_linesearch~~CallsGraph_edge3" class="edge">
+<title>proc~adjust_search_direction&#45;&gt;proc~int2str</title>
+<path fill="none" stroke="#000000" d="M402.26,-60.16C475.21,-64.21 565.96,-69.23 615.51,-71.98"/>
+<polygon fill="#000000" stroke="#000000" points="615.55,-75.49 625.73,-72.54 615.94,-68.5 615.55,-75.49"/>
+</g>
+<!-- proc~set_status -->
+<g id="proc~~backtracking_linesearch~~CallsGraph_node5" class="node">
+<title>proc~set_status</title>
+<g id="a_proc~~backtracking_linesearch~~CallsGraph_node5"><a xlink:href="../proc/set_status.html" xlink:title="nlesolver_type%set_status">
+<polygon fill="#d9534f" stroke="#d9534f" points="590,-46 438,-46 438,-22 590,-22 590,-46"/>
+<text text-anchor="middle" x="514" y="-31.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%set_status</text>
+</a>
+</g>
+</g>
+<!-- proc~adjust_search_direction&#45;&gt;proc~set_status -->
+<g id="proc~~backtracking_linesearch~~CallsGraph_edge4" class="edge">
+<title>proc~adjust_search_direction&#45;&gt;proc~set_status</title>
+<path fill="none" stroke="#000000" d="M402,-44C410.63,-43.22 419.26,-42.44 427.68,-41.69"/>
+<polygon fill="#000000" stroke="#000000" points="428.2,-45.15 437.84,-40.77 427.57,-38.18 428.2,-45.15"/>
+</g>
+<!-- proc~set_status&#45;&gt;proc~int2str -->
+<g id="proc~~backtracking_linesearch~~CallsGraph_edge5" class="edge">
+<title>proc~set_status&#45;&gt;proc~int2str</title>
+<path fill="none" stroke="#000000" d="M556.1,-46C575.12,-51.55 597.52,-58.09 615.88,-63.45"/>
+<polygon fill="#000000" stroke="#000000" points="615.04,-66.85 625.62,-66.3 617,-60.13 615.04,-66.85"/>
+</g>
+<!-- proc~real2str -->
+<g id="proc~~backtracking_linesearch~~CallsGraph_node6" class="node">
+<title>proc~real2str</title>
+<g id="a_proc~~backtracking_linesearch~~CallsGraph_node6"><a xlink:href="../proc/real2str.html" xlink:title="real2str">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="680,-44 626,-44 626,-20 680,-20 680,-44"/>
+<text text-anchor="middle" x="653" y="-29.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">real2str</text>
+</a>
+</g>
+</g>
+<!-- proc~set_status&#45;&gt;proc~real2str -->
+<g id="proc~~backtracking_linesearch~~CallsGraph_edge6" class="edge">
+<title>proc~set_status&#45;&gt;proc~real2str</title>
+<path fill="none" stroke="#000000" d="M590.31,-32.9C599.22,-32.77 607.97,-32.64 615.96,-32.53"/>
+<polygon fill="#000000" stroke="#000000" points="616.01,-36.03 625.96,-32.38 615.91,-29.03 616.01,-36.03"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var panprocbacktracking_linesearchCallsGraph = svgPanZoom('#procbacktracking_linesearchCallsGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CallsGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="CallsGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.51" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(0.86 0.86) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 741.5,-28 741.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="146,-24 88,-24 88,0 146,0 146,-24"/>
+<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="225.5,-24 164.5,-24 164.5,0 225.5,0 225.5,-24"/>
+<text text-anchor="middle" x="195" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Type Bound Procedure -->
+<g id="node4" class="node">
+<title>Type Bound Procedure</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="374,-24 244,-24 244,0 374,0 374,-24"/>
+<text text-anchor="middle" x="309" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type Bound Procedure</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node5" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="537.5,-24 392.5,-24 392.5,0 537.5,0 537.5,-24"/>
+<text text-anchor="middle" x="465" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node6" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="614,-24 556,-24 556,0 614,0 614,-24"/>
+<text text-anchor="middle" x="585" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node7" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="737.5,-24 632.5,-24 632.5,0 737.5,0 737.5,-24"/>
+<text text-anchor="middle" x="685" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.
+</p>
+ </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+
+
+    
+    
+
+    
+    
+
+
+
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl codehilite"><pre><span></span><span class="w">    </span><span class="k">subroutine </span><span class="n">backtracking_linesearch</span><span class="p">(</span><span class="n">me</span><span class="p">,</span><span class="n">xold</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">fvec</span><span class="p">,</span><span class="n">fjac</span><span class="p">,</span><span class="n">fjac_sparse</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">implicit none</span>
+
+<span class="k">    class</span><span class="p">(</span><span class="n">nlesolver_type</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">me</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">xold</span><span class="w">      </span><span class="c">!! previous value of `x`</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">p</span><span class="w">         </span><span class="c">!! search direction</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="w">        </span><span class="c">!! new `x`</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">f</span><span class="w">                      </span><span class="c">!! magnitude of `fvec`</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fvec</span><span class="w">   </span><span class="c">!! function vector</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:,:),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fjac</span><span class="w"> </span><span class="c">!! jacobian matrix [dense]</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fjac_sparse</span><span class="w"> </span><span class="c">!! jacobian matrix [sparse]</span>
+
+<span class="w">    </span><span class="kt">integer</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="w">                  </span><span class="c">!! counter</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">slope</span><span class="w">              </span><span class="c">!! local slope of the function of `alpha` along the search direction used for line search</span>
+<span class="w">    </span><span class="kt">logical</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">min_alpha_reached</span><span class="w">  </span><span class="c">!! if the minimum step size is reached during the line search</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">alpha</span><span class="w">              </span><span class="c">!! `alpha` for the line search</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">ftmp</span><span class="w">               </span><span class="c">!! `f` value for linesearch</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">t</span><span class="w">                  </span><span class="c">!! used for line search</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">gradf</span><span class="w">      </span><span class="c">!! line search objective function gradient vector</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">xtmp</span><span class="w">       </span><span class="c">!! `x` value for linesearch</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fvectmp</span><span class="w">    </span><span class="c">!! `fvec` value for linesearch</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">search_direction</span><span class="w">  </span><span class="c">!! search direction to use (can be modified from `p` if bounds are violated)</span>
+<span class="w">    </span><span class="kt">logical</span><span class="p">,</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">modified</span><span class="w">  </span><span class="c">!! indicates the elements of p that were modified</span>
+
+<span class="w">    </span><span class="c">! allocate arrays:</span>
+<span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="n">gradf</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">))</span>
+<span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="n">xtmp</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">))</span>
+<span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="n">fvectmp</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">))</span>
+<span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="n">search_direction</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">))</span>
+<span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="n">modified</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">))</span>
+
+<span class="w">    </span><span class="c">! set the search direction:</span>
+<span class="w">    </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">adjust_search_direction</span><span class="p">(</span><span class="n">xold</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">search_direction</span><span class="p">,</span><span class="n">modified</span><span class="p">)</span>
+
+<span class="w">    </span><span class="c">! compute the gradient of the function to be minimized</span>
+<span class="w">    </span><span class="c">! (which in this case is 1/2 the norm of fvec). Use the chain</span>
+<span class="w">    </span><span class="c">! rule and the Jacobian matrix already computed.</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">fjac</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span><span class="c">! dense</span>
+<span class="w">        </span><span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">n</span>
+<span class="w">            </span><span class="n">gradf</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">dot_product</span><span class="p">(</span><span class="n">fvec</span><span class="p">,</span><span class="n">fjac</span><span class="p">(:,</span><span class="n">i</span><span class="p">))</span>
+<span class="w">        </span><span class="k">end do</span>
+<span class="k">    else</span>
+<span class="w">        </span><span class="c">! sparse</span>
+<span class="w">        </span><span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">n</span>
+<span class="w">            </span><span class="n">gradf</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">dot_product</span><span class="p">(</span><span class="n">fvec</span><span class="p">,</span><span class="nb">pack</span><span class="p">(</span><span class="n">fjac_sparse</span><span class="p">,</span><span class="n">mask</span><span class="o">=</span><span class="n">me</span><span class="p">%</span><span class="n">icol</span><span class="o">==</span><span class="n">i</span><span class="p">))</span>
+<span class="w">        </span><span class="k">end do</span>
+<span class="k">    end if</span>
+<span class="k">    </span><span class="n">slope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">dot_product</span><span class="p">(</span><span class="n">search_direction</span><span class="p">,</span><span class="w"> </span><span class="n">gradf</span><span class="p">)</span>
+<span class="w">    </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">me</span><span class="p">%</span><span class="n">c</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">slope</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">verbose</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">        write</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">iunit</span><span class="p">,</span><span class="s1">&#39;(1P,*(A,1X,E16.6))&#39;</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39;        slope    = &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">slope</span>
+<span class="w">        </span><span class="k">write</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">iunit</span><span class="p">,</span><span class="s1">&#39;(1P,*(A,1X,E16.6))&#39;</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39;        t        = &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">t</span>
+<span class="w">    </span><span class="k">end if</span>
+
+<span class="w">    </span><span class="c">! perform the line search:</span>
+
+<span class="w">    </span><span class="n">min_alpha_reached</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w">   </span><span class="c">! initialize</span>
+<span class="w">    </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">alpha_max</span><span class="w">          </span><span class="c">! start with the largest step</span>
+<span class="w">    </span><span class="k">do</span>
+
+<span class="k">        call </span><span class="n">me</span><span class="p">%</span><span class="n">compute_next_step</span><span class="p">(</span><span class="n">xold</span><span class="p">,</span><span class="w"> </span><span class="n">search_direction</span><span class="p">,</span><span class="w"> </span><span class="n">alpha</span><span class="p">,</span><span class="w"> </span><span class="n">modified</span><span class="p">,</span><span class="w"> </span><span class="n">xtmp</span><span class="p">)</span>
+<span class="w">        </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">func</span><span class="p">(</span><span class="n">xtmp</span><span class="p">,</span><span class="n">fvectmp</span><span class="p">)</span>
+<span class="w">        </span><span class="n">ftmp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">norm</span><span class="p">(</span><span class="n">fvectmp</span><span class="p">)</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">verbose</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">            write</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">iunit</span><span class="p">,</span><span class="s1">&#39;(1P,*(A,1X,E16.6))&#39;</span><span class="p">)</span><span class="w">          </span><span class="s1">&#39;        alpha    = &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">alpha</span><span class="p">,</span><span class="w">    </span><span class="s1">&#39; f       = &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">ftmp</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">f</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">ftmp</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">alpha</span><span class="o">*</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                write</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">iunit</span><span class="p">,</span><span class="s1">&#39;(1P,2(A,1X,E16.6),1X,A)&#39;</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39;        f - ftmp = &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">ftmp</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39; alpha*t = &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">alpha</span><span class="o">*</span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39; [ACCEPTED]&#39;</span>
+<span class="w">            </span><span class="k">else</span>
+<span class="k">                write</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">iunit</span><span class="p">,</span><span class="s1">&#39;(1P,*(A,1X,E16.6))&#39;</span><span class="p">)</span><span class="w">      </span><span class="s1">&#39;        f - ftmp = &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">ftmp</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39; alpha*t = &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">alpha</span><span class="o">*</span><span class="n">t</span>
+<span class="w">            </span><span class="k">end if</span>
+<span class="k">        end if</span>
+
+<span class="k">        if</span><span class="w"> </span><span class="p">(((</span><span class="n">f</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">ftmp</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">2.0_wp</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">alpha</span><span class="o">*</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="p">.</span><span class="nb">or</span><span class="p">.</span><span class="w"> </span><span class="n">min_alpha_reached</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">            if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">verbose</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="n">min_alpha_reached</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                write</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">iunit</span><span class="p">,</span><span class="s1">&#39;(A)&#39;</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39;        Minimum alpha reached&#39;</span>
+<span class="w">            </span><span class="k">end if</span>
+<span class="w">            </span><span class="c">! Armijo-Goldstein condition is satisfied</span>
+<span class="w">            </span><span class="c">! (or the min step has been reached)</span>
+<span class="w">            </span><span class="n">x</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">xtmp</span>
+<span class="w">            </span><span class="n">fvec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fvectmp</span>
+<span class="w">            </span><span class="n">f</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">ftmp</span>
+<span class="w">            </span><span class="k">exit</span>
+<span class="k">        end if</span>
+<span class="k">        </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">tau</span><span class="w"> </span><span class="c">! reduce step size</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">alpha</span><span class="o">&lt;=</span><span class="n">me</span><span class="p">%</span><span class="n">alpha_min</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">            </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">alpha_min</span>
+<span class="w">            </span><span class="n">min_alpha_reached</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"> </span><span class="c">! will stop on the next step</span>
+<span class="w">        </span><span class="k">end if</span>
+
+<span class="k">    end do</span>
+
+<span class="k">    end subroutine </span><span class="n">backtracking_linesearch</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              nlesolver-fortran
+ was developed by Jacob Williams<br>              &copy; 2025 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+            </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,823 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Nonlinear Equation Solver with Modern Fortran">
+    <meta name="author" content="Jacob Williams" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>nlesolver_solver &ndash; nlesolver-fortran</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">nlesolver-fortran </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../sourcefile/nlesolver_module.f90.html">Source File</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>nlesolver_solver
+      <small>Subroutine</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title="27.7% of total for procedures.">226 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/nlesolver_module.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/nlesolver_module.f90.html'>nlesolver_module.F90</a></li>
+                <li class="breadcrumb-item"><a href='../module/nlesolver_module.html'>nlesolver_module</a></li>
+            <li class="breadcrumb-item active" aria-current="page">nlesolver_solver</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+      <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/nlesolver_solver.html#src">nlesolver_solver</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>private  subroutine nlesolver_solver(me, x)  
+</h2>
+    
+
+    <p>Main solver.</p>
+
+    <h3>Type Bound</h3>
+    <p><a href='../type/nlesolver_type.html'>nlesolver_type</a></p>
+
+    <h3>Arguments</h3>
+        <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~12"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~7"></span>
+              real(kind=wp),
+            </td>
+<td>intent(inout),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <br>
+    <div class="card">
+      <div class="card-header">
+  <h3 class="card-title">Calls</h3>
+      </div>
+      <div class="card-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: proc~~nlesolver_solver~~CallsGraph Pages: 1 -->
+<svg id="procnlesolver_solverCallsGraph" width="528pt" height="242pt"
+ viewBox="0.00 0.00 528.00 242.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~nlesolver_solver~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 238)">
+<title>proc~~nlesolver_solver~~CallsGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-238 524,-238 524,4 -4,4"/>
+<!-- proc~nlesolver_solver -->
+<g id="proc~~nlesolver_solver~~CallsGraph_node1" class="node">
+<title>proc~nlesolver_solver</title>
+<polygon fill="none" stroke="black" points="186,-129 0,-129 0,-105 186,-105 186,-129"/>
+<text text-anchor="middle" x="93" y="-114.6" font-family="Helvetica,sans-Serif" font-size="10.50">nlesolver_type%nlesolver_solver</text>
+</g>
+<!-- initialize -->
+<g id="proc~~nlesolver_solver~~CallsGraph_node2" class="node">
+<title>initialize</title>
+<polygon fill="#777777" stroke="#777777" points="354.5,-234 297.5,-234 297.5,-210 354.5,-210 354.5,-234"/>
+<text text-anchor="middle" x="326" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">initialize</text>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;initialize -->
+<g id="proc~~nlesolver_solver~~CallsGraph_edge1" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;initialize</title>
+<path fill="none" stroke="#000000" d="M108.32,-129.07C130.94,-147.5 177.03,-182.46 222,-201 242.83,-209.59 267.53,-214.78 287.52,-217.85"/>
+<polygon fill="#000000" stroke="#000000" points="287.1,-221.32 297.5,-219.27 288.09,-214.39 287.1,-221.32"/>
+</g>
+<!-- lsmr_ez -->
+<g id="proc~~nlesolver_solver~~CallsGraph_node3" class="node">
+<title>lsmr_ez</title>
+<polygon fill="#777777" stroke="#777777" points="353,-192 299,-192 299,-168 353,-168 353,-192"/>
+<text text-anchor="middle" x="326" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lsmr_ez</text>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;lsmr_ez -->
+<g id="proc~~nlesolver_solver~~CallsGraph_edge2" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;lsmr_ez</title>
+<path fill="none" stroke="#000000" d="M127.1,-129.03C152.76,-138.08 189.33,-150.34 222,-159 244.08,-164.85 269.2,-170 289.1,-173.74"/>
+<polygon fill="#000000" stroke="#000000" points="288.52,-177.19 298.99,-175.56 289.79,-170.31 288.52,-177.19"/>
+</g>
+<!-- proc~adjust_x_for_bounds -->
+<g id="proc~~nlesolver_solver~~CallsGraph_node4" class="node">
+<title>proc~adjust_x_for_bounds</title>
+<g id="a_proc~~nlesolver_solver~~CallsGraph_node4"><a xlink:href="../proc/adjust_x_for_bounds.html" xlink:title="nlesolver_type%adjust_x_for_bounds">
+<polygon fill="#d9534f" stroke="#d9534f" points="430,-150 222,-150 222,-126 430,-126 430,-150"/>
+<text text-anchor="middle" x="326" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%adjust_x_for_bounds</text>
+</a>
+</g>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;proc~adjust_x_for_bounds -->
+<g id="proc~~nlesolver_solver~~CallsGraph_edge3" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;proc~adjust_x_for_bounds</title>
+<path fill="none" stroke="#000000" d="M186.29,-125.39C194.69,-126.15 203.26,-126.93 211.82,-127.71"/>
+<polygon fill="#000000" stroke="#000000" points="211.57,-131.2 221.84,-128.62 212.2,-124.23 211.57,-131.2"/>
+</g>
+<!-- proc~linear_solver -->
+<g id="proc~~nlesolver_solver~~CallsGraph_node5" class="node">
+<title>proc~linear_solver</title>
+<g id="a_proc~~nlesolver_solver~~CallsGraph_node5"><a xlink:href="../proc/linear_solver.html" xlink:title="linear_solver">
+<polygon fill="#d9534f" stroke="#d9534f" points="366.5,-108 285.5,-108 285.5,-84 366.5,-84 366.5,-108"/>
+<text text-anchor="middle" x="326" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">linear_solver</text>
+</a>
+</g>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;proc~linear_solver -->
+<g id="proc~~nlesolver_solver~~CallsGraph_edge4" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;proc~linear_solver</title>
+<path fill="none" stroke="#000000" d="M186.29,-108.61C216.69,-105.85 249.33,-102.88 275.3,-100.52"/>
+<polygon fill="#000000" stroke="#000000" points="275.63,-104 285.27,-99.61 274.99,-97.03 275.63,-104"/>
+</g>
+<!-- proc~set_status -->
+<g id="proc~~nlesolver_solver~~CallsGraph_node6" class="node">
+<title>proc~set_status</title>
+<g id="a_proc~~nlesolver_solver~~CallsGraph_node6"><a xlink:href="../proc/set_status.html" xlink:title="nlesolver_type%set_status">
+<polygon fill="#d9534f" stroke="#d9534f" points="402,-66 250,-66 250,-42 402,-42 402,-66"/>
+<text text-anchor="middle" x="326" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%set_status</text>
+</a>
+</g>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;proc~set_status -->
+<g id="proc~~nlesolver_solver~~CallsGraph_edge5" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;proc~set_status</title>
+<path fill="none" stroke="#000000" d="M127.1,-104.97C152.76,-95.92 189.33,-83.66 222,-75 231.1,-72.59 240.71,-70.3 250.27,-68.17"/>
+<polygon fill="#000000" stroke="#000000" points="251.14,-71.56 260.17,-66.02 249.66,-64.72 251.14,-71.56"/>
+</g>
+<!-- solve -->
+<g id="proc~~nlesolver_solver~~CallsGraph_node7" class="node">
+<title>solve</title>
+<polygon fill="#777777" stroke="#777777" points="353,-24 299,-24 299,0 353,0 353,-24"/>
+<text text-anchor="middle" x="326" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">solve</text>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;solve -->
+<g id="proc~~nlesolver_solver~~CallsGraph_edge6" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;solve</title>
+<path fill="none" stroke="#000000" d="M108.32,-104.93C130.94,-86.5 177.03,-51.54 222,-33 243.27,-24.24 268.56,-19.01 288.76,-15.97"/>
+<polygon fill="#000000" stroke="#000000" points="289.38,-19.41 298.81,-14.56 288.42,-12.48 289.38,-19.41"/>
+</g>
+<!-- proc~int2str -->
+<g id="proc~~nlesolver_solver~~CallsGraph_node8" class="node">
+<title>proc~int2str</title>
+<g id="a_proc~~nlesolver_solver~~CallsGraph_node8"><a xlink:href="../proc/int2str.html" xlink:title="int2str">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="520,-129 466,-129 466,-105 520,-105 520,-129"/>
+<text text-anchor="middle" x="493" y="-114.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">int2str</text>
+</a>
+</g>
+</g>
+<!-- proc~adjust_x_for_bounds&#45;&gt;proc~int2str -->
+<g id="proc~~nlesolver_solver~~CallsGraph_edge7" class="edge">
+<title>proc~adjust_x_for_bounds&#45;&gt;proc~int2str</title>
+<path fill="none" stroke="#000000" d="M421.55,-125.97C433.62,-124.43 445.35,-122.94 455.66,-121.63"/>
+<polygon fill="#000000" stroke="#000000" points="456.36,-125.06 465.84,-120.33 455.48,-118.12 456.36,-125.06"/>
+</g>
+<!-- proc~set_status&#45;&gt;proc~int2str -->
+<g id="proc~~nlesolver_solver~~CallsGraph_edge8" class="edge">
+<title>proc~set_status&#45;&gt;proc~int2str</title>
+<path fill="none" stroke="#000000" d="M402.04,-65.67C411.63,-68.21 421.17,-71.28 430,-75 444.13,-80.95 458.4,-90.33 469.68,-98.72"/>
+<polygon fill="#000000" stroke="#000000" points="467.62,-101.54 477.68,-104.87 471.88,-95.99 467.62,-101.54"/>
+</g>
+<!-- proc~real2str -->
+<g id="proc~~nlesolver_solver~~CallsGraph_node9" class="node">
+<title>proc~real2str</title>
+<g id="a_proc~~nlesolver_solver~~CallsGraph_node9"><a xlink:href="../proc/real2str.html" xlink:title="real2str">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="520,-66 466,-66 466,-42 520,-42 520,-66"/>
+<text text-anchor="middle" x="493" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">real2str</text>
+</a>
+</g>
+</g>
+<!-- proc~set_status&#45;&gt;proc~real2str -->
+<g id="proc~~nlesolver_solver~~CallsGraph_edge9" class="edge">
+<title>proc~set_status&#45;&gt;proc~real2str</title>
+<path fill="none" stroke="#000000" d="M402.26,-54C420.76,-54 439.76,-54 455.49,-54"/>
+<polygon fill="#000000" stroke="#000000" points="455.8,-57.5 465.8,-54 455.8,-50.5 455.8,-57.5"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CallsGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="CallsGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.43.0 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 27.51" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(0.86 0.86) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 741.5,-28 741.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="146,-24 88,-24 88,0 146,0 146,-24"/>
+<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="225.5,-24 164.5,-24 164.5,0 225.5,0 225.5,-24"/>
+<text text-anchor="middle" x="195" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Type Bound Procedure -->
+<g id="node4" class="node">
+<title>Type Bound Procedure</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="374,-24 244,-24 244,0 374,0 374,-24"/>
+<text text-anchor="middle" x="309" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type Bound Procedure</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node5" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="537.5,-24 392.5,-24 392.5,0 537.5,0 537.5,-24"/>
+<text text-anchor="middle" x="465" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node6" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="614,-24 556,-24 556,0 614,0 614,-24"/>
+<text text-anchor="middle" x="585" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node7" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="737.5,-24 632.5,-24 632.5,0 737.5,0 737.5,-24"/>
+<text text-anchor="middle" x="685" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.
+</p>
+ </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+
+
+    
+    
+
+    
+    
+
+
+
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl codehilite"><pre><span></span><span class="w">    </span><span class="k">subroutine </span><span class="n">nlesolver_solver</span><span class="p">(</span><span class="n">me</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">implicit none</span>
+
+<span class="k">    class</span><span class="p">(</span><span class="n">nlesolver_type</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">me</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span>
+
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:)</span><span class="w">  </span><span class="p">,</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fvec</span><span class="w">             </span><span class="c">!! function vector</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:,:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fjac</span><span class="w">             </span><span class="c">!! jacobian matrix [dense]</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:),</span><span class="w">  </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fjac_sparse</span><span class="w">      </span><span class="c">!! jacobian matrix [sparse]</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:),</span><span class="w">  </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">prev_fjac_sparse</span><span class="w"> </span><span class="c">!! previous jacobian matrix [sparse]</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:)</span><span class="w">  </span><span class="p">,</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">rhs</span><span class="w">              </span><span class="c">!! linear system right-hand side</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:)</span><span class="w">  </span><span class="p">,</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">p</span><span class="w">                </span><span class="c">!! search direction</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:)</span><span class="w">  </span><span class="p">,</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">xold</span><span class="w">             </span><span class="c">!! previous value of `x`</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:)</span><span class="w">  </span><span class="p">,</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">prev_fvec</span><span class="w">        </span><span class="c">!! previous function vector</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:,:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">prev_fjac</span><span class="w">        </span><span class="c">!! previous jacobian matrix</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:,:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">delf</span><span class="w">             </span><span class="c">!! used for Broyden (rank 2 for `matmul`)</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:,:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">delx</span><span class="w">             </span><span class="c">!! used for Broyden (rank 2 for `matmul`)</span>
+<span class="w">    </span><span class="kt">logical</span><span class="w">                             </span><span class="kd">::</span><span class="w"> </span><span class="n">user_stop</span><span class="w">        </span><span class="c">!! user stop button flag</span>
+<span class="w">    </span><span class="kt">integer</span><span class="w">                             </span><span class="kd">::</span><span class="w"> </span><span class="n">info</span><span class="w">             </span><span class="c">!! status flag from the [[linear_solver]]</span>
+<span class="w">    </span><span class="kt">integer</span><span class="w">                             </span><span class="kd">::</span><span class="w"> </span><span class="n">iter</span><span class="w">             </span><span class="c">!! iteration counter</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w">                            </span><span class="kd">::</span><span class="w"> </span><span class="n">f</span><span class="w">                </span><span class="c">!! magnitude of `fvec`</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w">                            </span><span class="kd">::</span><span class="w"> </span><span class="n">fold</span><span class="w">             </span><span class="c">!! previous value of `f`</span>
+<span class="w">    </span><span class="kt">integer</span><span class="w">                             </span><span class="kd">::</span><span class="w"> </span><span class="n">n_uphill</span><span class="w">         </span><span class="c">!! number of steps taken in the &quot;uphill&quot; direction</span>
+<span class="w">                                                            </span><span class="c">!! (where `f` is increasing)</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w">                            </span><span class="kd">::</span><span class="w"> </span><span class="n">delxmag2</span><span class="w">         </span><span class="c">!! used for Broyden</span>
+<span class="w">    </span><span class="kt">logical</span><span class="w">                             </span><span class="kd">::</span><span class="w"> </span><span class="n">recompute_jac</span><span class="w">    </span><span class="c">!! if using Broyden, and we want to call the user</span>
+<span class="w">                                                            </span><span class="c">!! jacobian routine instead</span>
+<span class="w">    </span><span class="kt">integer</span><span class="w">                             </span><span class="kd">::</span><span class="w"> </span><span class="n">broyden_counter</span><span class="w">  </span><span class="c">!! number of times the broyden update has been used</span>
+<span class="w">    </span><span class="kt">integer</span><span class="w">                             </span><span class="kd">::</span><span class="w"> </span><span class="n">alloc_stat</span><span class="w">       </span><span class="c">!! allocation status flag</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">lsqr_solver_ez</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">sparse_solver</span><span class="w">  </span><span class="c">!! sparse LSQR solver class</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">lusol_settings</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">lusol_options</span>
+<span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="c">!! counter</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">idx</span><span class="p">,</span><span class="w"> </span><span class="n">index_array</span><span class="w"> </span><span class="c">!! for sparse indexing</span>
+<span class="w">    </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i_str</span><span class="w"> </span><span class="c">!! string version of `i` for row string</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">normA</span><span class="p">,</span><span class="w"> </span><span class="n">condA</span><span class="p">,</span><span class="w"> </span><span class="n">normr</span><span class="p">,</span><span class="w"> </span><span class="n">normAr</span><span class="p">,</span><span class="w"> </span><span class="n">normx</span><span class="w"> </span><span class="c">!! for LSMR</span>
+<span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">itn</span><span class="w"> </span><span class="c">!! for LSMR</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">istat</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="c">! class was not initialized properly</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="nb">associated</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">func</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">        call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: function routine is not associated&#39;</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="k">    end if</span>
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="o">==</span><span class="n">NLESOLVER_SPARSITY_DENSE</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="p">.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="nb">associated</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">grad</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">        call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: gradient routine is not associated&#39;</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="k">    end if</span>
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="o">&gt;</span><span class="n">NLESOLVER_SPARSITY_DENSE</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="p">.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="nb">associated</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">grad_sparse</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">        call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: gradient routine is not associated&#39;</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="k">    end if</span>
+
+<span class="w">    </span><span class="c">! initialize:</span>
+<span class="w">    </span><span class="n">iter</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="n">n_uphill</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="n">recompute_jac</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<span class="w">    </span><span class="n">broyden_counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+
+<span class="w">    </span><span class="c">! allocate the arrays:</span>
+<span class="w">    </span><span class="n">alloc_stat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">alloc_stat</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">allocate</span><span class="p">(</span><span class="n">fvec</span><span class="w">     </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">)</span><span class="w">      </span><span class="p">,</span><span class="w"> </span><span class="nb">stat</span><span class="o">=</span><span class="n">alloc_stat</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="o">==</span><span class="n">NLESOLVER_SPARSITY_DENSE</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span><span class="c">! dense</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">alloc_stat</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">allocate</span><span class="p">(</span><span class="n">fjac</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="nb">stat</span><span class="o">=</span><span class="n">alloc_stat</span><span class="p">)</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">        </span><span class="c">! sparse</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">alloc_stat</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">allocate</span><span class="p">(</span><span class="n">fjac_sparse</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n_nonzeros</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="nb">stat</span><span class="o">=</span><span class="n">alloc_stat</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">use_broyden</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="n">alloc_stat</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">allocate</span><span class="p">(</span><span class="n">prev_fjac_sparse</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n_nonzeros</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="nb">stat</span><span class="o">=</span><span class="n">alloc_stat</span><span class="p">)</span>
+<span class="w">    </span><span class="k">end if</span>
+
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">alloc_stat</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">allocate</span><span class="p">(</span><span class="n">rhs</span><span class="w">      </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">)</span><span class="w">      </span><span class="p">,</span><span class="w"> </span><span class="nb">stat</span><span class="o">=</span><span class="n">alloc_stat</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">alloc_stat</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">allocate</span><span class="p">(</span><span class="n">p</span><span class="w">        </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">)</span><span class="w">      </span><span class="p">,</span><span class="w"> </span><span class="nb">stat</span><span class="o">=</span><span class="n">alloc_stat</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">alloc_stat</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">allocate</span><span class="p">(</span><span class="n">xold</span><span class="w">     </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">)</span><span class="w">      </span><span class="p">,</span><span class="w"> </span><span class="nb">stat</span><span class="o">=</span><span class="n">alloc_stat</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">use_broyden</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span><span class="c">! only need these for broyden:</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">alloc_stat</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">allocate</span><span class="p">(</span><span class="n">prev_fvec</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">)</span><span class="w">      </span><span class="p">,</span><span class="w"> </span><span class="nb">stat</span><span class="o">=</span><span class="n">alloc_stat</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="o">/=</span><span class="n">NLESOLVER_SPARSITY_DENSE</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="n">alloc_stat</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">            allocate</span><span class="p">(</span><span class="n">prev_fjac</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="nb">stat</span><span class="o">=</span><span class="n">alloc_stat</span><span class="p">)</span>
+<span class="w">            </span><span class="n">index_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">n_nonzeros</span><span class="p">)]</span><span class="w"> </span><span class="c">! an array to index the sparse jacobian elements</span>
+<span class="w">        </span><span class="k">end if</span>
+<span class="k">        if</span><span class="w"> </span><span class="p">(</span><span class="n">alloc_stat</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">allocate</span><span class="p">(</span><span class="n">delf</span><span class="w">     </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="nb">stat</span><span class="o">=</span><span class="n">alloc_stat</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">alloc_stat</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">allocate</span><span class="p">(</span><span class="n">delx</span><span class="w">     </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="nb">stat</span><span class="o">=</span><span class="n">alloc_stat</span><span class="p">)</span>
+<span class="w">    </span><span class="k">end if</span>
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="n">alloc_stat</span><span class="o">/=</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">        call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: Out of memory&#39;</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="k">    else</span>
+<span class="k">        </span><span class="n">me</span><span class="p">%</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">998</span>
+<span class="w">        </span><span class="n">me</span><span class="p">%</span><span class="n">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Unknown error&#39;</span>
+<span class="w">    </span><span class="k">end if</span>
+
+<span class="w">    </span><span class="c">! evaluate the function:</span>
+<span class="w">    </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">adjust_x_for_bounds</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="c">! if the guess is out of bounds it may also be adjusted first.</span>
+<span class="w">    </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">fvec</span><span class="p">)</span>
+<span class="w">    </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">norm</span><span class="p">(</span><span class="n">fvec</span><span class="p">)</span>
+
+<span class="w">    </span><span class="c">! check to see if initial guess is a root:</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">f</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">tol</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+
+<span class="k">        call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Required accuracy achieved&#39;</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">else</span>
+
+<span class="w">        </span><span class="c">! main iteration loop:</span>
+<span class="w">        </span><span class="k">do </span><span class="n">iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">max_iter</span>
+
+<span class="w">            </span><span class="c">! Export the current iteration:</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">associated</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">export_iteration</span><span class="p">))</span><span class="w"> </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">export_iteration</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">fvec</span><span class="p">,</span><span class="n">iter</span><span class="p">)</span>
+
+<span class="w">            </span><span class="c">! Check for user stop:</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">associated</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">user_input_check</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                call </span><span class="n">me</span><span class="p">%</span><span class="n">user_input_check</span><span class="p">(</span><span class="n">user_stop</span><span class="p">)</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">user_stop</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                    call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Stopped by the user&#39;</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">exit</span>
+<span class="k">                end if</span>
+<span class="k">            end if</span>
+
+<span class="k">            if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">use_broyden</span><span class="w"> </span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="w"> </span><span class="p">.</span><span class="nb">not</span><span class="p">.</span><span class="w"> </span><span class="n">recompute_jac</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                if</span><span class="w"> </span><span class="p">(</span><span class="n">iter</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="w">                    </span><span class="c">! always compute Jacobian on the first iteration</span>
+<span class="w">                    </span><span class="c">!call me%grad(x,fjac)</span>
+<span class="w">                    </span><span class="k">select case</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">NLESOLVER_SPARSITY_DENSE</span><span class="p">)</span>
+<span class="w">                        </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">grad</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">fjac</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">case </span><span class="n">default</span><span class="w"> </span><span class="c">! sparse modes</span>
+<span class="w">                        </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">grad_sparse</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">fjac_sparse</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">end select</span>
+<span class="k">                    </span><span class="n">broyden_counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">                </span><span class="k">else</span>
+<span class="w">                    </span><span class="c">! and use Broyden update to estimate Jacobian</span>
+<span class="w">                    </span><span class="c">! for subsequent iterations.</span>
+
+<span class="w">                    </span><span class="c">! note: fvec was computed the last iteration</span>
+<span class="w">                    </span><span class="n">delx</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">xold</span>
+<span class="w">                    </span><span class="n">delf</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fvec</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">prev_fvec</span>
+
+<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="o">==</span><span class="n">NLESOLVER_SPARSITY_DENSE</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">! dense</span>
+
+<span class="w">                        </span><span class="n">delxmag2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">dot_product</span><span class="p">(</span><span class="n">delx</span><span class="p">(:,</span><span class="mi">1</span><span class="p">),</span><span class="n">delx</span><span class="p">(:,</span><span class="mi">1</span><span class="p">))</span>
+<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">delxmag2</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">eps</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                            call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                                    </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: Divide by zero when computing Broyden update&#39;</span><span class="p">)</span>
+<span class="w">                            </span><span class="k">exit</span>
+<span class="k">                        end if</span>
+
+<span class="w">                        </span><span class="c">! Jacobian estimate:</span>
+<span class="w">                        </span><span class="c">! This is the equation from wikipedia : https://en.wikipedia.org/wiki/Broyden%27s_method</span>
+<span class="w">                        </span><span class="n">fjac</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prev_fjac</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">matmul</span><span class="p">((</span><span class="n">delf</span><span class="o">-</span><span class="nb">matmul</span><span class="p">(</span><span class="n">prev_fjac</span><span class="p">,</span><span class="n">delx</span><span class="p">)),</span><span class="w"> </span><span class="nb">transpose</span><span class="p">(</span><span class="n">delx</span><span class="p">))</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">delxmag2</span>
+
+<span class="w">                        </span><span class="c">! see also: eqn 4 in Schubert, which is different ...</span>
+
+<span class="w">                    </span><span class="k">else</span><span class="w"> </span><span class="c">! using a sparse option</span>
+
+<span class="w">                        </span><span class="c">! Just a row-by-row version of the fjac equation above.</span>
+<span class="w">                        </span><span class="c">! see L.K. Schubert, 1970</span>
+<span class="w">                        </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">m</span>
+
+<span class="w">                            </span><span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">pack</span><span class="p">(</span><span class="n">index_array</span><span class="p">,</span><span class="w"> </span><span class="n">mask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">irow</span><span class="o">==</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="c">! the nonzero elements in this row</span>
+<span class="w">                            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">cycle</span><span class="w"> </span><span class="c">! no non-zeros in this row</span>
+
+<span class="w">                            </span><span class="k">associate</span><span class="w"> </span><span class="p">(</span><span class="n">dx</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">delx</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">icol</span><span class="p">(</span><span class="n">idx</span><span class="p">),:))</span><span class="w"> </span><span class="c">! nonzero x vec for this row</span>
+<span class="w">                                </span><span class="n">delxmag2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">dot_product</span><span class="p">(</span><span class="n">dx</span><span class="p">(:,</span><span class="mi">1</span><span class="p">),</span><span class="n">dx</span><span class="p">(:,</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="c">! only those x&#39;s for this row</span>
+<span class="w">                                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">delxmag2</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">eps</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                                    write</span><span class="p">(</span><span class="n">i_str</span><span class="p">,</span><span class="s1">&#39;(I10)&#39;</span><span class="p">)</span><span class="w"> </span><span class="n">i</span>
+<span class="w">                                    </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                                            </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: Divide by zero when computing sparse Broyden update for row &#39;</span><span class="o">//</span><span class="p">&amp;</span>
+<span class="w">                                            </span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">i_str</span><span class="p">)))</span>
+<span class="w">                                    </span><span class="k">exit</span>
+<span class="k">                                end if</span>
+<span class="k">                                </span><span class="n">fjac_sparse</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">prev_fjac_sparse</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                                        </span><span class="nb">matmul</span><span class="p">((</span><span class="n">delf</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="nb">matmul</span><span class="p">(</span><span class="n">prev_fjac_sparse</span><span class="p">(</span><span class="n">idx</span><span class="p">),</span><span class="n">dx</span><span class="p">)),</span><span class="w"> </span><span class="nb">transpose</span><span class="p">(</span><span class="n">dx</span><span class="p">))</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">delxmag2</span>
+<span class="w">                            </span><span class="k">end associate</span>
+
+<span class="k">                        end do</span>
+
+<span class="k">                    end if</span>
+<span class="k">                    </span><span class="n">broyden_counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">broyden_counter</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">                </span><span class="k">end if</span>
+<span class="k">                </span><span class="n">prev_fvec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fvec</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="o">==</span><span class="n">NLESOLVER_SPARSITY_DENSE</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                    </span><span class="n">prev_fjac</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fjac</span>
+<span class="w">                </span><span class="k">else</span>
+<span class="k">                    </span><span class="n">prev_fjac_sparse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fjac_sparse</span>
+<span class="w">                </span><span class="k">end if</span>
+<span class="k">            else</span>
+<span class="w">                </span><span class="c">! compute the jacobian:</span>
+<span class="w">                </span><span class="k">select case</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="p">)</span>
+<span class="w">                </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">NLESOLVER_SPARSITY_DENSE</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">grad</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">fjac</span><span class="p">)</span>
+<span class="w">                </span><span class="k">case </span><span class="n">default</span><span class="w"> </span><span class="c">! sparse</span>
+<span class="w">                    </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">grad_sparse</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">fjac_sparse</span><span class="p">)</span>
+<span class="w">                </span><span class="k">end select</span>
+<span class="k">                </span><span class="n">recompute_jac</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w">  </span><span class="c">! for broyden</span>
+<span class="w">                </span><span class="n">broyden_counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">            </span><span class="k">end if</span>
+
+<span class="k">            </span><span class="n">xold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span>
+<span class="w">            </span><span class="n">fold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span>
+
+<span class="w">            </span><span class="c">! compute the search direction p by solving linear system:</span>
+<span class="w">            </span><span class="n">rhs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">fvec</span><span class="w"> </span><span class="c">! RHS of the linear system</span>
+<span class="w">            </span><span class="k">select case</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">sparsity_mode</span><span class="p">)</span>
+
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">NLESOLVER_SPARSITY_DENSE</span><span class="p">)</span>
+<span class="w">                </span><span class="c">! use dense solver</span>
+<span class="w">                </span><span class="k">call </span><span class="n">linear_solver</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">,</span><span class="n">fjac</span><span class="p">,</span><span class="n">rhs</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">info</span><span class="p">)</span>
+
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">NLESOLVER_SPARSITY_LSQR</span><span class="p">)</span>
+<span class="w">                </span><span class="c">! initialize the LSQR sparse solver</span>
+<span class="w">                </span><span class="k">call </span><span class="n">sparse_solver</span><span class="p">%</span><span class="n">initialize</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">,</span><span class="n">fjac_sparse</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">irow</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">icol</span><span class="p">,&amp;</span>
+<span class="w">                                              </span><span class="n">atol</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">atol</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                                              </span><span class="n">btol</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">btol</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                                              </span><span class="n">conlim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">conlim</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                                              </span><span class="n">itnlim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">itnlim</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                                              </span><span class="n">nout</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">nout</span><span class="p">)</span>
+<span class="w">                </span><span class="k">call </span><span class="n">sparse_solver</span><span class="p">%</span><span class="n">solve</span><span class="p">(</span><span class="n">rhs</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">damp</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">info</span><span class="p">)</span><span class="w"> </span><span class="c">! solve the linear system</span>
+<span class="w">                </span><span class="c">! check convergence:</span>
+<span class="w">                </span><span class="k">select case</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+<span class="w">                </span><span class="k">case</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1004</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                                </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;LSQR Error: The system appears to be ill-conditioned. istop =&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="n">info</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">exit</span>
+<span class="k">                case</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1005</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                                </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;LSQR Error: The iteration limit was reached. istop =&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="n">info</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">exit</span>
+<span class="k">                case </span><span class="n">default</span>
+<span class="w">                    </span><span class="n">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">                </span><span class="k">end select</span>
+
+<span class="k">            case</span><span class="w"> </span><span class="p">(</span><span class="n">NLESOLVER_SPARSITY_LUSOL</span><span class="p">)</span>
+<span class="w">                </span><span class="c">! use lusol solver</span>
+<span class="w">                </span><span class="n">lusol_options</span><span class="p">%</span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">lusol_method</span>
+<span class="w">                </span><span class="k">call </span><span class="n">solve</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">n_nonzeros</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">irow</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">icol</span><span class="p">,</span><span class="n">fjac_sparse</span><span class="p">,</span><span class="n">rhs</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">info</span><span class="p">,&amp;</span>
+<span class="w">                           </span><span class="n">settings</span><span class="o">=</span><span class="n">lusol_options</span><span class="p">)</span>
+
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="p">(</span><span class="n">NLESOLVER_SPARSITY_LSMR</span><span class="p">)</span>
+
+<span class="w">                </span><span class="c">! use LSMR solver:</span>
+<span class="w">                </span><span class="c">!me%conlim = 1.0_wp/(100*epsilon(1.0_wp))</span>
+<span class="w">                </span><span class="k">call </span><span class="n">lsmr_ez</span><span class="w">  </span><span class="p">(</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">irow</span><span class="p">,</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">icol</span><span class="p">,</span><span class="w"> </span><span class="n">fjac_sparse</span><span class="p">,</span><span class="w"> </span><span class="n">rhs</span><span class="p">,</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">damp</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                                </span><span class="n">me</span><span class="p">%</span><span class="n">atol</span><span class="p">,</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">btol</span><span class="p">,</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">conlim</span><span class="p">,</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">itnlim</span><span class="p">,</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">localSize</span><span class="p">,</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">nout</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                                </span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="n">info</span><span class="p">,</span><span class="w"> </span><span class="n">itn</span><span class="p">,</span><span class="w"> </span><span class="n">normA</span><span class="p">,</span><span class="w"> </span><span class="n">condA</span><span class="p">,</span><span class="w"> </span><span class="n">normr</span><span class="p">,</span><span class="w"> </span><span class="n">normAr</span><span class="p">,</span><span class="w"> </span><span class="n">normx</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">                </span><span class="c">! check convergence:</span>
+<span class="w">                </span><span class="k">select case</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+<span class="w">                </span><span class="k">case</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1004</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                                </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;LSMR Error: The system appears to be ill-conditioned. istop =&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="n">info</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">exit</span>
+<span class="k">                case</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1005</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                                </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;LSMR Error: The iteration limit was reached. istop =&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="n">info</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">exit</span>
+<span class="k">                case </span><span class="n">default</span>
+<span class="w">                    </span><span class="n">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">                </span><span class="k">end select</span>
+
+<span class="k">            case</span><span class="w"> </span><span class="p">(</span><span class="n">NLESOLVER_SPARSITY_CUSTOM_SPARSE</span><span class="p">)</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">associated</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">custom_solver_sparse</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="w">                    </span><span class="c">! a user-provided sparse solver:</span>
+<span class="w">                    </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">custom_solver_sparse</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">n_nonzeros</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">irow</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">icol</span><span class="p">,</span><span class="n">fjac_sparse</span><span class="p">,</span><span class="n">rhs</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">info</span><span class="p">)</span>
+<span class="w">                </span><span class="k">else</span>
+<span class="k">                    call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1006</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">                                </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error: The custom_solver_sparse procedure has not been set.&#39;</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">exit</span>
+<span class="k">                end if</span>
+<span class="k">            case </span><span class="n">default</span>
+<span class="w">                </span><span class="k">error stop</span><span class="w"> </span><span class="s1">&#39;invalid sparsity_mode&#39;</span>
+<span class="w">            </span><span class="k">end select</span>
+
+<span class="w">            </span><span class="c">! check for errors:</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">info</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+
+<span class="k">                call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Error solving linear system. info =&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="n">info</span><span class="p">)</span>
+<span class="w">                </span><span class="k">exit</span>
+
+<span class="k">            else</span>
+
+<span class="w">                </span><span class="c">! next step, using the specified method:</span>
+<span class="w">                </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">linesearch</span><span class="p">(</span><span class="n">xold</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">fvec</span><span class="p">,</span><span class="n">fjac</span><span class="p">,</span><span class="n">fjac_sparse</span><span class="p">)</span>
+
+<span class="w">                </span><span class="c">! keep track of the number of steps in the &quot;uphill&quot; direction:</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">f</span><span class="o">&gt;</span><span class="n">fold</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                    </span><span class="n">n_uphill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n_uphill</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">                </span><span class="k">else</span>
+<span class="k">                    </span><span class="n">n_uphill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">                </span><span class="k">end if</span>
+
+<span class="w">                </span><span class="c">! check for stopping conditions</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">f</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">tol</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+
+<span class="k">                    call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Required accuracy achieved&#39;</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">exit</span>
+
+<span class="k">                elseif</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="nb">maxval</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">xold</span><span class="p">))</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">tolx</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+
+<span class="k">                    call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Solution cannot be improved&#39;</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">exit</span>
+
+<span class="k">                elseif</span><span class="w"> </span><span class="p">(</span><span class="n">iter</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">max_iter</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+
+<span class="k">                    call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Maximum number of iterations reached&#39;</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">exit</span>
+
+<span class="k">                elseif</span><span class="w"> </span><span class="p">(</span><span class="n">n_uphill</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">n_uphill_max</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+
+<span class="k">                    call </span><span class="n">me</span><span class="p">%</span><span class="n">set_status</span><span class="p">(</span><span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Too many steps in the uphill direction&#39;</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">exit</span>
+
+<span class="k">                elseif</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">use_broyden</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+
+<span class="w">                    </span><span class="c">! If delxmag2 is too small when using broyden, just</span>
+<span class="w">                    </span><span class="c">! call the user-supplied jacobian function to avoid</span>
+<span class="w">                    </span><span class="c">! a divide by zero on the next step. This should</span>
+<span class="w">                    </span><span class="c">! normally only happen when the solution is almost converged.</span>
+<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">norm2</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">xold</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">eps</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                        </span><span class="n">recompute_jac</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+<span class="w">                    </span><span class="k">else</span>
+<span class="k">                        if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">broyden_update_n</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="w">                            </span><span class="c">! Note that we also recompute if we have taken an uphill step</span>
+<span class="w">                            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">broyden_counter</span><span class="o">==</span><span class="n">me</span><span class="p">%</span><span class="n">broyden_update_n</span><span class="w"> </span><span class="p">.</span><span class="nb">or</span><span class="p">.</span><span class="w"> </span><span class="n">n_uphill</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="w">                                </span><span class="c">! time to recompute the full jacobian</span>
+<span class="w">                                </span><span class="n">recompute_jac</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span>
+<span class="w">                            </span><span class="k">end if</span>
+<span class="k">                        end if</span>
+<span class="k">                    end if</span>
+
+<span class="k">                endif</span>
+
+<span class="k">            end if</span>
+
+<span class="k">        end do</span><span class="w">   </span><span class="c">!end of iterations loop</span>
+
+<span class="w">    </span><span class="k">end if</span>
+
+<span class="w">    </span><span class="c">!Export the last iteration:</span>
+<span class="w">    </span><span class="n">iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iter</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">associated</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">export_iteration</span><span class="p">))</span><span class="w"> </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">export_iteration</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">fvec</span><span class="p">,</span><span class="n">iter</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">end subroutine </span><span class="n">nlesolver_solver</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              nlesolver-fortran
+ was developed by Jacob Williams<br>              &copy; 2025 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+            </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>
