@@ -1,14 +1,13 @@
 ![nlesolver-fortran](media/logo.png)
-============
 
 Nonlinear Equation Solver with Modern Fortran.
+============
 
 A basic Newton-Raphson type nonlinear equation solver for sparse or dense systems with `m` functions of `n` input variables.
 
-A work in progress.
-
 ### Status
 
+[![GitHub Badge](https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=fff&style=plastic)](https://github.com/jacobwilliams/nlesolver-fortran)
 [![Language](https://img.shields.io/badge/-Fortran-734f96?logo=fortran&logoColor=white)](https://github.com/topics/fortran)
 [![CI Status](https://github.com/jacobwilliams/nlesolver-fortran/actions/workflows/CI.yml/badge.svg)](https://github.com/jacobwilliams/nlesolver-fortran/actions)
 [![GitHub release](https://img.shields.io/github/release/jacobwilliams/nlesolver-fortran.svg)](https://github.com/jacobwilliams/nlesolver-fortran/releases/latest)
