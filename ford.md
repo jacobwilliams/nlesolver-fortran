@@ -21,5 +21,6 @@ extra_mods: iso_fortran_env: https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fFOR
             fmin_module: https://jacobwilliams.github.io/fmin
             lusol_ez_module: https://jacobwilliams.github.io/lusol
             lsqr_module: https://jacobwilliams.github.io/LSQR
+            lsmrModule: https://jacobwilliams.github.io/LSMR
 
 {!README.md!}
