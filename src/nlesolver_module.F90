@@ -1391,6 +1391,7 @@
     real(wp),dimension(:),intent(in),optional :: fjac_sparse !! jacobian matrix [sparse]
 
     integer    :: i                  !! counter
+    integer    :: k                  !! counter
     real(wp)   :: slope              !! local slope of the function of `alpha` along the search direction used for line search
     logical    :: min_alpha_reached  !! if the minimum step size is reached during the line search
     real(wp)   :: alpha              !! `alpha` for the line search
@@ -1422,8 +1423,10 @@
         end do
     else
         ! sparse
-        do i=1,me%n
-            gradf(i) = dot_product(fvec,pack(fjac_sparse,mask=me%icol==i))
+        ! gradf = J^T * fvec, accumulated over the nonzero entries
+        gradf = 0.0_wp
+        do k=1,size(fjac_sparse)
+            gradf(me%icol(k)) = gradf(me%icol(k)) + fvec(me%irow(k))*fjac_sparse(k)
         end do
     end if
     slope = dot_product(search_direction, gradf)
