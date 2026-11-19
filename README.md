@@ -24,6 +24,7 @@ A basic Newton-Raphson type nonlinear equation solver for sparse or dense system
     3. [lusol](https://github.com/jacobwilliams/lusol) -- A sparse LU factorization for square and rectangular matrices, with Bartels-Golub-Reid updates for column replacement and other rank-1 modifications.
     4. [lsmr](https://github.com/jacobwilliams/LSMR) -- a conjugate-gradient type method for solving sparse linear equations and sparse least-squares problems
     5. The user can also provide a custom linear solver.
+    6. CRAIG -- a built-in conjugate-gradient type method (based on Golub-Kahan bidiagonalization) for the minimum-norm solution of sparse linear systems. It is intended for large, sparse, under-determined systems (`n>m`), but works for any compatible system. It has no external dependencies, and uses only products with `A` and `A^T` computed directly from the sparse Jacobian, so the dense matrix is never formed. A `damp` option solves a regularized version of the problem, for use when the Jacobian is rank deficient.
   * Has a Broyden update option (sparse and dense versions).
   * Has various line search options.
      * use a specified constant step size (0,1]
@@ -90,6 +91,8 @@ Note that LAPACK is required to build. The [fmin](https://github.com/jacobwillia
 
   * C. G. Broyden, "[A Class of Methods for Solving Nonlinear Simultaneous Equations](https://www.ams.org/journals/mcom/1965-19-092/S0025-5718-1965-0198670-6/S0025-5718-1965-0198670-6.pdf)", Math. Comp. 19 (1965), 577-593
   * L. K. Schubert, "[Modification of a Quasi-Newton Method for Nonlinear Equations with a Sparse Jacobian](https://www.ams.org/journals/mcom/1970-24-109/S0025-5718-1970-0258276-9/S0025-5718-1970-0258276-9.pdf)", Mathematics of Computation, Vol. 24, No. 109 (Jan., 1970), pp. 27-30.
+  * C. C. Paige and M. A. Saunders, "[LSQR: An Algorithm for Sparse Linear Equations and Sparse Least Squares](https://doi.org/10.1145/355984.355989)", ACM Transactions on Mathematical Software, Vol. 8, No. 1 (1982), pp. 43-71.
+  * M. A. Saunders, "[Solution of Sparse Rectangular Systems Using LSQR and CRAIG](https://doi.org/10.1007/BF01739829)", BIT Numerical Mathematics, Vol. 35 (1995), pp. 588-604.
 
 ### See also
 
