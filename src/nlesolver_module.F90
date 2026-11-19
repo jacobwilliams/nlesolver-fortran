@@ -44,6 +44,7 @@
     use lsqr_module,     only: lsqr_solver_ez
     use lusol_ez_module, only: solve, lusol_settings
     use lsmrModule,      only: lsmr_ez
+    use nlesolver_cholesky_module, only: cholesky_minnorm_solver, CHOLESKY_ERR_NOT_PD, CHOLESKY_ERR_MEMORY
 
     implicit none
 
@@ -75,7 +76,9 @@
     integer,parameter,public :: NLESOLVER_SPARSITY_CUSTOM_SPARSE = 5 !! [[nlesolver_type:sparsity_mode]] : assume sparse (use a user provided sparse solver).
     integer,parameter,public :: NLESOLVER_SPARSITY_CRAIG         = 6 !! [[nlesolver_type:sparsity_mode]] : assume sparse (use the built-in CRAIG
                                                                      !! minimum-norm sparse solver).
-    !integer,parameter,public :: NLESOLVER_SPARSITY_CUSTOM_DENSE  = 7 !! [[nlesolver_type:sparsity_mode]] : assume dense (use a user provided dense solver). [not available]
+    integer,parameter,public :: NLESOLVER_SPARSITY_CHOLESKY      = 7 !! [[nlesolver_type:sparsity_mode]] : assume sparse (use the built-in sparse direct
+                                                                     !! minimum-norm solver: Cholesky factorization of `A*A^T`).
+    !integer,parameter,public :: NLESOLVER_SPARSITY_CUSTOM_DENSE  = 8 !! [[nlesolver_type:sparsity_mode]] : assume dense (use a user provided dense solver). [not available]
     ! if add will have to update code below where sparsity_modes /= 1 is assumed sparse
 
     ! bounds mode options:
@@ -167,6 +170,8 @@
                                                              !! * 4 - assume sparse (use LSMR sparse solver).
                                                              !! * 5 - assume sparse (use a user provided sparse solver).
                                                              !! * 6 - assume sparse (use the built-in CRAIG minimum-norm solver).
+                                                             !! * 7 - assume sparse (use the built-in sparse direct minimum-norm
+                                                             !!   solver: Cholesky factorization of `A*A^T`).
         integer :: n_nonzeros = -1 !! number of nonzero Jacobian elements (used for `sparsity_mode > 1`)
         integer,dimension(:),allocatable :: irow !! sparsity pattern nonzero elements row indices.
         integer,dimension(:),allocatable :: icol !! sparsity pattern nonzero elements column indices
@@ -188,6 +193,11 @@
                                  !!
                                  !! localSize need not be more than `min(m,n)`.
                                  !! At most `min(m,n)` vectors will be allocated.
+
+        ! sparse Cholesky (minimum-norm) solver:
+        type(cholesky_minnorm_solver) :: cholesky !! the solver (the symbolic analysis is done once
+                                                  !! for the sparsity pattern, and reused for each iteration)
+        integer :: cholesky_refine = 2 !! max number of iterative refinement steps for the Cholesky solver
 
         ! LUSOL parameters:
         integer :: lusol_method = 0 !! * 0 => TPP: Threshold Partial   Pivoting.
@@ -448,7 +458,7 @@
                     sparsity_mode,irow,icol,&
                     atol,btol,conlim,damp,itnlim,nout,&
                     lusol_method,localSize,custom_solver_sparse,&
-                    bounds_mode,xlow,xupp,norm_mode)
+                    bounds_mode,xlow,xupp,norm_mode,cholesky_refine)
 
     implicit none
 
@@ -502,6 +512,9 @@
                                                  !! * 6 - assume sparse (use the built-in CRAIG
                                                  !!   minimum-norm solver. Uses `atol`, `btol`,
                                                  !!   `damp`, `itnlim`, and `nout`).
+                                                 !! * 7 - assume sparse (use the built-in sparse direct
+                                                 !!   minimum-norm solver: Cholesky factorization of `A*A^T`.
+                                                 !!   Uses `damp` and `cholesky_refine`).
                                                  !! Must also specify `grad_sparse` and the `irow` and `icol`
                                                  !! sparsity pattern for `mode>1`.
     integer,dimension(:),intent(in),optional :: irow !! sparsity pattern nonzero elements row indices.
@@ -530,6 +543,9 @@
                                              !! At most `min(m,n)` vectors will be allocated.
     procedure(sparse_solver_func),optional :: custom_solver_sparse !! for `sparsity_mode=5`, this is the
                                                                    !! user-provided linear solver.
+    integer,intent(in),optional :: cholesky_refine !! for `sparsity_mode=7`: maximum number of iterative
+                                                   !! refinement steps (default is 2). Refinement stops early
+                                                   !! if the residual does not decrease.
     integer,intent(in),optional :: bounds_mode  !! how to handle the `x` variable bounds:
                                                 !!
                                                 !!  * 0 = ignore bounds
@@ -657,6 +673,7 @@
     end if
 
     ! initialize:
+    call me%cholesky%destroy() ! the sparsity pattern may have changed
     me%n_nonzeros = -1 ! not used
     if (allocated(me%irow)) deallocate(me%irow)
     if (allocated(me%icol)) deallocate(me%icol)
@@ -692,6 +709,9 @@
 
             ! LSMR optional inputs:
             if (present(localSize)) me%localSize = localSize
+
+            ! Cholesky optional inputs:
+            if (present(cholesky_refine)) me%cholesky_refine = max(0, cholesky_refine)
 
         end if
         if (sparsity_mode==NLESOLVER_SPARSITY_CUSTOM_SPARSE) then
@@ -1020,6 +1040,38 @@
                     exit
                 case default
                     info = 0
+                end select
+
+            case (NLESOLVER_SPARSITY_CHOLESKY)
+
+                ! use the built-in sparse direct minimum-norm solver.
+                ! the symbolic analysis is only done once for the sparsity pattern:
+                info = 0
+                if (.not. me%cholesky%is_analyzed()) then
+                    call me%cholesky%analyze(me%m, me%n, me%irow, me%icol, info)
+                    if (info == 0 .and. me%verbose) then
+                        write(me%iunit,'(A,I0,A,I0)') 'Cholesky analysis: bandwidth = ', me%cholesky%bandwidth(), &
+                                                      ', envelope size = ', me%cholesky%envelope_size()
+                    end if
+                end if
+                if (info == 0) call me%cholesky%factor(fjac_sparse, me%damp, info)
+                if (info == 0) call me%cholesky%solve(rhs, p, info, n_refine = me%cholesky_refine)
+
+                ! check for errors:
+                select case (info)
+                case(0)
+                case(CHOLESKY_ERR_NOT_PD)
+                    call me%set_status(istat = -1008, &
+                                string = 'CHOLESKY Error: A*A^T is not positive definite '//&
+                                         '(the Jacobian appears to be rank deficient; try damp > 0). info =', i=info)
+                    exit
+                case(CHOLESKY_ERR_MEMORY)
+                    call me%set_status(istat = -1009, &
+                                string = 'CHOLESKY Error: Out of memory (envelope of A*A^T is too large). info =', i=info)
+                    exit
+                case default
+                    call me%set_status(istat = -1010, string = 'CHOLESKY Error. info =', i=info)
+                    exit
                 end select
 
             case (NLESOLVER_SPARSITY_CUSTOM_SPARSE)

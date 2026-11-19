@@ -25,6 +25,7 @@ A basic Newton-Raphson type nonlinear equation solver for sparse or dense system
     4. [lsmr](https://github.com/jacobwilliams/LSMR) -- a conjugate-gradient type method for solving sparse linear equations and sparse least-squares problems
     5. The user can also provide a custom linear solver.
     6. CRAIG -- a built-in conjugate-gradient type method (based on Golub-Kahan bidiagonalization) for the minimum-norm solution of sparse linear systems. It is intended for large, sparse, under-determined systems (`n>m`), but works for any compatible system. It has no external dependencies, and uses only products with `A` and `A^T` computed directly from the sparse Jacobian, so the dense matrix is never formed. A `damp` option solves a regularized version of the problem, for use when the Jacobian is rank deficient.
+    7. Sparse Cholesky -- a built-in sparse direct method for the minimum-norm solution of sparse linear systems (`x = A^T y`, `(A A^T) y = b`). It has no external dependencies, and never forms the dense matrix. The rows are reordered once with the reverse Cuthill-McKee algorithm (so the Jacobian does not have to be numbered in banded order), `A A^T` is formed directly in envelope ("skyline") storage and factored with a Cholesky factorization, and iterative refinement is used to recover the accuracy lost by forming `A A^T`. This is much faster than the iterative methods for banded or "mostly banded" Jacobians (for a 500,000 variable banded test problem, about 12x faster than CRAIG). For general sparse matrices with large fill-in, a nested-dissection based solver such as [qr_mumps](https://gitlab.com/qr_mumps/qr_mumps) can be used via the custom linear solver option. The `damp` option is also supported.
   * Has a Broyden update option (sparse and dense versions).
   * Has various line search options.
      * use a specified constant step size (0,1]
@@ -93,6 +94,8 @@ Note that LAPACK is required to build. The [fmin](https://github.com/jacobwillia
   * L. K. Schubert, "[Modification of a Quasi-Newton Method for Nonlinear Equations with a Sparse Jacobian](https://www.ams.org/journals/mcom/1970-24-109/S0025-5718-1970-0258276-9/S0025-5718-1970-0258276-9.pdf)", Mathematics of Computation, Vol. 24, No. 109 (Jan., 1970), pp. 27-30.
   * C. C. Paige and M. A. Saunders, "[LSQR: An Algorithm for Sparse Linear Equations and Sparse Least Squares](https://doi.org/10.1145/355984.355989)", ACM Transactions on Mathematical Software, Vol. 8, No. 1 (1982), pp. 43-71.
   * M. A. Saunders, "[Solution of Sparse Rectangular Systems Using LSQR and CRAIG](https://doi.org/10.1007/BF01739829)", BIT Numerical Mathematics, Vol. 35 (1995), pp. 588-604.
+  * A. George and J. W. H. Liu, "Computer Solution of Large Sparse Positive Definite Systems", Prentice-Hall, 1981.
+  * E. Cuthill and J. McKee, "[Reducing the Bandwidth of Sparse Symmetric Matrices](https://doi.org/10.1145/800195.805928)", Proceedings of the 24th ACM National Conference (1969), pp. 157-172.
 
 ### See also
 

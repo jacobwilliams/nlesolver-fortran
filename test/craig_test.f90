@@ -1,7 +1,7 @@
 !******************************************************************************************************
 !>
-!  Test of the CRAIG minimum-norm sparse solver (`sparsity_mode=6`)
-!  for underdetermined systems (`n > m`).
+!  Test of the minimum-norm sparse solvers for underdetermined systems (`n > m`):
+!  CRAIG (`sparsity_mode=6`) and the sparse direct Cholesky solver (`sparsity_mode=7`).
 !
 !  1. A linear problem `f(x) = A x - b`. Starting from `x=0` with a full step,
 !     one Newton iteration gives the minimum-norm solution, which is compared to
@@ -22,6 +22,8 @@
     real(wp),dimension(m_lin,n_lin) :: a_lin  !! dense version of the linear problem matrix
     real(wp),dimension(m_lin) :: b_lin
     integer,dimension(:),allocatable :: irow, icol
+    integer,dimension(2),parameter :: modes = [NLESOLVER_SPARSITY_CRAIG, NLESOLVER_SPARSITY_CHOLESKY]
+    character(len=8),dimension(2),parameter :: mode_names = ['CRAIG   ', 'CHOLESKY']
 
     call linear_test()
     call nonlinear_test()
@@ -33,7 +35,7 @@
 
     type(nlesolver_type) :: solver
     real(wp),dimension(n_lin) :: x_dense, x_craig
-    integer :: i, j, k, istat
+    integer :: i, j, k, istat, imode
     character(len=:),allocatable :: message
     real(wp) :: err
 
@@ -73,22 +75,25 @@
     call solver%status(istat, message)
     write(*,'(A,I3,1X,A)') ' dense : ', istat, message
 
-    ! CRAIG min-norm solution:
-    call solver%initialize(n = n_lin, m = m_lin, max_iter = 1, tol = 1.0e-10_wp, &
-                           func = func_lin, grad_sparse = grad_lin_sparse, &
-                           sparsity_mode = NLESOLVER_SPARSITY_CRAIG, irow = irow, icol = icol, &
-                           atol = 1.0e-14_wp, btol = 1.0e-14_wp, itnlim = 1000)
-    x_craig = 0.0_wp
-    call solver%solve(x_craig)
-    call solver%status(istat, message)
-    write(*,'(A,I3,1X,A)') ' CRAIG : ', istat, message
-    if (istat /= 1) error stop 'CRAIG linear test failed to converge'
-
-    err = norm2(x_craig - x_dense) / norm2(x_dense)
     write(*,'(A,1P,E12.4)') ' ||x||   (dense) = ', norm2(x_dense)
-    write(*,'(A,1P,E12.4)') ' ||x||   (CRAIG) = ', norm2(x_craig)
-    write(*,'(A,1P,E12.4)') ' rel diff        = ', err
-    if (err > 1.0e-8_wp) error stop 'CRAIG solution is not the minimum-norm solution'
+
+    ! sparse min-norm solutions:
+    do imode = 1, 2
+        call solver%initialize(n = n_lin, m = m_lin, max_iter = 1, tol = 1.0e-10_wp, &
+                               func = func_lin, grad_sparse = grad_lin_sparse, &
+                               sparsity_mode = modes(imode), irow = irow, icol = icol, &
+                               atol = 1.0e-14_wp, btol = 1.0e-14_wp, itnlim = 1000)
+        x_craig = 0.0_wp
+        call solver%solve(x_craig)
+        call solver%status(istat, message)
+        write(*,'(1X,A8,A,I3,1X,A)') mode_names(imode), ': ', istat, message
+        if (istat /= 1) error stop 'linear test failed to converge'
+
+        err = norm2(x_craig - x_dense) / norm2(x_dense)
+        write(*,'(A,1P,E12.4)') '   ||x||    = ', norm2(x_craig)
+        write(*,'(A,1P,E12.4)') '   rel diff = ', err
+        if (err > 1.0e-8_wp) error stop 'solution is not the minimum-norm solution'
+    end do
 
     deallocate(irow, icol)
 
@@ -104,7 +109,7 @@
     type(nlesolver_type) :: solver
     real(wp),dimension(n_nl) :: x
     real(wp),dimension(m_nl) :: f
-    integer :: i, step_mode, istat, ib
+    integer :: i, step_mode, istat, ib, imode
     logical :: use_broyden
     character(len=:),allocatable :: message
 
@@ -120,13 +125,15 @@
     end do
     write(*,'(A,I0,A,I0,A,I0)') ' m = ', m_nl, ', n = ', n_nl, ', nnz = ', size(irow)
 
+    do imode = 1, 2
+    write(*,'(/A)') ' '//mode_names(imode)
     do ib = 1, 2
     use_broyden = ib == 2
     do step_mode = 1, 4
         call solver%initialize(n = n_nl, m = m_nl, max_iter = 50, tol = 1.0e-10_wp, &
                                func = func_nl, grad_sparse = grad_nl_sparse, &
                                step_mode = step_mode, use_broyden = use_broyden, n_intervals = 4, fmin_tol = 1.0e-4_wp, &
-                               sparsity_mode = NLESOLVER_SPARSITY_CRAIG, irow = irow, icol = icol, &
+                               sparsity_mode = modes(imode), irow = irow, icol = icol, &
                                atol = 1.0e-12_wp, btol = 1.0e-12_wp, itnlim = 1000)
         call solver%status(istat, message)
         if (istat /= 0) error stop 'initialize failed'
@@ -142,7 +149,8 @@
         ! with Broyden, the approximate Jacobian can make the steps smaller than `tolx`
         ! just before reaching `tol` (istat=2), so in that case just require a small residual.
         if (istat == 1 .or. (use_broyden .and. istat == 2 .and. norm2(f) < 1.0e-8_wp)) cycle
-        error stop 'CRAIG nonlinear test failed to converge'
+        error stop 'nonlinear test failed to converge'
+    end do
     end do
     end do
 

@@ -1,6 +1,7 @@
 !******************************************************************************************************
 !>
-!  Large, sparse, underdetermined example for the CRAIG solver (`sparsity_mode=6`).
+!  Large, sparse, underdetermined example for the minimum-norm solvers
+!  (CRAIG: `sparsity_mode=6`, and the sparse direct Cholesky solver: `sparsity_mode=7`).
 !
 !  The system has `m` equations and `n > m` variables. Each equation `i` couples a
 !  band of `2*hb+1` consecutive variables centered at column `c_i ~ i*n/m`, so the
@@ -16,7 +17,8 @@
 !  For the default sizes (n=50,000, m=30,000), the dense Jacobian would need
 !  ~12 GB of memory. The sparse Jacobian has 270,000 nonzeros (~4 MB including indices).
 !
-!  The same problem is also solved with LSQR and LSMR for comparison
+!  The same problem is also solved with the sparse direct Cholesky solver
+!  (`sparsity_mode=7`), and with LSQR and LSMR for comparison
 !  (both also give minimum-norm steps for compatible systems when started from zero).
 
     program craig_large_test
@@ -57,7 +59,8 @@
     write(*,'(A)') ' solver  istat   newton  f-evals  j-evals      ||f||        ||x-x0||     time (s)'
     write(*,'(A)') ' ------  -----   ------  -------  -------   -----------   -----------   --------'
 
-    call go(NLESOLVER_SPARSITY_CRAIG, 'CRAIG', check=.true.)
+    call go(NLESOLVER_SPARSITY_CRAIG,    'CRAIG', check=.true.)
+    call go(NLESOLVER_SPARSITY_CHOLESKY, 'CHOL',  check=.true.)
     call go(NLESOLVER_SPARSITY_LSQR,  'LSQR',  check=.false.)
     call go(NLESOLVER_SPARSITY_LSMR,  'LSMR',  check=.false.)
     write(*,*) ''
@@ -158,7 +161,7 @@
                                                     norm2(f), norm2(x-x0), &
                                                     real(count_end-count_start,wp)/real(count_rate,wp)
         if (istat /= 1) write(*,'(10X,A)') message
-        if (check .and. istat /= 1) error stop 'CRAIG large test failed to converge'
+        if (check .and. istat /= 1) error stop 'large test failed to converge'
 
     end subroutine go
 !******************************************************************************************************
