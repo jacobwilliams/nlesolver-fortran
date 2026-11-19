@@ -38,4 +38,6 @@
 /build
 /doc
 /lib
-/bin
+/bin# pixi environments
+.pixi/*
+!.pixi/config.toml

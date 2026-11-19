@@ -73,7 +73,9 @@
     integer,parameter,public :: NLESOLVER_SPARSITY_LUSOL         = 3 !! [[nlesolver_type:sparsity_mode]] : assume sparse (use LUSOL sparse solver).
     integer,parameter,public :: NLESOLVER_SPARSITY_LSMR          = 4 !! [[nlesolver_type:sparsity_mode]] : assume sparse (use LSMR sparse solver).
     integer,parameter,public :: NLESOLVER_SPARSITY_CUSTOM_SPARSE = 5 !! [[nlesolver_type:sparsity_mode]] : assume sparse (use a user provided sparse solver).
-    !integer,parameter,public :: NLESOLVER_SPARSITY_CUSTOM_DENSE  = 6 !! [[nlesolver_type:sparsity_mode]] : assume dense (use a user provided dense solver). [not available]
+    integer,parameter,public :: NLESOLVER_SPARSITY_CRAIG         = 6 !! [[nlesolver_type:sparsity_mode]] : assume sparse (use the built-in CRAIG
+                                                                     !! minimum-norm sparse solver).
+    !integer,parameter,public :: NLESOLVER_SPARSITY_CUSTOM_DENSE  = 7 !! [[nlesolver_type:sparsity_mode]] : assume dense (use a user provided dense solver). [not available]
     ! if add will have to update code below where sparsity_modes /= 1 is assumed sparse
 
     ! bounds mode options:
@@ -108,7 +110,9 @@
         real(wp)    :: alpha_min        = 0.1_wp        !! minimum step length (when allowed to vary)
         real(wp)    :: alpha_max        = 1.0_wp        !! maximum step length (when allowed to vary)
         real(wp)    :: tolx             = 1.0e-8_wp     !! convergence tolerance for `x`
-        real(wp)    :: c                = 0.5_wp        !! backtracking linesearch parameter (0,1)
+        real(wp)    :: c                = 1.0e-4_wp     !! backtracking linesearch parameter (0,1):
+                                                        !! the sufficient decrease (Armijo) constant.
+                                                        !! must be `< 0.5` to allow full Newton steps.
         real(wp)    :: tau              = 0.5_wp        !! backtracking linesearch parameter (0,1)
         real(wp)    :: fmin_tol         = 1.0e-5_wp     !! tolerance for "exact" linesearch
         integer     :: n_intervals      = 2             !! number of intervals for fixed point linesearch
@@ -162,6 +166,7 @@
                                                              !! * 3 - assume sparse (use LUSOL sparse solver).
                                                              !! * 4 - assume sparse (use LSMR sparse solver).
                                                              !! * 5 - assume sparse (use a user provided sparse solver).
+                                                             !! * 6 - assume sparse (use the built-in CRAIG minimum-norm solver).
         integer :: n_nonzeros = -1 !! number of nonzero Jacobian elements (used for `sparsity_mode > 1`)
         integer,dimension(:),allocatable :: irow !! sparsity pattern nonzero elements row indices.
         integer,dimension(:),allocatable :: icol !! sparsity pattern nonzero elements column indices
@@ -466,7 +471,10 @@
     real(wp),intent(in),optional      :: alpha_max          !! maximum step length (0,1]
     real(wp),intent(in),optional      :: tolx               !! convergence tolerance for changes in `x`
     real(wp),intent(in),optional      :: fmin_tol           !! convergence tolerance for [[fmin]] (used when `step_mode=3`)
-    real(wp),intent(in),optional      :: backtrack_c        !! backtracking linesearch parameter (0,1)
+    real(wp),intent(in),optional      :: backtrack_c        !! backtracking linesearch parameter (0,1):
+                                                            !! the sufficient decrease (Armijo) constant
+                                                            !! (default is `1e-4`). Must be `< 0.5` to
+                                                            !! allow full Newton steps to be accepted.
     real(wp),intent(in),optional      :: backtrack_tau      !! backtracking linesearch parameter (0,1)
     logical,intent(in),optional       :: use_broyden        !! use a Broyden update (default is False)
     integer,intent(in),optional       :: broyden_update_n   !! For Broyden mode, update the full Jacobian
@@ -491,6 +499,9 @@
                                                  !! * 4 - assume sparse (use LSMR sparse solver).
                                                  !! * 5 - assume sparse (use the user provided sparse
                                                  !!   solver `custom_solver_sparse`).
+                                                 !! * 6 - assume sparse (use the built-in CRAIG
+                                                 !!   minimum-norm solver. Uses `atol`, `btol`,
+                                                 !!   `damp`, `itnlim`, and `nout`).
                                                  !! Must also specify `grad_sparse` and the `irow` and `icol`
                                                  !! sparsity pattern for `mode>1`.
     integer,dimension(:),intent(in),optional :: irow !! sparsity pattern nonzero elements row indices.
@@ -677,7 +688,7 @@
             if (present(nout))   me%nout   = nout
 
             ! LUSOL method
-            if (present(nout)) me%lusol_method = lusol_method
+            if (present(lusol_method)) me%lusol_method = lusol_method
 
             ! LSMR optional inputs:
             if (present(localSize)) me%localSize = localSize
@@ -735,8 +746,12 @@
     type(lsqr_solver_ez) :: sparse_solver  !! sparse LSQR solver class
     type(lusol_settings) :: lusol_options
     integer :: i !! counter
-    integer,dimension(:),allocatable :: idx, index_array !! for sparse indexing
-    character(len=10) :: i_str !! string version of `i` for row string
+    integer :: k, k1, k2 !! counters for sparse indexing
+    integer,dimension(:),allocatable :: row_ptr !! sparse Broyden: nonzeros of row `i` are
+                                                !! `row_nz(row_ptr(i):row_ptr(i+1)-1)` (size `m+1`)
+    integer,dimension(:),allocatable :: row_nz  !! sparse Broyden: indices of the nonzero elements,
+                                                !! grouped by row (size `n_nonzeros`)
+    real(wp),dimension(:),allocatable :: dx     !! sparse Broyden: `delx` elements for one row
     real(wp) :: normA, condA, normr, normAr, normx !! for LSMR
     integer :: itn !! for LSMR
 
@@ -780,9 +795,33 @@
     if (me%use_broyden) then
         ! only need these for broyden:
         if (alloc_stat==0) allocate(prev_fvec(me%m)      , stat=alloc_stat)
-        if (me%sparsity_mode/=NLESOLVER_SPARSITY_DENSE .and. alloc_stat==0) then
-            allocate(prev_fjac(me%m,me%n) , stat=alloc_stat)
-            index_array = [(i, i=1,me%n_nonzeros)] ! an array to index the sparse jacobian elements
+        if (me%sparsity_mode==NLESOLVER_SPARSITY_DENSE) then
+            if (alloc_stat==0) allocate(prev_fjac(me%m,me%n) , stat=alloc_stat)
+        else
+            ! group the sparse jacobian elements by row (counting sort, O(n_nonzeros)),
+            ! so the row-by-row Broyden update never has to search the whole sparsity pattern
+            if (alloc_stat==0) allocate(row_ptr(me%m+1), stat=alloc_stat)
+            if (alloc_stat==0) allocate(row_nz(me%n_nonzeros), stat=alloc_stat)
+            if (alloc_stat==0) then
+                row_ptr = 0
+                do k = 1, me%n_nonzeros
+                    row_ptr(me%irow(k)+1) = row_ptr(me%irow(k)+1) + 1
+                end do
+                row_ptr(1) = 1
+                do i = 1, me%m
+                    row_ptr(i+1) = row_ptr(i+1) + row_ptr(i)
+                end do
+                ! fill row_nz, using row_ptr(i) as the insertion point for row i:
+                do k = 1, me%n_nonzeros
+                    row_nz(row_ptr(me%irow(k))) = k
+                    row_ptr(me%irow(k)) = row_ptr(me%irow(k)) + 1
+                end do
+                ! restore row_ptr (each entry was advanced to the start of the next row):
+                do i = me%m, 1, -1
+                    row_ptr(i+1) = row_ptr(i)
+                end do
+                row_ptr(1) = 1
+            end if
         end if
         if (alloc_stat==0) allocate(delf     (me%m,1)    , stat=alloc_stat)
         if (alloc_stat==0) allocate(delx     (me%n,1)    , stat=alloc_stat)
@@ -860,22 +899,21 @@
 
                         ! Just a row-by-row version of the fjac equation above.
                         ! see L.K. Schubert, 1970
+                        fjac_sparse = prev_fjac_sparse
                         do i = 1, me%m
 
-                            idx = pack(index_array, mask = me%irow==i) ! the nonzero elements in this row
-                            if (size(idx)==0) cycle ! no non-zeros in this row
+                            k1 = row_ptr(i)
+                            k2 = row_ptr(i+1) - 1
+                            if (k2 < k1) cycle ! no non-zeros in this row
 
-                            associate (dx => delx(me%icol(idx),:)) ! nonzero x vec for this row
-                                delxmag2 = dot_product(dx(:,1),dx(:,1)) ! only those x's for this row
-                                if (delxmag2 < eps) then
-                                    write(i_str,'(I10)') i
-                                    call me%set_status(istat = -8, &
-                                            string = 'Error: Divide by zero when computing sparse Broyden update for row '//&
-                                            trim(adjustl(i_str)))
-                                    exit
-                                end if
+                            associate (idx => row_nz(k1:k2)) ! the nonzero elements in this row
+                                dx = delx(me%icol(idx),1)    ! nonzero x vec for this row
+                                delxmag2 = dot_product(dx,dx) ! only those x's for this row
+                                ! if none of the variables in this row changed, there is
+                                ! no new information, so this row of the jacobian is unchanged.
+                                if (delxmag2 < eps) cycle
                                 fjac_sparse(idx) = prev_fjac_sparse(idx) + &
-                                        matmul((delf(i,1)-matmul(prev_fjac_sparse(idx),dx)), transpose(dx)) / delxmag2
+                                        (delf(i,1) - dot_product(prev_fjac_sparse(idx),dx)) * dx / delxmag2
                             end associate
 
                         end do
@@ -958,6 +996,27 @@
                 case(5)
                     call me%set_status(istat = -1005, &
                                 string = 'LSMR Error: The iteration limit was reached. istop =', i=info)
+                    exit
+                case default
+                    info = 0
+                end select
+
+            case (NLESOLVER_SPARSITY_CRAIG)
+
+                ! use the built-in CRAIG minimum-norm solver:
+                call craig_solver(me%m, me%n, me%n_nonzeros, me%irow, me%icol, fjac_sparse, rhs, &
+                                  me%damp, me%atol, me%btol, me%itnlim, me%nout, p, info)
+
+                ! check convergence:
+                select case (info)
+                case(2)
+                    call me%set_status(istat = -1007, &
+                                string = 'CRAIG Error: Breakdown (system appears to be incompatible; '//&
+                                         'try damp > 0). istop =', i=info)
+                    exit
+                case(3)
+                    call me%set_status(istat = -1005, &
+                                string = 'CRAIG Error: The iteration limit was reached. istop =', i=info)
                     exit
                 case default
                     info = 0
@@ -1252,6 +1311,204 @@
 
 !*****************************************************************************************
 !>
+!  Sparse minimum-norm linear solver using CRAIG's method.
+!
+!  Computes the minimum-norm solution of the compatible system \( A x = b \),
+!  where `A` is an `m x n` sparse matrix stored in coordinate (triplet) format.
+!  This is intended for the underdetermined case (`n > m`), but works for any
+!  compatible system. The dense matrix is never formed: the only operations
+!  on `A` are the products \( A v \) and \( A^T u \), each costing `O(nnz)`.
+!
+!  The method is based on the Golub-Kahan bidiagonalization
+!  \( A V_k = U_k L_k + \beta_{k+1} u_{k+1} e_k^T \), where \( L_k \) is lower
+!  bidiagonal. The iterate is \( x_k = V_k z_k \) with \( L_k z_k = \beta_1 e_1 \).
+!  Since every \( v_i \in \mathrm{range}(A^T) \), \( x_k \) converges to the
+!  minimum-norm solution \( x = A^T (A A^T)^{-1} b \). It is mathematically
+!  equivalent to CG applied to \( A A^T y = b \), \( x = A^T y \), but without
+!  forming \( A A^T \), and it minimizes the error \( \| x - x_k \| \) at each step.
+!  The residual is available for free: \( \| b - A x_k \| = | \beta_{k+1} \zeta_k | \).
+!
+!  If `damp > 0`, the regularized problem is solved instead:
+!  \( \min \| x \|^2 + \| s \|^2 \) subject to \( A x + \delta s = b \),
+!  whose solution is \( x = A^T (A A^T + \delta^2 I)^{-1} b \). This is done by applying
+!  the same method to the operator \( [A, \; \delta I] \), which always has full row rank,
+!  so the iteration cannot break down. This is useful when `A` is rank deficient.
+!
+!### Status codes (`istop`)
+!  * 0 -- `b = 0`, so the solution is `x = 0`
+!  * 1 -- converged: \( \| r \| \le \mathrm{btol} \| b \| + \mathrm{atol} \| A \|_F \| x \| \)
+!  * 2 -- breakdown: \( \alpha_k = 0 \). `b` is not in the range of `A` (incompatible system).
+!  * 3 -- iteration limit `itnlim` reached
+!
+!### References
+!  * C. C. Paige and M. A. Saunders, "LSQR: An algorithm for sparse linear equations and
+!    sparse least squares", ACM TOMS 8(1), 1982.
+!  * M. A. Saunders, "Solution of sparse rectangular systems using LSQR and CRAIG",
+!    BIT 35, 1995.
+
+    subroutine craig_solver(m,n,nnz,irow,icol,a,b,damp,atol,btol,itnlim,nout,x,istop,itn,rnorm,xnorm)
+
+    implicit none
+
+    integer,intent(in)                   :: m      !! number of rows in `A`
+    integer,intent(in)                   :: n      !! number of columns in `A`
+    integer,intent(in)                   :: nnz    !! number of nonzero elements of `A`
+    integer,dimension(nnz),intent(in)    :: irow   !! row indices of the nonzero elements of `A`
+    integer,dimension(nnz),intent(in)    :: icol   !! column indices of the nonzero elements of `A`
+    real(wp),dimension(nnz),intent(in)   :: a      !! nonzero elements of `A`
+    real(wp),dimension(m),intent(in)     :: b      !! right hand side
+    real(wp),intent(in)                  :: damp   !! damping (regularization) parameter \( \delta \ge 0 \)
+    real(wp),intent(in)                  :: atol   !! relative error in the definition of `A`
+                                                   !! (values less than machine epsilon are replaced by it)
+    real(wp),intent(in)                  :: btol   !! relative error in the definition of `b`
+                                                   !! (values less than machine epsilon are replaced by it)
+    integer,intent(in)                   :: itnlim !! maximum number of iterations
+    integer,intent(in)                   :: nout   !! output unit for printing iterations (none if `<=0`)
+    real(wp),dimension(n),intent(out)    :: x      !! minimum-norm solution
+    integer,intent(out)                  :: istop  !! status code (see above)
+    integer,intent(out),optional         :: itn    !! number of iterations performed
+    real(wp),intent(out),optional        :: rnorm  !! estimate of \( \| b - A x - \delta s \| \)
+    real(wp),intent(out),optional        :: xnorm  !! estimate of \( \| [x; s] \| \)
+
+    real(wp),dimension(m) :: u      !! left Lanczos vector
+    real(wp),dimension(n) :: v      !! right Lanczos vector (`x` part)
+    real(wp),dimension(:),allocatable :: w  !! right Lanczos vector (`s` part, only if `damp>0`)
+    real(wp) :: alpha, beta, zeta   !! bidiagonalization and solution coefficients
+    real(wp) :: anorm, bnorm        !! norms of `[A, damp*I]` (Frobenius) and `b`
+    real(wp) :: xnrm2               !! \( \| [x; s] \|^2 \)
+    real(wp) :: res                 !! residual norm
+    real(wp) :: atol_, btol_        !! tolerances used
+    logical  :: damped              !! if `damp>0`
+    integer  :: k                   !! iteration counter
+
+    x      = zero
+    istop  = 0
+    k      = 0
+    res    = zero
+    xnrm2  = zero
+    damped = damp > zero
+    atol_  = max(atol, eps)
+    btol_  = max(btol, eps)
+
+    ! beta_1 u_1 = b
+    u     = b
+    beta  = norm2(u)
+    bnorm = beta
+    if (beta > zero) then
+
+        u = u / beta
+
+        ! alpha_1 v_1 = A^T u_1
+        call atx(u, v)
+        if (damped) then
+            w = damp * u
+            alpha = sqrt(dot_product(v,v) + dot_product(w,w))
+        else
+            alpha = norm2(v)
+        end if
+
+        if (alpha <= zero) then
+            istop = 2  ! A^T b = 0 : b is orthogonal to range(A)
+            res   = bnorm
+        else
+            v = v / alpha
+            if (damped) w = w / alpha
+
+            anorm = sqrt(sum(a**2) + m*damp**2)  ! Frobenius norm of [A, damp*I]
+            zeta  = beta / alpha                  ! first element of z: L_k z_k = beta_1 e_1
+
+            if (nout > 0) write(nout,'(A)') '   itn       ||r||           ||x||'
+
+            istop = 3
+            do k = 1, itnlim
+
+                ! update the solution: x_k = x_{k-1} + zeta_k v_k
+                x     = x + zeta * v
+                xnrm2 = xnrm2 + zeta**2
+
+                ! continue the bidiagonalization:
+                ! beta_{k+1} u_{k+1} = A v_k + damp w_k - alpha_k u_k
+                call ax(v, u, -alpha)
+                if (damped) u = u + damp * w
+                beta = norm2(u)
+
+                ! residual: r_k = -beta_{k+1} zeta_k u_{k+1}
+                res = abs(beta * zeta)
+                if (nout > 0) write(nout,'(I6,1P,2E16.6)') k, res, sqrt(xnrm2)
+
+                if (res <= btol_*bnorm + atol_*anorm*sqrt(xnrm2)) then
+                    istop = 1
+                    exit
+                end if
+
+                u = u / beta
+
+                ! alpha_{k+1} v_{k+1} = A^T u_{k+1} - beta_{k+1} v_k
+                call atx(u, v, -beta)
+                if (damped) then
+                    w = damp * u - beta * w
+                    alpha = sqrt(dot_product(v,v) + dot_product(w,w))
+                else
+                    alpha = norm2(v)
+                end if
+
+                if (alpha <= eps*anorm) then
+                    istop = 2  ! breakdown: system is incompatible (rank deficient A)
+                    exit
+                end if
+
+                v = v / alpha
+                if (damped) w = w / alpha
+
+                ! next element of z (forward substitution with L_k)
+                zeta = -beta * zeta / alpha
+
+            end do
+            k = min(k, itnlim)
+
+        end if
+    end if
+
+    if (present(itn))   itn   = k
+    if (present(rnorm)) rnorm = res
+    if (present(xnorm)) xnorm = sqrt(xnrm2)
+
+    contains
+
+        subroutine ax(xv, y, c)
+            !! compute `y = A*xv + c*y` using the sparse triplet representation
+            real(wp),dimension(n),intent(in)    :: xv
+            real(wp),dimension(m),intent(inout) :: y
+            real(wp),intent(in)                 :: c
+            integer :: i
+            y = c * y
+            do i = 1, nnz
+                y(irow(i)) = y(irow(i)) + a(i) * xv(icol(i))
+            end do
+        end subroutine ax
+
+        subroutine atx(yv, xv, c)
+            !! compute `xv = A^T*yv + c*xv` using the sparse triplet representation
+            !! (if `c` is not present, `xv` is an output only)
+            real(wp),dimension(m),intent(in)    :: yv
+            real(wp),dimension(n),intent(inout) :: xv
+            real(wp),intent(in),optional        :: c
+            integer :: i
+            if (present(c)) then
+                xv = c * xv
+            else
+                xv = zero
+            end if
+            do i = 1, nnz
+                xv(icol(i)) = xv(icol(i)) + a(i) * yv(irow(i))
+            end do
+        end subroutine atx
+
+    end subroutine craig_solver
+!*****************************************************************************************
+
+!*****************************************************************************************
+!>
 !  Solve the linear system: \( Ax = b \), using a dense, direct method.
 !
 !  * if `n=m` : use LAPACK `dgesv` (LU decomposition)
@@ -1396,6 +1653,8 @@
     real(wp)   :: alpha              !! `alpha` for the line search
     real(wp)   :: ftmp               !! `f` value for linesearch
     real(wp)   :: t                  !! used for line search
+    real(wp)   :: phi0               !! merit function \( \frac{1}{2} \| f \|_2^2 \) at `xold`
+    real(wp)   :: phi                !! merit function \( \frac{1}{2} \| f \|_2^2 \) at the trial point
     real(wp),dimension(:),allocatable :: gradf      !! line search objective function gradient vector
     real(wp),dimension(:),allocatable :: xtmp       !! `x` value for linesearch
     real(wp),dimension(:),allocatable :: fvectmp    !! `fvec` value for linesearch
@@ -1412,22 +1671,26 @@
     ! set the search direction:
     call me%adjust_search_direction(xold,p,search_direction,modified)
 
-    ! compute the gradient of the function to be minimized
-    ! (which in this case is 1/2 the norm of fvec). Use the chain
-    ! rule and the Jacobian matrix already computed.
+    ! compute the gradient of the merit function to be minimized:
+    ! phi = 1/2 * ||fvec||_2^2, so grad(phi) = J^T * fvec.
+    ! Use the chain rule and the Jacobian matrix already computed.
+    ! Note: the 2-norm is always used for the merit function here (regardless
+    ! of `norm_mode`), so that the slope and the sufficient decrease test are consistent.
     if (present(fjac)) then
         ! dense
         do i=1,me%n
             gradf(i) = dot_product(fvec,fjac(:,i))
         end do
     else
-        ! sparse
-        do i=1,me%n
-            gradf(i) = dot_product(fvec,pack(fjac_sparse,mask=me%icol==i))
+        ! sparse: gradf = J^T * fvec
+        gradf = zero
+        do i=1,me%n_nonzeros
+            gradf(me%icol(i)) = gradf(me%icol(i)) + fjac_sparse(i)*fvec(me%irow(i))
         end do
     end if
     slope = dot_product(search_direction, gradf)
     t = -me%c * slope
+    phi0 = 0.5_wp * dot_product(fvec,fvec)
 
     if (me%verbose) then
         write(me%iunit,'(1P,*(A,1X,E16.6))') '        slope    = ', slope
@@ -1443,17 +1706,19 @@
         call me%compute_next_step(xold, search_direction, alpha, modified, xtmp)
         call me%func(xtmp,fvectmp)
         ftmp = me%norm(fvectmp)
+        phi  = 0.5_wp * dot_product(fvectmp,fvectmp)
 
         if (me%verbose) then
             write(me%iunit,'(1P,*(A,1X,E16.6))')          '        alpha    = ', alpha,    ' f       = ', ftmp
-            if (f - ftmp >= alpha*t) then
-                write(me%iunit,'(1P,2(A,1X,E16.6),1X,A)') '        f - ftmp = ', f - ftmp, ' alpha*t = ', alpha*t, ' [ACCEPTED]'
+            if (phi0 - phi >= alpha*t) then
+                write(me%iunit,'(1P,2(A,1X,E16.6),1X,A)') '        phi0-phi = ', phi0 - phi, ' alpha*t = ', alpha*t, ' [ACCEPTED]'
             else
-                write(me%iunit,'(1P,*(A,1X,E16.6))')      '        f - ftmp = ', f - ftmp, ' alpha*t = ', alpha*t
+                write(me%iunit,'(1P,*(A,1X,E16.6))')      '        phi0-phi = ', phi0 - phi, ' alpha*t = ', alpha*t
             end if
         end if
 
-        if (((f - ftmp) / 2.0_wp >= alpha*t) .or. min_alpha_reached) then
+        ! Armijo condition: phi(xold + alpha*p) <= phi(xold) + c * alpha * slope
+        if ((phi0 - phi >= alpha*t) .or. min_alpha_reached) then
             if (me%verbose .and. min_alpha_reached) then
                 write(me%iunit,'(A)') '        Minimum alpha reached'
             end if
