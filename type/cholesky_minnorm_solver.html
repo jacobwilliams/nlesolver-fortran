@@ -1,0 +1,1383 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Nonlinear Equation Solver with Modern Fortran">
+    <meta name="author" content="Jacob Williams" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>cholesky_minnorm_solver &ndash; nlesolver-fortran </title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">nlesolver-fortran </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>cholesky_minnorm_solver
+      <small>Derived Type</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title="<p>34.1% of total for derived types.</p>Including implementation: 332 statements, 33.6% of total for derived types.">30 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/nlesolver_cholesky_module.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/nlesolver_cholesky_module.f90.html'>nlesolver_cholesky_module.F90</a></li>
+                <li class="breadcrumb-item"><a href='../module/nlesolver_cholesky_module.html'>nlesolver_cholesky_module</a></li>
+            <li class="breadcrumb-item active" aria-current="page">cholesky_minnorm_solver</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+      <div id="sidebar">
+      <h3>Contents</h3>
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#vars-0"
+         aria-expanded="false" aria-controls="vars-0">
+         <h4 class="card-header bg-primary text-white">Variables</h4>
+      </a>
+      <div id="vars-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#variable-analyzed">analyzed</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#variable-factored">factored</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#variable-m">m</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#variable-n">n</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#variable-nnz">nnz</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#variable-damp">damp</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#variable-rowptr">rowptr</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#variable-colidx">colidx</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#variable-map">map</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#variable-val">val</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#variable-adjptr">adjptr</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#variable-adj">adj</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#variable-perm">perm</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#variable-iperm">iperm</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#variable-first">first</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#variable-ptr">ptr</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#variable-env">env</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#boundprocs-0"
+         aria-expanded="false" aria-controls="boundprocs-0">
+         <h4 class="card-header bg-primary text-white">Type-Bound Procedures</h4>
+      </a>
+      <div id="boundprocs-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#boundprocedure-analyze">analyze</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#boundprocedure-factor">factor</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#boundprocedure-solve">solve</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#boundprocedure-destroy">destroy</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#boundprocedure-is_analyzed">is_analyzed</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#boundprocedure-envelope_size">envelope_size</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#boundprocedure-bandwidth">bandwidth</a>
+            <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#boundprocedure-lower_solve">lower_solve</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../type/cholesky_minnorm_solver.html#src">cholesky_minnorm_solver</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+      <h2 id="type-def-statement">
+        type, public :: cholesky_minnorm_solver</h2>
+    <p>Sparse direct minimum-norm solver class.</p>
+<h3>Example</h3>
+<div class="codehilite"><pre><span></span><code><span class="w">  </span><span class="k">type</span><span class="p">(</span><span class="n">cholesky_minnorm_solver</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">solver</span>
+<span class="w">  </span><span class="k">call </span><span class="n">solver</span><span class="p">%</span><span class="n">analyze</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">irow</span><span class="p">,</span><span class="w"> </span><span class="n">icol</span><span class="p">,</span><span class="w"> </span><span class="n">istat</span><span class="p">)</span><span class="w"> </span><span class="c">! once for the sparsity pattern</span>
+<span class="w">  </span><span class="k">call </span><span class="n">solver</span><span class="p">%</span><span class="n">factor</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">damp</span><span class="p">,</span><span class="w"> </span><span class="n">istat</span><span class="p">)</span><span class="w">           </span><span class="c">! each time the values of A change</span>
+<span class="w">  </span><span class="k">call </span><span class="n">solver</span><span class="p">%</span><span class="n">solve</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">istat</span><span class="p">)</span><span class="w">               </span><span class="c">! for each right-hand side</span>
+</code></pre></div>
+<br>      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Inherited by</h3>
+        </div>
+        <div class="card-body">
+          <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (0)
+ -->
+<!-- Title: type~~cholesky_minnorm_solver~~InheritedByGraph Pages: 1 -->
+<svg id="typecholesky_minnorm_solverInheritedByGraph" width="324pt" height="32pt"
+ viewBox="0.00 0.00 324.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="type~~cholesky_minnorm_solver~~InheritedByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28.27)">
+<title>type~~cholesky_minnorm_solver~~InheritedByGraph</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28.27 320.29,-28.27 320.29,4 -4,4"/>
+<!-- type~cholesky_minnorm_solver -->
+<g id="type~~cholesky_minnorm_solver~~InheritedByGraph_node1" class="node">
+<title>type~cholesky_minnorm_solver</title>
+<polygon fill="none" stroke="black" points="149.52,-24.27 0,-24.27 0,0 149.52,0 149.52,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="74.76" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50">cholesky_minnorm_solver</text>
+</g>
+<!-- type~nlesolver_type -->
+<g id="type~~cholesky_minnorm_solver~~InheritedByGraph_node2" class="node">
+<title>type~nlesolver_type</title>
+<g id="a_type~~cholesky_minnorm_solver~~InheritedByGraph_node2"><a xlink:href="../type/nlesolver_type.html" xlink:title="nlesolver_type">
+<polygon fill="#5cb85c" stroke="#5cb85c" points="316.29,-24.27 227.52,-24.27 227.52,0 316.29,0 316.29,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="271.9" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type</text>
+</a>
+</g>
+</g>
+<!-- type~nlesolver_type&#45;&gt;type~cholesky_minnorm_solver -->
+<g id="type~~cholesky_minnorm_solver~~InheritedByGraph_edge1" class="edge">
+<title>type~nlesolver_type&#45;&gt;type~cholesky_minnorm_solver</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M227.11,-12.13C207.6,-12.13 183.91,-12.13 161.12,-12.13"/>
+<polygon fill="#000000" stroke="#000000" points="161.19,-8.64 151.19,-12.14 161.19,-15.64 161.19,-8.64"/>
+<text xml:space="preserve" text-anchor="middle" x="188.52" y="-14.36" font-family="Helvetica,sans-Serif" font-size="9.50">cholesky</text>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#InheritedByGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="InheritedByGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="184pt" height="32pt"
+ viewBox="0.00 0.00 184.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28.27)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28.27 179.88,-28.27 179.88,4 -4,4"/>
+<!-- Type -->
+<g id="node1" class="node">
+<title>Type</title>
+<polygon fill="#5cb85c" stroke="#5cb85c" points="54,-24.27 0,-24.27 0,0 54,0 54,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="27" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="175.88,-24.27 72.12,-24.27 72.12,0 175.88,0 175.88,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="124" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a derived type to the parent type which it
+extends. Dashed arrows point from a derived type to the other
+types it contains as a components, with a label listing the name(s) of
+said component(s).
+</p>
+ </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    <br>
+
+    <section>
+    <h2>Components</h2>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-analyzed"></span>
+              logical,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>analyzed</strong></td>
+<td> =</td>
+                <td>.false.</td>
+            <td>
+                <p>if <code>analyze</code> has been called</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-factored"></span>
+              logical,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>factored</strong></td>
+<td> =</td>
+                <td>.false.</td>
+            <td>
+                <p>if <code>factor</code> has been called</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-m"></span>
+              integer,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>m</strong></td>
+<td> =</td>
+                <td>0</td>
+            <td>
+                <p>number of rows in <code>A</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n"></span>
+              integer,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+<td> =</td>
+                <td>0</td>
+            <td>
+                <p>number of columns in <code>A</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nnz"></span>
+              integer,
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>nnz</strong></td>
+<td> =</td>
+                <td>0</td>
+            <td>
+                <p>number of nonzeros in <code>A</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-damp"></span>
+              real(kind=wp),
+            </td>
+              <td>private</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>damp</strong></td>
+<td> =</td>
+                <td>zero</td>
+            <td>
+                <p>damping parameter used in the factorization</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-rowptr"></span>
+              integer,
+            </td>
+              <td>private,</td>
+            <td>
+              dimension(:), allocatable
+            </td>
+            <td>::</td>
+            <td><strong>rowptr</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                <p>row pointers (size <code>m+1</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-colidx"></span>
+              integer,
+            </td>
+              <td>private,</td>
+            <td>
+              dimension(:), allocatable
+            </td>
+            <td>::</td>
+            <td><strong>colidx</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                <p>column indices (size <code>nnz</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-map"></span>
+              integer,
+            </td>
+              <td>private,</td>
+            <td>
+              dimension(:), allocatable
+            </td>
+            <td>::</td>
+            <td><strong>map</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                <p>index into the user's <code>a</code> array for each CSR element (size <code>nnz</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-val"></span>
+              real(kind=wp),
+            </td>
+              <td>private,</td>
+            <td>
+              dimension(:), allocatable
+            </td>
+            <td>::</td>
+            <td><strong>val</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                <p>values of <code>A</code> in CSR order (size <code>nnz</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-adjptr"></span>
+              integer,
+            </td>
+              <td>private,</td>
+            <td>
+              dimension(:), allocatable
+            </td>
+            <td>::</td>
+            <td><strong>adjptr</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                <p>(size <code>m+1</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-adj"></span>
+              integer,
+            </td>
+              <td>private,</td>
+            <td>
+              dimension(:), allocatable
+            </td>
+            <td>::</td>
+            <td><strong>adj</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                <p>(size <code>adjptr(m+1)-1</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-perm"></span>
+              integer,
+            </td>
+              <td>private,</td>
+            <td>
+              dimension(:), allocatable
+            </td>
+            <td>::</td>
+            <td><strong>perm</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                <p><code>perm(new) = old</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-iperm"></span>
+              integer,
+            </td>
+              <td>private,</td>
+            <td>
+              dimension(:), allocatable
+            </td>
+            <td>::</td>
+            <td><strong>iperm</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                <p><code>iperm(old) = new</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-first"></span>
+              integer,
+            </td>
+              <td>private,</td>
+            <td>
+              dimension(:), allocatable
+            </td>
+            <td>::</td>
+            <td><strong>first</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                <p>first column in each row (size <code>m</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ptr"></span>
+              integer(kind=ip),
+            </td>
+              <td>private,</td>
+            <td>
+              dimension(:), allocatable
+            </td>
+            <td>::</td>
+            <td><strong>ptr</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                <p>start of each row in <code>env</code> (size <code>m+1</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-env"></span>
+              real(kind=wp),
+            </td>
+              <td>private,</td>
+            <td>
+              dimension(:), allocatable
+            </td>
+            <td>::</td>
+            <td><strong>env</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+                <p>envelope values</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    </section>
+    <br>
+    
+
+
+      <section>
+        <h2>Type-Bound Procedures</h2>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-analyze"></span>
+      <h3>
+          procedure, public ::
+  <strong>analyze</strong>
+        
+      </h3>
+    </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
+    private  subroutine <a href='../proc/analyze.html'>analyze</a>(me, m, n, irow, icol, istat)  
+</h3>
+    
+
+  <p>Symbolic analysis of the sparsity pattern of <code>A</code>.
+  This only has to be called once for a given sparsity pattern.</p><a href="../proc/analyze.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='cholesky_minnorm_solver.html'>cholesky_minnorm_solver</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>m</strong></td>
+            <td>
+<p>number of rows in <code>A</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+<p>number of columns in <code>A</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>irow</strong></td>
+            <td>
+<p>row indices of the nonzero elements of <code>A</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>icol</strong></td>
+            <td>
+<p>column indices of the nonzero elements of <code>A</code>
+(same size as <code>irow</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer,
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>istat</strong></td>
+            <td>
+<p>status code (<code>CHOLESKY_SUCCESS</code> if no errors)</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+          </li>
+      </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-factor"></span>
+      <h3>
+          procedure, public ::
+  <strong>factor</strong>
+        
+      </h3>
+    </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
+    private  subroutine <a href='../proc/factor.html'>factor</a>(me, a, damp, istat)  
+</h3>
+    
+
+  <p>Numeric factorization: form <script type="math/tex"> A A^T + \delta^2 I </script> in the envelope storage
+and compute its Cholesky factorization <script type="math/tex"> L L^T </script>.</p><a href="../proc/factor.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='cholesky_minnorm_solver.html'>cholesky_minnorm_solver</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>a</strong></td>
+            <td>
+<p>nonzero elements of <code>A</code> (in the same
+order as <code>irow</code> and <code>icol</code> in <code>analyze</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>damp</strong></td>
+            <td>
+<p>damping parameter <script type="math/tex"> \delta </script> (<code>0</code> for none)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer,
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>istat</strong></td>
+            <td>
+<p>status code (<code>CHOLESKY_SUCCESS</code> if no errors)</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+          </li>
+      </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-solve"></span>
+      <h3>
+          procedure, public ::
+  <strong>solve</strong>
+        
+      </h3>
+    </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
+    private  subroutine <a href='../proc/solve.html'>solve</a>(me, b, x, istat, n_refine, rnorm)  
+</h3>
+    
+
+  <p>Solve for the minimum-norm solution: <script type="math/tex"> x = A^T y </script>, <script type="math/tex"> (A A^T + \delta^2 I) y = b </script>.</p><a href="../proc/solve.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='cholesky_minnorm_solver.html'>cholesky_minnorm_solver</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>b</strong></td>
+            <td>
+<p>right-hand side (size <code>m</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+<p>minimum-norm solution (size <code>n</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer,
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>istat</strong></td>
+            <td>
+<p>status code (<code>CHOLESKY_SUCCESS</code> if no errors)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n_refine</strong></td>
+            <td>
+<p>maximum number of iterative refinement steps
+(default is 2)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>rnorm</strong></td>
+            <td>
+<p>final residual norm <script type="math/tex"> \| b - A x - \delta^2 y \| </script>
+</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+          </li>
+      </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-destroy"></span>
+      <h3>
+          procedure, public ::
+  <strong>destroy</strong>
+        
+      </h3>
+    </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
+    private  subroutine <a href='../proc/destroy.html'>destroy</a>(me)  
+</h3>
+    
+
+  <p>Destroy the solver (deallocate all the arrays).</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='cholesky_minnorm_solver.html'>cholesky_minnorm_solver</a>),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+          </li>
+      </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-is_analyzed"></span>
+      <h3>
+          procedure, public ::
+  <strong>is_analyzed</strong>
+        
+      </h3>
+    </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
+    private pure function <a href='../proc/is_analyzed.html'>is_analyzed</a>(me)  
+</h3>
+    
+
+  <p>Returns true if <a href="../type/cholesky_minnorm_solver.html#boundprocedure-analyze">analyze</a> has been called successfully.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='cholesky_minnorm_solver.html'>cholesky_minnorm_solver</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    
+
+          </li>
+      </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-envelope_size"></span>
+      <h3>
+          procedure, public ::
+  <strong>envelope_size</strong>
+        
+      </h3>
+    </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
+    private pure function <a href='../proc/envelope_size.html'>envelope_size</a>(me)  
+</h3>
+    
+
+  <p>Number of elements in the envelope of the Cholesky factor
+(i.e., the storage required for <code>L</code>, in reals). Returns <code>0</code> if not analyzed.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='cholesky_minnorm_solver.html'>cholesky_minnorm_solver</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>integer(kind=int64)</small>
+    </h4>
+    
+
+          </li>
+      </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-bandwidth"></span>
+      <h3>
+          procedure, public ::
+  <strong>bandwidth</strong>
+        
+      </h3>
+    </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
+    private pure function <a href='../proc/bandwidth.html'>bandwidth</a>(me)  
+</h3>
+    
+
+  <p>Maximum bandwidth of the reordered <script type="math/tex"> A A^T </script>. Returns <code>-1</code> if not analyzed.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='cholesky_minnorm_solver.html'>cholesky_minnorm_solver</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>integer</small>
+    </h4>
+    
+
+          </li>
+      </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-lower_solve"></span>
+      <h3>
+          procedure, private ::
+  <strong>lower_solve</strong>
+        
+      </h3>
+    </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
+    private  subroutine <a href='../proc/lower_solve.html'>lower_solve</a>(me, c, y)  
+</h3>
+    
+
+  <p>Solve <script type="math/tex"> (A A^T + \delta^2 I) y = c </script> using the Cholesky factor.
+<code>c</code> and <code>y</code> are in the original row ordering.</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='cholesky_minnorm_solver.html'>cholesky_minnorm_solver</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%m)
+            </td>
+            <td>::</td>
+            <td><strong>c</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(me%m)
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+          </li>
+      </ul>
+  </div>
+
+          </div>
+      </section>
+
+    <section>
+    <h3><span class="anchor" id="src"></span>Source Code</h3>
+    <div class="hl codehilite"><pre><span></span><span class="w">    </span><span class="k">type</span><span class="p">,</span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">cholesky_minnorm_solver</span>
+<span class="w">        </span><span class="c">!! Sparse direct minimum-norm solver class.</span>
+<span class="w">        </span><span class="c">!!</span>
+<span class="w">        </span><span class="c">!!### Example</span>
+<span class="w">        </span><span class="c">!!```fortran</span>
+<span class="w">        </span><span class="c">!!  type(cholesky_minnorm_solver) :: solver</span>
+<span class="w">        </span><span class="c">!!  call solver%analyze(m, n, irow, icol, istat) ! once for the sparsity pattern</span>
+<span class="w">        </span><span class="c">!!  call solver%factor(a, damp, istat)           ! each time the values of A change</span>
+<span class="w">        </span><span class="c">!!  call solver%solve(b, x, istat)               ! for each right-hand side</span>
+<span class="w">        </span><span class="c">!!```</span>
+<span class="w">        </span><span class="k">private</span>
+<span class="k">        </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">analyzed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"> </span><span class="c">!! if `analyze` has been called</span>
+<span class="w">        </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">factored</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"> </span><span class="c">!! if `factor` has been called</span>
+<span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">m</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="c">!! number of rows in `A`</span>
+<span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="c">!! number of columns in `A`</span>
+<span class="w">        </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">nnz</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="c">!! number of nonzeros in `A`</span>
+<span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">damp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zero</span><span class="w"> </span><span class="c">!! damping parameter used in the factorization</span>
+
+<span class="w">        </span><span class="c">! `A` stored by rows (CSR):</span>
+<span class="w">        </span><span class="kt">integer</span><span class="p">,</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">rowptr</span><span class="w"> </span><span class="c">!! row pointers (size `m+1`)</span>
+<span class="w">        </span><span class="kt">integer</span><span class="p">,</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">colidx</span><span class="w"> </span><span class="c">!! column indices (size `nnz`)</span>
+<span class="w">        </span><span class="kt">integer</span><span class="p">,</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">map</span><span class="w">    </span><span class="c">!! index into the user's `a` array for each CSR element (size `nnz`)</span>
+<span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">val</span><span class="w">    </span><span class="c">!! values of `A` in CSR order (size `nnz`)</span>
+
+<span class="w">        </span><span class="c">! graph of `A*A^T` (off-diagonal nonzeros), CSR:</span>
+<span class="w">        </span><span class="kt">integer</span><span class="p">,</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">adjptr</span><span class="w"> </span><span class="c">!! (size `m+1`)</span>
+<span class="w">        </span><span class="kt">integer</span><span class="p">,</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">adj</span><span class="w">    </span><span class="c">!! (size `adjptr(m+1)-1`)</span>
+
+<span class="w">        </span><span class="c">! row ordering:</span>
+<span class="w">        </span><span class="kt">integer</span><span class="p">,</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">perm</span><span class="w">  </span><span class="c">!! `perm(new) = old`</span>
+<span class="w">        </span><span class="kt">integer</span><span class="p">,</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iperm</span><span class="w"> </span><span class="c">!! `iperm(old) = new`</span>
+
+<span class="w">        </span><span class="c">! envelope storage of the lower triangle of L (in the new ordering):</span>
+<span class="w">        </span><span class="c">! row `r` holds columns `first(r):r`, stored contiguously starting at `ptr(r)`.</span>
+<span class="w">        </span><span class="kt">integer</span><span class="p">,</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w">     </span><span class="kd">::</span><span class="w"> </span><span class="n">first</span><span class="w"> </span><span class="c">!! first column in each row (size `m`)</span>
+<span class="w">        </span><span class="kt">integer</span><span class="p">(</span><span class="n">ip</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ptr</span><span class="w">   </span><span class="c">!! start of each row in `env` (size `m+1`)</span>
+<span class="w">        </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">env</span><span class="w">   </span><span class="c">!! envelope values</span>
+
+<span class="w">    </span><span class="k">contains</span>
+
+<span class="k">        private</span>
+
+<span class="k">        procedure</span><span class="p">,</span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">analyze</span>
+<span class="w">        </span><span class="k">procedure</span><span class="p">,</span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">factor</span>
+<span class="w">        </span><span class="k">procedure</span><span class="p">,</span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">solve</span>
+<span class="w">        </span><span class="k">procedure</span><span class="p">,</span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">destroy</span>
+<span class="w">        </span><span class="k">procedure</span><span class="p">,</span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">is_analyzed</span>
+<span class="w">        </span><span class="k">procedure</span><span class="p">,</span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">envelope_size</span>
+<span class="w">        </span><span class="k">procedure</span><span class="p">,</span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bandwidth</span>
+
+<span class="w">        </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">lower_solve</span>
+
+<span class="w">    </span><span class="k">end type </span><span class="n">cholesky_minnorm_solver</span>
+</pre></div>
+
+    </section>
+    
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              nlesolver-fortran
+ was developed by Jacob Williams<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+            </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>
