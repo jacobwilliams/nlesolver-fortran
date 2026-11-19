@@ -1,0 +1,16 @@
+\begin{table}[htbp]
+\centering
+\caption{Banded underdetermined problem, $n = 50{,}000$, $m = 30{,}000$ (backtracking line search). $\norm{x - x_0}$ is the distance from the starting point to the computed solution.}
+\label{tab:scaling}
+\small
+\begin{tabular}{@{}llrrrrrr@{}}
+\toprule
+solver & status & iterations & $F$ evals & $J$ evals & $\norm{F}$ & $\norm{x-x_0}$ & time [s] \\
+\midrule
+LSQR & converged & 3 & 4 & 3 & $3.1\times10^{-14}$ & 28.6439 & 0.082 \\
+LSMR & converged & 3 & 4 & 3 & $3.1\times10^{-14}$ & 28.6439 & 0.087 \\
+CRAIG & converged & 3 & 4 & 3 & $3.1\times10^{-14}$ & 28.6439 & 0.070 \\
+Cholesky & converged & 3 & 4 & 3 & $3.1\times10^{-14}$ & 28.6439 & 0.014 \\
+\bottomrule
+\end{tabular}
+\end{table}

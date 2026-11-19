@@ -1,0 +1,29 @@
+\begin{table}[htbp]
+\centering
+\caption{Step-length strategies with and without Schubert updates, banded problem with $n = 50{,}000$.}
+\label{tab:steps}
+\small
+\begin{tabular}{@{}lllrrrrr@{}}
+\toprule
+solver & step mode & updates & status & iterations & $F$ evals & $J$ evals & time [s] \\
+\midrule
+Cholesky & constant & no & converged & 3 & 4 & 3 & 0.013 \\
+Cholesky & backtracking & no & converged & 3 & 4 & 3 & 0.014 \\
+Cholesky & exact & no & converged & 3 & 57 & 3 & 0.023 \\
+Cholesky & fixed points & no & converged & 3 & 16 & 3 & 0.016 \\
+Cholesky & constant & yes & converged & 5 & 6 & 1 & 0.024 \\
+Cholesky & backtracking & yes & converged & 5 & 6 & 1 & 0.025 \\
+Cholesky & exact & yes & converged & 5 & 69 & 1 & 0.035 \\
+Cholesky & fixed points & yes & converged & 5 & 26 & 1 & 0.028 \\
+\midrule
+CRAIG & constant & no & converged & 3 & 4 & 3 & 0.071 \\
+CRAIG & backtracking & no & converged & 3 & 4 & 3 & 0.072 \\
+CRAIG & exact & no & converged & 3 & 57 & 3 & 0.086 \\
+CRAIG & fixed points & no & converged & 3 & 16 & 3 & 0.080 \\
+CRAIG & constant & yes & converged & 5 & 6 & 1 & 0.120 \\
+CRAIG & backtracking & yes & converged & 5 & 6 & 1 & 0.119 \\
+CRAIG & exact & yes & converged & 5 & 69 & 1 & 0.132 \\
+CRAIG & fixed points & yes & converged & 5 & 26 & 1 & 0.122 \\
+\bottomrule
+\end{tabular}
+\end{table}

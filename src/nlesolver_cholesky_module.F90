@@ -121,6 +121,7 @@
         procedure,public :: is_analyzed
         procedure,public :: envelope_size
         procedure,public :: bandwidth
+        procedure,public :: get_permutation
 
         procedure :: lower_solve
 
@@ -191,6 +192,21 @@
     end if
 
     end function bandwidth
+!*****************************************************************************************
+
+!*****************************************************************************************
+!>
+!  Returns the row ordering computed by [[cholesky_minnorm_solver:analyze]]:
+!  `perm(new) = old`. Returns an unallocated array if not analyzed.
+
+    subroutine get_permutation(me, perm)
+
+    class(cholesky_minnorm_solver),intent(in) :: me
+    integer,dimension(:),allocatable,intent(out) :: perm
+
+    if (me%analyzed) perm = me%perm
+
+    end subroutine get_permutation
 !*****************************************************************************************
 
 !*****************************************************************************************

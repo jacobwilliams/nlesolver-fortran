@@ -1,0 +1,19 @@
+\begin{table}[htbp]
+\centering
+\caption{Effect of the sparsity pattern on the Cholesky solver: bandwidth of $JJ^T$ in the given order and after RCM, envelope size of $L$, and total solve times (Cholesky and CRAIG).}
+\label{tab:sparsity}
+\small
+\begin{tabular}{@{}lrrrrrrr@{}}
+\toprule
+problem & $n$ & $m$ & bandwidth & after RCM & envelope & Cholesky [s] & CRAIG [s] \\
+\midrule
+banded & 50{,}000 & 30{,}000 & 7 & 7 & 169{,}992 & 0.014 & 0.071 \\
+shuffled & 50{,}000 & 30{,}000 & 29{,}922 & 7 & 169{,}992 & 0.019 & 0.074 \\
+grid{,} $k=25$ & 1{,}250 & 625 & 50 & 50 & 21{,}963 & 0.0008 & 0.0050 \\
+grid{,} $k=50$ & 5{,}000 & 2{,}500 & 100 & 100 & 171{,}425 & 0.0086 & 0.021 \\
+grid{,} $k=100$ & 20{,}000 & 10{,}000 & 200 & 200 & 1{,}352{,}850 & 0.127 & 0.086 \\
+grid{,} $k=150$ & 45{,}000 & 22{,}500 & 300 & 300 & 4{,}544{,}275 & 0.698 & 0.172 \\
+grid{,} $k=200$ & 80{,}000 & 40{,}000 & 400 & 400 & 10{,}745{,}700 & 2.36 & 0.310 \\
+\bottomrule
+\end{tabular}
+\end{table}

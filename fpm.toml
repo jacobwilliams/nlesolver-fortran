@@ -21,5 +21,10 @@ LSQR = { git="https://github.com/jacobwilliams/LSQR", tag="1.1.0" }
 lusol = { git="https://github.com/jacobwilliams/lusol", tag="1.0.0" }
 LSMR = { git="https://github.com/jacobwilliams/LSMR", tag="1.0.0" }
 
+[[example]]
+name = "nlesolver_benchmarks"
+source-dir = "docs/benchmarks"
+main = "nlesolver_benchmarks.f90"
+
 [install]
 library = true

@@ -1259,7 +1259,7 @@
                 call me%set_status(istat = -17, string = 'Error adjusting line search direction for bounds')
                 pnew = p
             else
-                pnew = p / t
+                pnew = p * t  ! the fraction of the full step that stays within the bounds
             end if
         end select
         if (me%verbose) write(me%iunit, '(A)') 'Search direction modified to be within bounds'
@@ -1286,9 +1286,11 @@
     real(wp),dimension(me%n),intent(out) :: xnew  !! final `x`
 
     if (me%bounds_mode == NLESOLVER_WALL_BOUNDS) then
-        ! for the 'wall' mode, the modified variables are held fixed during the step
+        ! for the 'wall' mode, the modified variables are put on the bounds and held
+        ! fixed there during the line search (independent of alpha). Note that for these,
+        ! `xold + search_direction` is the bound (see `adjust_search_direction`).
         where (modified)
-            xnew = xold
+            xnew = xold + search_direction
         else where
             xnew = xold + search_direction * alpha
         end where
