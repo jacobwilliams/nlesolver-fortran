@@ -136,12 +136,13 @@
         call func_nl(solver, x, f)
         write(*,'(A,I0,A,L1,A,I3,1X,A,A,1P,E12.4)') ' step_mode ', step_mode, ' broyden=', use_broyden, &
                                                 ' : ', istat, message, '  ||f|| = ', norm2(f)
-        ! notes (the same is true with LSQR/LSMR), these cases are not checked:
-        !  * the exact line search (step_mode=3, fmin) does not reliably reach tol=1e-10 here.
-        !  * Broyden with constant full steps (step_mode=1) is not globally convergent,
-        !    and diverges from this starting point.
-        if (step_mode == 3 .or. (step_mode == 1 .and. use_broyden)) cycle
-        if (istat /= 1) error stop 'CRAIG nonlinear test failed to converge'
+        ! note: Broyden with constant full steps (step_mode=1) is not globally convergent,
+        ! and diverges from this starting point (the same is true with LSQR/LSMR), so it is not checked.
+        if (step_mode == 1 .and. use_broyden) cycle
+        ! with Broyden, the approximate Jacobian can make the steps smaller than `tolx`
+        ! just before reaching `tol` (istat=2), so in that case just require a small residual.
+        if (istat == 1 .or. (use_broyden .and. istat == 2 .and. norm2(f) < 1.0e-8_wp)) cycle
+        error stop 'CRAIG nonlinear test failed to converge'
     end do
     end do
 

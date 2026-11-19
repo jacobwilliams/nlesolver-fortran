@@ -1763,41 +1763,58 @@
     real(wp),dimension(:,:),intent(in),optional :: fjac !! jacobian matrix [dense]
     real(wp),dimension(:),intent(in),optional :: fjac_sparse !! jacobian matrix [sparse]
 
-    real(wp),dimension(:),allocatable :: xnew !! used in [[func_for_fmin]]
-    real(wp) :: alpha_min
+    real(wp),dimension(:),allocatable :: xnew      !! trial `x` (used in [[func_for_fmin]])
+    real(wp),dimension(:),allocatable :: fvecnew   !! trial `fvec` (used in [[func_for_fmin]])
     real(wp),dimension(:),allocatable :: search_direction !! search direction to use (may be modified from `p` if bounds are violated)
     logical,dimension(:),allocatable :: modified  !! indicates the elements of p that were modified
+    real(wp) :: alpha      !! step length returned by [[fmin]]
+    real(wp) :: phi        !! value returned by [[func_for_fmin]]
+    real(wp) :: phi_best   !! best (smallest) value of `norm(fvec)**2` found so far
+    real(wp) :: alpha_best !! `alpha` corresponding to `phi_best`
 
     allocate(xnew(me%n))
+    allocate(fvecnew(me%m))
     allocate(search_direction(me%n))
     allocate(modified(me%n))
 
-    ! find the minimum value of f in the range of alphas:
-    alpha_min = fmin(func_for_fmin,me%alpha_min,me%alpha_max,me%fmin_tol)
-
-    if (me%verbose) write(me%iunit,'(1P,*(A,1X,E16.6))') '        alpha_min = ', alpha_min
-
+    ! set the search direction (this must be done before the line search):
     call me%adjust_search_direction(xold,p,search_direction,modified)
-    call me%compute_next_step(xold, search_direction, alpha_min, modified, x)
-    if (all(x==xnew)) then
-        ! already computed in the func
-    else
-        call me%func(x,fvec)
-        f = me%norm(fvec)
-    end if
+
+    ! the full step is evaluated explicitly, since fmin never evaluates
+    ! the endpoints of the interval, and near the solution the full
+    ! Newton step is usually the minimizer.
+    phi_best = huge(one)
+    phi = func_for_fmin(me%alpha_max)
+
+    ! find the minimum value of f in the range of alphas.
+    ! Note: the function minimized is norm(fvec)**2, which has the same minimizer as
+    ! norm(fvec), but (for the 2-norm) is smooth at a zero, which is much better for the
+    ! parabolic interpolation used by fmin. The best point is saved in func_for_fmin.
+    alpha = fmin(func_for_fmin,me%alpha_min,me%alpha_max,me%fmin_tol)
+
+    if (me%verbose) write(me%iunit,'(1P,*(A,1X,E16.6))') '        alpha_min = ', alpha_best
+
+    ! x, fvec, and f were saved for the best point evaluated:
+    f = sqrt(phi_best)
 
 contains
 
     real(wp) function func_for_fmin(alpha)
-    !! function for [[fmin]]
+    !! function for [[fmin]]: `norm(fvec)**2` at `xold + alpha*search_direction`.
+    !! Also saves the best point evaluated so far in `x` and `fvec`.
     implicit none
     real(wp),intent(in) :: alpha !! indep variable
 
     call me%compute_next_step(xold, search_direction, alpha, modified, xnew)
-    call me%func(xnew,fvec)
-    func_for_fmin = me%norm(fvec) ! return result
+    call me%func(xnew,fvecnew)
+    func_for_fmin = me%norm(fvecnew)**2
 
-    f = func_for_fmin ! just in case this is the solution
+    if (func_for_fmin < phi_best .or. phi_best == huge(one)) then  ! (always save the first one)
+        phi_best   = func_for_fmin
+        alpha_best = alpha
+        x          = xnew
+        fvec       = fvecnew
+    end if
 
     end function func_for_fmin
 
