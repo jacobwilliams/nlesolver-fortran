@@ -491,25 +491,39 @@ much more than a function evaluation plus a linear solve (\cref{sec:exp-steps}).
 %=============================================================================================
 
 Simple bounds $x_\ell \le x \le x_u$ are handled by modifying the step; four modes are available
-(\code{bounds\_mode}), illustrated in \cref{fig:bounds}. In all modes the initial point is first
-projected onto the bounds. Let $\tilde x = x_k + p_k$ be the full Newton point.
+(\code{bounds\_mode}), illustrated in \cref{fig:bounds}. When a bounds mode is enabled, the function is
+never evaluated outside the bounds: the initial point is first projected onto the bounds, and every
+trial point of the line search is projected onto them as well. (For $\alpha \in (0,1]$ the trial points of
+all three modes are within the bounds in exact arithmetic; the projection only removes rounding errors,
+such as $x + (x_u - x) > x_u$.) A bounds mode without \code{xlow} and \code{xupp} is an input error.
+
+The bounds are checked on the largest step that the line search will actually attempt, not on the full
+Newton step, so that a variable is not put on a bound that the attempted steps do not reach. Let
+$\alpha_{\text{top}}$ be that step length ($\code{alpha}$ for the constant step, $\alpha_{\max}$ for the
+line searches) and $\tilde x = x_k + \alpha_{\text{top}}\, p_k$ the corresponding trial point. Each mode
+replaces $p_k$ by a direction $\tilde p$ such that $x_k + \alpha_{\text{top}} \tilde p$ is within the bounds,
+and the trial points are $x_k + \alpha \tilde p$, $\alpha \le \alpha_{\text{top}}$:
 \begin{description}
   \item[0: ignore] the bounds (default).
-  \item[1: scalar.] Each violating component of $\tilde x$ is moved to its bound, and the step becomes
-  $\tilde p = \operatorname{clip}(\tilde x) - x_k$. Both the direction and the length can change.
+  \item[1: scalar.] Each violating component of $\tilde x$ is moved to its bound, and
+  $\tilde p = (\operatorname{clip}(\tilde x) - x_k)/\alpha_{\text{top}}$. Both the direction and the length can
+  change. For $\alpha < \alpha_{\text{top}}$ the modified components move back off the bound.
   \item[2: vector.] The step is shortened along the Newton direction:
   $\tilde p = t\, p_k$ with
   \begin{equation}
-     t = \min_{i:\ \tilde x_i \notin [x_{\ell,i},\, x_{u,i}]} \frac{b_i - x_{k,i}}{p_{k,i}},
+     t = \min_{i:\ \tilde x_i \notin [x_{\ell,i},\, x_{u,i}]} \frac{b_i - x_{k,i}}{\alpha_{\text{top}}\, p_{k,i}},
      \qquad b_i \in \{x_{\ell,i}, x_{u,i}\}\ \text{the violated bound},
   \end{equation}
   so the direction is preserved.
   \item[3: wall.] As the scalar mode, but the components put on the bounds stay there during the line
-  search: $x(\alpha)_i = b_i$ for those components, and $x_{k,i} + \alpha \tilde p_i$ for the others.
+  search: $x(\alpha)_i = b_i$ for those components (for every $\alpha$), and $x_{k,i} + \alpha \tilde p_i$ for
+  the others.
 \end{description}
 The vector mode keeps the Newton direction (and its descent property) but can produce very short steps
-when a single variable is near its bound. The scalar and wall modes let the other variables continue to
-move.
+when a single variable is near its bound, and no step at all ($t = 0$) when a variable is on its bound and
+the Newton step points outward; the iteration then stops with status 2. The scalar and wall modes let the
+other variables continue to move. These definitions are the same as the \code{vector}, \code{scalar}, and
+\code{wall} bound enforcement modes of the OpenMDAO line searches.
 
 \begin{figure}[htbp]
 \centering
@@ -534,7 +548,7 @@ move.
   \foreach \a in {0.25,0.5,0.75,1} {\fill[green!50!black] (8.4,{0.4+0.8*\a}) circle (1.0pt);}
   \draw[->, green!50!black, thick] (6.9,0.4) -- (8.4,0.6);
 \end{tikzpicture}
-\caption{Bounds modes for a full Newton point $\tilde x$ outside the box. Scalar: $\tilde x$ is clipped
+\caption{Bounds modes for a trial point $\tilde x = x_k + \alpha_{\text{top}} p_k$ outside the box. Scalar: $\tilde x$ is clipped
 to the box (the direction changes). Vector: the step is shortened along the Newton direction. Wall: the
 clipped component is put on the bound for every trial $\alpha$ of the line search (dots), while the other
 components move with $\alpha$.}
@@ -570,7 +584,7 @@ code & meaning \\
 3 & maximum number of iterations reached \\
 4 & stopped by the user (\code{user\_input\_check}) \\
 5 & more than \code{n\_uphill\_max} consecutive uphill steps \\
-$-1$ to $-18$ & input errors (invalid options, missing routines, out of memory, \ldots) \\
+$-1$ to $-20$ & input errors (invalid options, missing routines, missing bounds, out of memory, \ldots) \\
 $-1004$, $-1005$ & LSQR/LSMR/CRAIG: ill-conditioned system, iteration limit \\
 $-1007$ & CRAIG: breakdown, incompatible system (use \code{damp}${}>0$) \\
 $-1008$ & Cholesky: $JJ^T$ not positive definite, rank-deficient $J$ (use \code{damp}${}>0$) \\

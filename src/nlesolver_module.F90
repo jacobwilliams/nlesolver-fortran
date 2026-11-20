@@ -416,6 +416,8 @@
 !  * -16  -- Error: xlow > xupp
 !  * -17  -- Error adjusting line search direction for bounds
 !  * -18  -- Error: invalid norm_mode
+!  * -19  -- Error: xlow and xupp must be specified for bounds_mode > 0
+!  * -20  -- Error: invalid bounds_mode
 !  * -999 -- Error: class has not been initialized
 !  * 0    -- Class successfully initialized in [[nlesolver_type:initialize]]
 !  * 1    -- Required accuracy achieved
@@ -581,17 +583,32 @@
 
     !optional:
 
-    if (present(bounds_mode) .and. present(xlow) .and. present(xupp)) then
-        if (any(xlow>xupp)) then  ! check for consistency
+    me%bounds_mode = NLESOLVER_IGNORE_BOUNDS  ! default
+    if (present(bounds_mode)) then
+        select case (bounds_mode)
+        case (NLESOLVER_IGNORE_BOUNDS)
+            ! nothing to do
+        case (NLESOLVER_SCALAR_BOUNDS, NLESOLVER_VECTOR_BOUNDS, NLESOLVER_WALL_BOUNDS)
+            ! the bounds must be given (they are never silently ignored):
+            if (.not. (present(xlow) .and. present(xupp))) then
+                status_ok = .false.
+                call me%set_status(istat = -19, string = 'Error: xlow and xupp must be specified for bounds_mode =', &
+                                   i=bounds_mode)
+                return
+            end if
+            if (any(xlow>xupp)) then  ! check for consistency
+                status_ok = .false.
+                call me%set_status(istat = -16, string = 'Error: xlow > xupp')
+                return
+            end if
+            me%bounds_mode = bounds_mode
+            me%xupp = xupp
+            me%xlow = xlow
+        case default
             status_ok = .false.
-            call me%set_status(istat = -16, string = 'Error: xlow > xupp')
+            call me%set_status(istat = -20, string = 'Error: invalid bounds_mode:', i=bounds_mode)
             return
-        end if
-        me%bounds_mode = bounds_mode
-        me%xupp = xupp
-        me%xlow = xlow
-    else
-        me%bounds_mode = NLESOLVER_IGNORE_BOUNDS  ! default
+        end select
     end if
 
     if (present(norm_mode)) then
@@ -1197,31 +1214,36 @@
 !### Reference
 !  * https://openmdao.org/newdocs/versions/latest/features/building_blocks/solvers/bounds_enforce.html
 
-    subroutine adjust_search_direction(me,x,p,pnew,modified)
+    subroutine adjust_search_direction(me,x,p,alpha_top,pnew,modified)
 
     implicit none
 
     class(nlesolver_type),intent(inout) :: me
     real(wp),dimension(me%n),intent(in) :: x  !! initial `x`. it is assumed that this does not violate any bounds.
     real(wp),dimension(me%n),intent(in) :: p  !! search direction `p = xnew - x`
-    real(wp),dimension(me%n),intent(out) :: pnew  !! new search direction
+    real(wp),intent(in) :: alpha_top  !! the largest step length that will be attempted in the line search
+                                      !! (the bounds are checked for the step `alpha_top*p`, not the full step `p`,
+                                      !! so that variables are not put on a bound that the steps actually
+                                      !! attempted do not reach).
+    real(wp),dimension(me%n),intent(out) :: pnew  !! new search direction: `x + alpha_top*pnew` is the
+                                                  !! bounded version of `x + alpha_top*p`.
     logical,dimension(me%n),intent(out) :: modified  !! indicates the elements of `p` that were modified
 
     integer :: i  !! counter
-    real(wp),dimension(:),allocatable :: xnew  !! `x + pnew`
+    real(wp),dimension(:),allocatable :: xnew  !! `x + alpha_top*p`, adjusted for the bounds
     logical :: search_direction_modifed !! if `p` has been modified
-    real(wp) :: t !! indep var in the step equation: `xnew = x + t*p`
+    real(wp) :: t !! indep var in the step equation: `xnew = x + t*alpha_top*p`
 
-    if (me%bounds_mode==NLESOLVER_IGNORE_BOUNDS) then ! no change
+    if (me%bounds_mode==NLESOLVER_IGNORE_BOUNDS .or. alpha_top <= 0.0_wp) then ! no change
         modified = .false.
         pnew = p
         return
     end if
 
     allocate(xnew(me%n))
-    xnew = x + p  ! this is the full Newton step
+    xnew = x + alpha_top * p  ! the largest step that will be attempted
     search_direction_modifed = .false.  ! will be set to true if any bounds are violated
-    if (me%bounds_mode==NLESOLVER_VECTOR_BOUNDS) t = 1.0_wp ! for mode 2, start with full newton step
+    if (me%bounds_mode==NLESOLVER_VECTOR_BOUNDS) t = 1.0_wp ! for mode 2, start with the largest step
                                                             ! note: have to check each variable and
                                                             ! choose the smallest t. don't need to
                                                             ! keep track of xnew.
@@ -1234,7 +1256,7 @@
             if (me%verbose) write(me%iunit, '(A)') 'x('//int2str(i)//') < xlow(i) : adjusting to lower bound'
             select case (me%bounds_mode)
             case(NLESOLVER_SCALAR_BOUNDS,NLESOLVER_WALL_BOUNDS); xnew(i) = me%xlow(i)
-            case(NLESOLVER_VECTOR_BOUNDS);                       t = min(t,(me%xlow(i)-x(i))/p(i))
+            case(NLESOLVER_VECTOR_BOUNDS);                       t = min(t,(me%xlow(i)-x(i))/(alpha_top*p(i)))
             end select
         else if (xnew(i)>me%xupp(i)) then
             search_direction_modifed = .true.
@@ -1242,7 +1264,7 @@
             if (me%verbose) write(me%iunit, '(A)') 'x('//int2str(i)//') > xupp(i) : adjusting to upper bound'
             select case (me%bounds_mode)
             case(NLESOLVER_SCALAR_BOUNDS,NLESOLVER_WALL_BOUNDS); xnew(i) = me%xupp(i)
-            case(NLESOLVER_VECTOR_BOUNDS);                       t = min(t,(me%xupp(i)-x(i))/p(i))
+            case(NLESOLVER_VECTOR_BOUNDS);                       t = min(t,(me%xupp(i)-x(i))/(alpha_top*p(i)))
             end select
         end if
     end do
@@ -1251,16 +1273,17 @@
         ! adjust the search direction:
         select case (me%bounds_mode)
         case (NLESOLVER_SCALAR_BOUNDS,NLESOLVER_WALL_BOUNDS)
-            pnew = xnew - x  ! here we have changed the search direction vector
+            ! here we have changed the search direction vector (only for the modified components,
+            ! so that x + alpha_top*pnew is on the bound for these):
+            pnew = p
+            where (modified) pnew = (xnew - x) / alpha_top
             if (all(pnew==0.0_wp)) call me%set_status(istat = -17, string = 'Error adjusting line search direction for bounds')
         case (NLESOLVER_VECTOR_BOUNDS)
-            ! here was are staying on the original search direction vector, just walking back
-            if (t <= 0.0_wp) then ! something wrong
-                call me%set_status(istat = -17, string = 'Error adjusting line search direction for bounds')
-                pnew = p
-            else
-                pnew = p * t  ! the fraction of the full step that stays within the bounds
-            end if
+            ! here we are staying on the original search direction vector, just walking back.
+            ! t is the fraction of the largest step that stays within the bounds. If a variable
+            ! is already on a bound and the step points outward, then t = 0, and no step is
+            ! possible in this mode (the bounds are never ignored).
+            pnew = p * max(t, 0.0_wp)
         end select
         if (me%verbose) write(me%iunit, '(A)') 'Search direction modified to be within bounds'
     else
@@ -1274,12 +1297,14 @@
 !>
 !  Compute the next step.
 
-    subroutine compute_next_step(me, xold, search_direction, alpha, modified, xnew)
+    subroutine compute_next_step(me, xold, search_direction, alpha, alpha_top, modified, xnew)
 
     class(nlesolver_type),intent(inout)  :: me
     real(wp),dimension(me%n),intent(in)  :: xold  !! initial `x`
     real(wp),dimension(me%n),intent(in)  :: search_direction  !! search direction vector
     real(wp),intent(in)                  :: alpha !! step length to take in the search direction
+    real(wp),intent(in)                  :: alpha_top !! the largest step length that will be attempted
+                                                      !! in the line search (see [[adjust_search_direction]])
     logical,dimension(me%n),intent(in)   :: modified  !! indicates the elements of `p` that were
                                                       !! modified because they violated the bounds.
                                                       !! Output of [[adjust_search_direction]].
@@ -1288,15 +1313,22 @@
     if (me%bounds_mode == NLESOLVER_WALL_BOUNDS) then
         ! for the 'wall' mode, the modified variables are put on the bounds and held
         ! fixed there during the line search (independent of alpha). Note that for these,
-        ! `xold + search_direction` is the bound (see `adjust_search_direction`).
+        ! `xold + alpha_top*search_direction` is the bound (see `adjust_search_direction`).
         where (modified)
-            xnew = xold + search_direction
+            xnew = xold + alpha_top * search_direction
         else where
             xnew = xold + search_direction * alpha
         end where
     else
         ! all other modes just use the computed search direction
         xnew = xold + search_direction * alpha
+    end if
+
+    if (me%bounds_mode /= NLESOLVER_IGNORE_BOUNDS) then
+        ! For alpha in (0,1], the steps computed by `adjust_search_direction` are within the
+        ! bounds in exact arithmetic, but a point meant to be on a bound can be just outside
+        ! it due to rounding (e.g., x + (xupp - x) > xupp). Make sure it never is:
+        xnew = min(max(xnew, me%xlow), me%xupp)
     end if
 
     end subroutine compute_next_step
@@ -1669,8 +1701,8 @@
     allocate(search_direction(me%n))
     allocate(modified(me%n))
 
-    call me%adjust_search_direction(xold,p,search_direction,modified)
-    call me%compute_next_step(xold, search_direction, me%alpha, modified, x)
+    call me%adjust_search_direction(xold,p,me%alpha,search_direction,modified)
+    call me%compute_next_step(xold, search_direction, me%alpha, me%alpha, modified, x)
 
     !evaluate the function at the new point:
     call me%func(x,fvec)
@@ -1723,7 +1755,7 @@
     allocate(modified(me%n))
 
     ! set the search direction:
-    call me%adjust_search_direction(xold,p,search_direction,modified)
+    call me%adjust_search_direction(xold,p,me%alpha_max,search_direction,modified)
 
     ! compute the gradient of the merit function to be minimized:
     ! phi = 1/2 * ||fvec||_2^2, so grad(phi) = J^T * fvec.
@@ -1757,7 +1789,7 @@
     alpha = me%alpha_max          ! start with the largest step
     do
 
-        call me%compute_next_step(xold, search_direction, alpha, modified, xtmp)
+        call me%compute_next_step(xold, search_direction, alpha, me%alpha_max, modified, xtmp)
         call me%func(xtmp,fvectmp)
         ftmp = me%norm(fvectmp)
         phi  = 0.5_wp * dot_product(fvectmp,fvectmp)
@@ -1832,7 +1864,7 @@
     allocate(modified(me%n))
 
     ! set the search direction (this must be done before the line search):
-    call me%adjust_search_direction(xold,p,search_direction,modified)
+    call me%adjust_search_direction(xold,p,me%alpha_max,search_direction,modified)
 
     ! the full step is evaluated explicitly, since fmin never evaluates
     ! the endpoints of the interval, and near the solution the full
@@ -1859,7 +1891,7 @@ contains
     implicit none
     real(wp),intent(in) :: alpha !! indep variable
 
-    call me%compute_next_step(xold, search_direction, alpha, modified, xnew)
+    call me%compute_next_step(xold, search_direction, alpha, me%alpha_max, modified, xnew)
     call me%func(xnew,fvecnew)
     func_for_fmin = me%norm(fvecnew)**2
 
@@ -1928,10 +1960,10 @@ contains
 
     ! now compute the functions at these alphas:
     f = big
-    call me%adjust_search_direction(xold,p,search_direction,modified)
+    call me%adjust_search_direction(xold,p,me%alpha_max,search_direction,modified)
     do i = 1, n_points
 
-        call me%compute_next_step(xold, search_direction, alphas_to_try(i), modified, x_tmp)
+        call me%compute_next_step(xold, search_direction, alphas_to_try(i), me%alpha_max, modified, x_tmp)
 
         ! evaluate the function at this point:
         call me%func(x_tmp,fvec_tmp)
