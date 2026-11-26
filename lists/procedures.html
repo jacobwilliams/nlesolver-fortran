@@ -1,0 +1,863 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Nonlinear Equation Solver with Modern Fortran">
+    <meta name="author" content="Jacob Williams" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>All Procedures &ndash; nlesolver-fortran
+</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">nlesolver-fortran </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12" id='text'>
+			 <h1>Procedures</h1>
+			 <table class="table table-striped">
+			 <thead><tr><th>Procedure</th><th>Location</th><th>Procedure Type</th><th>Description</th></tr></thead>
+			 <tbody>
+			   <tr>
+                 <td><a href='../proc/adjust_search_direction.html'>adjust_search_direction</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>if necessary, adjust the search direction vector <code>p</code> so that bounds are not violated.</p><a href="../proc/adjust_search_direction.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/adjust_x_for_bounds.html'>adjust_x_for_bounds</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>if necessary, adjust the <code>x</code> vector to be within the bounds.
+used for the initial guess.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/analyze.html'>analyze</a></td>
+                 <td><a href='../module/nlesolver_cholesky_module.html'>nlesolver_cholesky_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Symbolic analysis of the sparsity pattern of <code>A</code>.
+  This only has to be called once for a given sparsity pattern.</p><a href="../proc/analyze.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/backtracking_linesearch.html'>backtracking_linesearch</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Backtracking line search.</p><a href="../proc/backtracking_linesearch.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/bandwidth.html'>bandwidth</a></td>
+                 <td><a href='../module/nlesolver_cholesky_module.html'>nlesolver_cholesky_module</a></td>
+                 <td>Function</td>
+                 <td><p>Maximum bandwidth of the reordered <script type="math/tex"> A A^T </script>. Returns <code>-1</code> if not analyzed.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/compute_next_step.html'>compute_next_step</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Compute the next step.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/craig_solver.html'>craig_solver</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Sparse minimum-norm linear solver using CRAIG's method.</p><a href="../proc/craig_solver.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/destroy.html'>destroy</a></td>
+                 <td><a href='../module/nlesolver_cholesky_module.html'>nlesolver_cholesky_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Destroy the solver (deallocate all the arrays).</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/destroy_nlesolver_variables.html'>destroy_nlesolver_variables</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Destructor</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/envelope_size.html'>envelope_size</a></td>
+                 <td><a href='../module/nlesolver_cholesky_module.html'>nlesolver_cholesky_module</a></td>
+                 <td>Function</td>
+                 <td><p>Number of elements in the envelope of the Cholesky factor
+(i.e., the storage required for <code>L</code>, in reals). Returns <code>0</code> if not analyzed.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/exact_linesearch.html'>exact_linesearch</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>An exact linesearch that uses a derivative-free minimizer to
+find the minimum value of <code>f(x)</code> between
+<code>x = xold + p * alpha_min</code> and
+<code>x = xold + p * alpha_max</code>.</p><a href="../proc/exact_linesearch.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/factor.html'>factor</a></td>
+                 <td><a href='../module/nlesolver_cholesky_module.html'>nlesolver_cholesky_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Numeric factorization: form <script type="math/tex"> A A^T + \delta^2 I </script> in the envelope storage
+and compute its Cholesky factorization <script type="math/tex"> L L^T </script>.</p><a href="../proc/factor.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/fixed_point_linesearch.html'>fixed_point_linesearch</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>A simple search that just evaluates the function at a specified
+number of points and picks the one with the minimum function value.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/get_permutation.html'>get_permutation</a></td>
+                 <td><a href='../module/nlesolver_cholesky_module.html'>nlesolver_cholesky_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Returns the row ordering computed by <a href="../type/cholesky_minnorm_solver.html#boundprocedure-analyze">analyze</a>:
+<code>perm(new) = old</code>. Returns an unallocated array if not analyzed.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/get_status.html'>get_status</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Return the status code and message from the <a href="../type/nlesolver_type.html">nlesolver_type</a> class.</p><a href="../proc/get_status.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/initialize_nlesolver_variables.html'>initialize_nlesolver_variables</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Constructor for the class.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/int2str.html'>int2str</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Function</td>
+                 <td><p>Convert an integer to a string. Works for up to 256 digits.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/is_analyzed.html'>is_analyzed</a></td>
+                 <td><a href='../module/nlesolver_cholesky_module.html'>nlesolver_cholesky_module</a></td>
+                 <td>Function</td>
+                 <td><p>Returns true if <a href="../type/cholesky_minnorm_solver.html#boundprocedure-analyze">analyze</a> has been called successfully.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/linear_solver.html'>linear_solver</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Solve the linear system: <script type="math/tex"> Ax = b </script>, using a dense, direct method.</p><a href="../proc/linear_solver.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/lower_solve.html'>lower_solve</a></td>
+                 <td><a href='../module/nlesolver_cholesky_module.html'>nlesolver_cholesky_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Solve <script type="math/tex"> (A A^T + \delta^2 I) y = c </script> using the Cholesky factor.
+<code>c</code> and <code>y</code> are in the original row ordering.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/nlesolver_solver.html'>nlesolver_solver</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Main solver.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/norm_1.html'>norm_1</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Function</td>
+                 <td><p>1-norm function</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/norm_2.html'>norm_2</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Function</td>
+                 <td><p>2-norm function</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/norm_inf.html'>norm_inf</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Function</td>
+                 <td><p>Infinity-norm function</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/rcm.html'>rcm</a></td>
+                 <td><a href='../module/nlesolver_cholesky_module.html'>nlesolver_cholesky_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Reverse Cuthill-McKee ordering of a symmetric graph.</p><a href="../proc/rcm.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/real2str.html'>real2str</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Function</td>
+                 <td><p>Convert a real to a string. Works for up to 256 digits.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/set_status.html'>set_status</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Set status flag and message.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/simple_step.html'>simple_step</a></td>
+                 <td><a href='../module/nlesolver_module.html'>nlesolver_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Take a simple step in the search direction of <code>p * alpha</code>.</p></td>
+               </tr>
+			   <tr>
+                 <td><a href='../proc/solve.html'>solve</a></td>
+                 <td><a href='../module/nlesolver_cholesky_module.html'>nlesolver_cholesky_module</a></td>
+                 <td>Subroutine</td>
+                 <td><p>Solve for the minimum-norm solution: <script type="math/tex"> x = A^T y </script>, <script type="math/tex"> (A A^T + \delta^2 I) y = b </script>.</p><a href="../proc/solve.html" class="pull-right"><emph>Read more&hellip;</emph></a></td>
+               </tr>
+			 </tbody></table>
+             <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (0)
+ -->
+<!-- Title: call~~graph~~CallGraph Pages: 1 -->
+<svg id="callgraphCallGraph" width="855pt" height="676pt"
+ viewBox="0.00 0.00 855.00 676.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="call~~graph~~CallGraph" class="graph" transform="scale(0.816557 0.816557) rotate(0) translate(4 824.27)">
+<title>call~~graph~~CallGraph</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-824.27 1043.08,-824.27 1043.08,4 -4,4"/>
+<!-- proc~adjust_search_direction -->
+<g id="call~~graph~~CallGraph_node1" class="node">
+<title>proc~adjust_search_direction</title>
+<g id="a_call~~graph~~CallGraph_node1"><a xlink:href="../proc/adjust_search_direction.html" xlink:title="nlesolver_type%adjust_search_direction">
+<polygon fill="#d9534f" stroke="#d9534f" points="520.67,-526.27 297.65,-526.27 297.65,-502 520.67,-502 520.67,-526.27"/>
+<text xml:space="preserve" text-anchor="middle" x="409.16" y="-510.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%adjust_search_direction</text>
+</a>
+</g>
+</g>
+<!-- proc~int2str -->
+<g id="call~~graph~~CallGraph_node17" class="node">
+<title>proc~int2str</title>
+<g id="a_call~~graph~~CallGraph_node17"><a xlink:href="../proc/int2str.html" xlink:title="int2str">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="966.95,-544.27 912.95,-544.27 912.95,-520 966.95,-520 966.95,-544.27"/>
+<text xml:space="preserve" text-anchor="middle" x="939.95" y="-528.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">int2str</text>
+</a>
+</g>
+</g>
+<!-- proc~adjust_search_direction&#45;&gt;proc~int2str -->
+<g id="call~~graph~~CallGraph_edge1" class="edge">
+<title>proc~adjust_search_direction&#45;&gt;proc~int2str</title>
+<path fill="none" stroke="#000000" d="M500.75,-526.76C523.49,-529.4 547.87,-531.8 570.54,-533.13 674.48,-539.27 700.69,-533.52 804.81,-533.13 837.37,-533.01 874.37,-532.73 901.25,-532.49"/>
+<polygon fill="#000000" stroke="#000000" points="900.99,-535.99 910.96,-532.4 900.93,-528.99 900.99,-535.99"/>
+</g>
+<!-- proc~set_status -->
+<g id="call~~graph~~CallGraph_node27" class="node">
+<title>proc~set_status</title>
+<g id="a_call~~graph~~CallGraph_node27"><a xlink:href="../proc/set_status.html" xlink:title="nlesolver_type%set_status">
+<polygon fill="#d9534f" stroke="#d9534f" points="763.19,-524.27 612.17,-524.27 612.17,-500 763.19,-500 763.19,-524.27"/>
+<text xml:space="preserve" text-anchor="middle" x="687.68" y="-508.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%set_status</text>
+</a>
+</g>
+</g>
+<!-- proc~adjust_search_direction&#45;&gt;proc~set_status -->
+<g id="call~~graph~~CallGraph_edge2" class="edge">
+<title>proc~adjust_search_direction&#45;&gt;proc~set_status</title>
+<path fill="none" stroke="#000000" d="M521.03,-513.33C547.48,-513.14 575.33,-512.94 600.48,-512.76"/>
+<polygon fill="#000000" stroke="#000000" points="600.34,-516.26 610.32,-512.69 600.29,-509.26 600.34,-516.26"/>
+</g>
+<!-- proc~adjust_x_for_bounds -->
+<g id="call~~graph~~CallGraph_node2" class="node">
+<title>proc~adjust_x_for_bounds</title>
+<g id="a_call~~graph~~CallGraph_node2"><a xlink:href="../proc/adjust_x_for_bounds.html" xlink:title="nlesolver_type%adjust_x_for_bounds">
+<polygon fill="#d9534f" stroke="#d9534f" points="790.94,-444.27 584.42,-444.27 584.42,-420 790.94,-420 790.94,-444.27"/>
+<text xml:space="preserve" text-anchor="middle" x="687.68" y="-428.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%adjust_x_for_bounds</text>
+</a>
+</g>
+</g>
+<!-- proc~adjust_x_for_bounds&#45;&gt;proc~int2str -->
+<g id="call~~graph~~CallGraph_edge3" class="edge">
+<title>proc~adjust_x_for_bounds&#45;&gt;proc~int2str</title>
+<path fill="none" stroke="#000000" d="M714.19,-444.76C737.81,-456.52 773.86,-474.68 804.81,-491.13 820.97,-499.73 823.67,-504.71 840.81,-511.13 860.17,-518.4 882.67,-523.44 901.24,-526.76"/>
+<polygon fill="#000000" stroke="#000000" points="900.58,-530.2 911.03,-528.4 901.74,-523.3 900.58,-530.2"/>
+</g>
+<!-- proc~analyze -->
+<g id="call~~graph~~CallGraph_node3" class="node">
+<title>proc~analyze</title>
+<g id="a_call~~graph~~CallGraph_node3"><a xlink:href="../proc/analyze.html" xlink:title="cholesky_minnorm_solver%analyze">
+<polygon fill="#d9534f" stroke="#d9534f" points="787.94,-318.27 587.42,-318.27 587.42,-294 787.94,-294 787.94,-318.27"/>
+<text xml:space="preserve" text-anchor="middle" x="687.68" y="-302.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">cholesky_minnorm_solver%analyze</text>
+</a>
+</g>
+</g>
+<!-- proc~destroy -->
+<g id="call~~graph~~CallGraph_node8" class="node">
+<title>proc~destroy</title>
+<g id="a_call~~graph~~CallGraph_node8"><a xlink:href="../proc/destroy.html" xlink:title="cholesky_minnorm_solver%destroy">
+<polygon fill="#d9534f" stroke="#d9534f" points="1039.08,-400.27 840.81,-400.27 840.81,-376 1039.08,-376 1039.08,-400.27"/>
+<text xml:space="preserve" text-anchor="middle" x="939.95" y="-384.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">cholesky_minnorm_solver%destroy</text>
+</a>
+</g>
+</g>
+<!-- proc~analyze&#45;&gt;proc~destroy -->
+<g id="call~~graph~~CallGraph_edge4" class="edge">
+<title>proc~analyze&#45;&gt;proc~destroy</title>
+<path fill="none" stroke="#000000" d="M772.7,-318.77C783.6,-321.15 794.54,-323.93 804.81,-327.13 840.59,-338.32 879.36,-356.69 905.98,-370.35"/>
+<polygon fill="#000000" stroke="#000000" points="904.07,-373.3 914.55,-374.82 907.3,-367.09 904.07,-373.3"/>
+</g>
+<!-- proc~rcm -->
+<g id="call~~graph~~CallGraph_node25" class="node">
+<title>proc~rcm</title>
+<g id="a_call~~graph~~CallGraph_node25"><a xlink:href="../proc/rcm.html" xlink:title="rcm">
+<polygon fill="#d9534f" stroke="#d9534f" points="966.95,-318.27 912.95,-318.27 912.95,-294 966.95,-294 966.95,-318.27"/>
+<text xml:space="preserve" text-anchor="middle" x="939.95" y="-302.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">rcm</text>
+</a>
+</g>
+</g>
+<!-- proc~analyze&#45;&gt;proc~rcm -->
+<g id="call~~graph~~CallGraph_edge5" class="edge">
+<title>proc~analyze&#45;&gt;proc~rcm</title>
+<path fill="none" stroke="#000000" d="M788.31,-306.13C828.14,-306.13 871.57,-306.13 901.52,-306.13"/>
+<polygon fill="#000000" stroke="#000000" points="901.18,-309.64 911.18,-306.14 901.18,-302.64 901.18,-309.64"/>
+</g>
+<!-- proc~backtracking_linesearch -->
+<g id="call~~graph~~CallGraph_node4" class="node">
+<title>proc~backtracking_linesearch</title>
+<g id="a_call~~graph~~CallGraph_node4"><a xlink:href="../proc/backtracking_linesearch.html" xlink:title="backtracking_linesearch">
+<polygon fill="#d9534f" stroke="#d9534f" points="194.14,-442.27 53.62,-442.27 53.62,-418 194.14,-418 194.14,-442.27"/>
+<text xml:space="preserve" text-anchor="middle" x="123.88" y="-426.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">backtracking_linesearch</text>
+</a>
+</g>
+</g>
+<!-- proc~backtracking_linesearch&#45;&gt;proc~adjust_search_direction -->
+<g id="call~~graph~~CallGraph_edge6" class="edge">
+<title>proc~backtracking_linesearch&#45;&gt;proc~adjust_search_direction</title>
+<path fill="none" stroke="#000000" d="M194.38,-433.53C212.62,-436.64 231.67,-442.01 247.77,-451.13 269.16,-463.26 262.37,-481.03 283.77,-493.13 286.31,-494.57 288.93,-495.92 291.6,-497.18"/>
+<polygon fill="#000000" stroke="#000000" points="290.21,-500.39 300.78,-501.03 292.92,-493.93 290.21,-500.39"/>
+</g>
+<!-- proc~compute_next_step -->
+<g id="call~~graph~~CallGraph_node6" class="node">
+<title>proc~compute_next_step</title>
+<g id="a_call~~graph~~CallGraph_node6"><a xlink:href="../proc/compute_next_step.html" xlink:title="nlesolver_type%compute_next_step">
+<polygon fill="#d9534f" stroke="#d9534f" points="509.79,-442.27 308.52,-442.27 308.52,-418 509.79,-418 509.79,-442.27"/>
+<text xml:space="preserve" text-anchor="middle" x="409.16" y="-426.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%compute_next_step</text>
+</a>
+</g>
+</g>
+<!-- proc~backtracking_linesearch&#45;&gt;proc~compute_next_step -->
+<g id="call~~graph~~CallGraph_edge7" class="edge">
+<title>proc~backtracking_linesearch&#45;&gt;proc~compute_next_step</title>
+<path fill="none" stroke="#000000" d="M194.54,-430.13C225.44,-430.13 262.55,-430.13 297.12,-430.13"/>
+<polygon fill="#000000" stroke="#000000" points="296.73,-433.64 306.73,-430.14 296.73,-426.64 296.73,-433.64"/>
+</g>
+<!-- proc~bandwidth -->
+<g id="call~~graph~~CallGraph_node5" class="node">
+<title>proc~bandwidth</title>
+<g id="a_call~~graph~~CallGraph_node5"><a xlink:href="../proc/bandwidth.html" xlink:title="cholesky_minnorm_solver%bandwidth">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="795.06,-192.27 580.29,-192.27 580.29,-168 795.06,-168 795.06,-192.27"/>
+<text xml:space="preserve" text-anchor="middle" x="687.68" y="-176.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">cholesky_minnorm_solver%bandwidth</text>
+</a>
+</g>
+</g>
+<!-- proc~craig_solver -->
+<g id="call~~graph~~CallGraph_node7" class="node">
+<title>proc~craig_solver</title>
+<g id="a_call~~graph~~CallGraph_node7"><a xlink:href="../proc/craig_solver.html" xlink:title="craig_solver">
+<polygon fill="#d9534f" stroke="#d9534f" points="725.69,-150.27 649.67,-150.27 649.67,-126 725.69,-126 725.69,-150.27"/>
+<text xml:space="preserve" text-anchor="middle" x="687.68" y="-134.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">craig_solver</text>
+</a>
+</g>
+</g>
+<!-- proc~destroy_nlesolver_variables -->
+<g id="call~~graph~~CallGraph_node9" class="node">
+<title>proc~destroy_nlesolver_variables</title>
+<g id="a_call~~graph~~CallGraph_node9"><a xlink:href="../proc/destroy_nlesolver_variables.html" xlink:title="nlesolver_type%destroy_nlesolver_variables">
+<polygon fill="#d9534f" stroke="#d9534f" points="246.65,-568.27 1.12,-568.27 1.12,-544 246.65,-544 246.65,-568.27"/>
+<text xml:space="preserve" text-anchor="middle" x="123.88" y="-552.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%destroy_nlesolver_variables</text>
+</a>
+</g>
+</g>
+<!-- proc~envelope_size -->
+<g id="call~~graph~~CallGraph_node10" class="node">
+<title>proc~envelope_size</title>
+<g id="a_call~~graph~~CallGraph_node10"><a xlink:href="../proc/envelope_size.html" xlink:title="cholesky_minnorm_solver%envelope_size">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="804.81,-108.27 570.54,-108.27 570.54,-84 804.81,-84 804.81,-108.27"/>
+<text xml:space="preserve" text-anchor="middle" x="687.68" y="-92.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">cholesky_minnorm_solver%envelope_size</text>
+</a>
+</g>
+</g>
+<!-- proc~exact_linesearch -->
+<g id="call~~graph~~CallGraph_node11" class="node">
+<title>proc~exact_linesearch</title>
+<g id="a_call~~graph~~CallGraph_node11"><a xlink:href="../proc/exact_linesearch.html" xlink:title="exact_linesearch">
+<polygon fill="#d9534f" stroke="#d9534f" points="173.89,-400.27 73.88,-400.27 73.88,-376 173.89,-376 173.89,-400.27"/>
+<text xml:space="preserve" text-anchor="middle" x="123.88" y="-384.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">exact_linesearch</text>
+</a>
+</g>
+</g>
+<!-- proc~exact_linesearch&#45;&gt;proc~adjust_search_direction -->
+<g id="call~~graph~~CallGraph_edge9" class="edge">
+<title>proc~exact_linesearch&#45;&gt;proc~adjust_search_direction</title>
+<path fill="none" stroke="#000000" d="M174.2,-385.97C198.63,-387.34 227.2,-392.92 247.77,-409.13 279.67,-434.28 251.85,-468.02 283.77,-493.13 285.09,-494.17 286.44,-495.17 287.82,-496.12"/>
+<polygon fill="#000000" stroke="#000000" points="285.64,-498.89 296.02,-501.04 289.24,-492.89 285.64,-498.89"/>
+</g>
+<!-- proc~exact_linesearch&#45;&gt;proc~compute_next_step -->
+<g id="call~~graph~~CallGraph_edge10" class="edge">
+<title>proc~exact_linesearch&#45;&gt;proc~compute_next_step</title>
+<path fill="none" stroke="#000000" d="M174.23,-395.45C212.08,-401.06 265.51,-408.99 311.76,-415.84"/>
+<polygon fill="#000000" stroke="#000000" points="311.14,-419.29 321.54,-417.29 312.16,-412.36 311.14,-419.29"/>
+</g>
+<!-- fmin -->
+<g id="call~~graph~~CallGraph_node30" class="node">
+<title>fmin</title>
+<polygon fill="#777777" stroke="#777777" points="436.16,-234.27 382.16,-234.27 382.16,-210 436.16,-210 436.16,-234.27"/>
+<text xml:space="preserve" text-anchor="middle" x="409.16" y="-218.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">fmin</text>
+</g>
+<!-- proc~exact_linesearch&#45;&gt;fmin -->
+<g id="call~~graph~~CallGraph_edge8" class="edge">
+<title>proc~exact_linesearch&#45;&gt;fmin</title>
+<path fill="none" stroke="#000000" d="M134.06,-375.91C156.24,-347.36 215.96,-276.18 283.77,-243.13 310.96,-229.88 345.02,-224.82 370.62,-222.96"/>
+<polygon fill="#000000" stroke="#000000" points="370.79,-226.46 380.58,-222.39 370.39,-219.47 370.79,-226.46"/>
+</g>
+<!-- proc~factor -->
+<g id="call~~graph~~CallGraph_node12" class="node">
+<title>proc~factor</title>
+<g id="a_call~~graph~~CallGraph_node12"><a xlink:href="../proc/factor.html" xlink:title="cholesky_minnorm_solver%factor">
+<polygon fill="#d9534f" stroke="#d9534f" points="783.06,-66.27 592.29,-66.27 592.29,-42 783.06,-42 783.06,-66.27"/>
+<text xml:space="preserve" text-anchor="middle" x="687.68" y="-50.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">cholesky_minnorm_solver%factor</text>
+</a>
+</g>
+</g>
+<!-- proc~fixed_point_linesearch -->
+<g id="call~~graph~~CallGraph_node13" class="node">
+<title>proc~fixed_point_linesearch</title>
+<g id="a_call~~graph~~CallGraph_node13"><a xlink:href="../proc/fixed_point_linesearch.html" xlink:title="fixed_point_linesearch">
+<polygon fill="#d9534f" stroke="#d9534f" points="188.89,-526.27 58.87,-526.27 58.87,-502 188.89,-502 188.89,-526.27"/>
+<text xml:space="preserve" text-anchor="middle" x="123.88" y="-510.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">fixed_point_linesearch</text>
+</a>
+</g>
+</g>
+<!-- proc~fixed_point_linesearch&#45;&gt;proc~adjust_search_direction -->
+<g id="call~~graph~~CallGraph_edge11" class="edge">
+<title>proc~fixed_point_linesearch&#45;&gt;proc~adjust_search_direction</title>
+<path fill="none" stroke="#000000" d="M189.16,-514.13C217.83,-514.13 252.61,-514.13 285.92,-514.13"/>
+<polygon fill="#000000" stroke="#000000" points="285.64,-517.64 295.64,-514.14 285.64,-510.64 285.64,-517.64"/>
+</g>
+<!-- proc~fixed_point_linesearch&#45;&gt;proc~compute_next_step -->
+<g id="call~~graph~~CallGraph_edge12" class="edge">
+<title>proc~fixed_point_linesearch&#45;&gt;proc~compute_next_step</title>
+<path fill="none" stroke="#000000" d="M189.29,-511.56C209.03,-508.61 230.17,-503.11 247.77,-493.13 269.16,-481.01 262.37,-463.24 283.77,-451.13 288.18,-448.64 292.81,-446.43 297.57,-444.46"/>
+<polygon fill="#000000" stroke="#000000" points="298.62,-447.81 306.8,-441.07 296.2,-441.24 298.62,-447.81"/>
+</g>
+<!-- proc~get_permutation -->
+<g id="call~~graph~~CallGraph_node14" class="node">
+<title>proc~get_permutation</title>
+<g id="a_call~~graph~~CallGraph_node14"><a xlink:href="../proc/get_permutation.html" xlink:title="cholesky_minnorm_solver%get_permutation">
+<polygon fill="#d9534f" stroke="#d9534f" points="247.77,-610.27 0,-610.27 0,-586 247.77,-586 247.77,-610.27"/>
+<text xml:space="preserve" text-anchor="middle" x="123.88" y="-594.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">cholesky_minnorm_solver%get_permutation</text>
+</a>
+</g>
+</g>
+<!-- proc~get_status -->
+<g id="call~~graph~~CallGraph_node15" class="node">
+<title>proc~get_status</title>
+<g id="a_call~~graph~~CallGraph_node15"><a xlink:href="../proc/get_status.html" xlink:title="nlesolver_type%get_status">
+<polygon fill="#d9534f" stroke="#d9534f" points="200.14,-652.27 47.62,-652.27 47.62,-628 200.14,-628 200.14,-652.27"/>
+<text xml:space="preserve" text-anchor="middle" x="123.88" y="-636.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%get_status</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_nlesolver_variables -->
+<g id="call~~graph~~CallGraph_node16" class="node">
+<title>proc~initialize_nlesolver_variables</title>
+<g id="a_call~~graph~~CallGraph_node16"><a xlink:href="../proc/initialize_nlesolver_variables.html" xlink:title="nlesolver_type%initialize_nlesolver_variables">
+<polygon fill="#d9534f" stroke="#d9534f" points="534.54,-484.27 283.77,-484.27 283.77,-460 534.54,-460 534.54,-484.27"/>
+<text xml:space="preserve" text-anchor="middle" x="409.16" y="-468.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%initialize_nlesolver_variables</text>
+</a>
+</g>
+</g>
+<!-- proc~initialize_nlesolver_variables&#45;&gt;proc~destroy -->
+<g id="call~~graph~~CallGraph_edge13" class="edge">
+<title>proc~initialize_nlesolver_variables&#45;&gt;proc~destroy</title>
+<path fill="none" stroke="#000000" d="M534.7,-478.8C613.34,-479.93 716.41,-475.68 804.81,-453.13 843.11,-443.37 883.45,-422.12 909.77,-406.57"/>
+<polygon fill="#000000" stroke="#000000" points="911.42,-409.66 918.17,-401.5 907.8,-403.67 911.42,-409.66"/>
+</g>
+<!-- proc~initialize_nlesolver_variables&#45;&gt;proc~set_status -->
+<g id="call~~graph~~CallGraph_edge14" class="edge">
+<title>proc~initialize_nlesolver_variables&#45;&gt;proc~set_status</title>
+<path fill="none" stroke="#000000" d="M497.27,-484.74C530.41,-489.53 568.11,-494.98 601.11,-499.76"/>
+<polygon fill="#000000" stroke="#000000" points="600.21,-503.16 610.6,-501.13 601.21,-496.24 600.21,-503.16"/>
+</g>
+<!-- proc~is_analyzed -->
+<g id="call~~graph~~CallGraph_node18" class="node">
+<title>proc~is_analyzed</title>
+<g id="a_call~~graph~~CallGraph_node18"><a xlink:href="../proc/is_analyzed.html" xlink:title="cholesky_minnorm_solver%is_analyzed">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="798.06,-24.27 577.29,-24.27 577.29,0 798.06,0 798.06,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="687.68" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">cholesky_minnorm_solver%is_analyzed</text>
+</a>
+</g>
+</g>
+<!-- proc~linear_solver -->
+<g id="call~~graph~~CallGraph_node19" class="node">
+<title>proc~linear_solver</title>
+<g id="a_call~~graph~~CallGraph_node19"><a xlink:href="../proc/linear_solver.html" xlink:title="linear_solver">
+<polygon fill="#d9534f" stroke="#d9534f" points="727.56,-402.27 647.79,-402.27 647.79,-378 727.56,-378 727.56,-402.27"/>
+<text xml:space="preserve" text-anchor="middle" x="687.68" y="-386.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">linear_solver</text>
+</a>
+</g>
+</g>
+<!-- proc~lower_solve -->
+<g id="call~~graph~~CallGraph_node20" class="node">
+<title>proc~lower_solve</title>
+<g id="a_call~~graph~~CallGraph_node20"><a xlink:href="../proc/lower_solve.html" xlink:title="cholesky_minnorm_solver%lower_solve">
+<polygon fill="#d9534f" stroke="#d9534f" points="519.92,-694.27 298.4,-694.27 298.4,-670 519.92,-670 519.92,-694.27"/>
+<text xml:space="preserve" text-anchor="middle" x="409.16" y="-678.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">cholesky_minnorm_solver%lower_solve</text>
+</a>
+</g>
+</g>
+<!-- proc~nlesolver_solver -->
+<g id="call~~graph~~CallGraph_node21" class="node">
+<title>proc~nlesolver_solver</title>
+<g id="a_call~~graph~~CallGraph_node21"><a xlink:href="../proc/nlesolver_solver.html" xlink:title="nlesolver_type%nlesolver_solver">
+<polygon fill="#d9534f" stroke="#d9534f" points="501.54,-276.27 316.77,-276.27 316.77,-252 501.54,-252 501.54,-276.27"/>
+<text xml:space="preserve" text-anchor="middle" x="409.16" y="-260.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%nlesolver_solver</text>
+</a>
+</g>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;proc~adjust_x_for_bounds -->
+<g id="call~~graph~~CallGraph_edge17" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;proc~adjust_x_for_bounds</title>
+<path fill="none" stroke="#000000" d="M419.43,-276.47C441.84,-305.31 502.19,-377.24 570.54,-411.13 573.84,-412.77 577.26,-414.29 580.75,-415.68"/>
+<polygon fill="#000000" stroke="#000000" points="579.41,-418.92 590,-419.01 581.78,-412.33 579.41,-418.92"/>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;proc~analyze -->
+<g id="call~~graph~~CallGraph_edge18" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;proc~analyze</title>
+<path fill="none" stroke="#000000" d="M493.12,-276.74C524.43,-281.49 560.26,-286.93 592.52,-291.83"/>
+<polygon fill="#000000" stroke="#000000" points="591.86,-295.27 602.27,-293.32 592.91,-288.35 591.86,-295.27"/>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;proc~bandwidth -->
+<g id="call~~graph~~CallGraph_edge19" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;proc~bandwidth</title>
+<path fill="none" stroke="#000000" d="M502.02,-256.15C513.4,-253.02 524.53,-248.8 534.54,-243.13 555.94,-231.03 549.21,-213.36 570.54,-201.13 573.03,-199.71 575.59,-198.37 578.22,-197.13"/>
+<polygon fill="#000000" stroke="#000000" points="579.35,-200.45 587.2,-193.33 576.63,-194 579.35,-200.45"/>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;proc~craig_solver -->
+<g id="call~~graph~~CallGraph_edge20" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;proc~craig_solver</title>
+<path fill="none" stroke="#000000" d="M501.96,-259.5C513.73,-255.89 524.99,-250.65 534.54,-243.13 566.46,-218.02 538.76,-184.43 570.54,-159.13 589.31,-144.19 615.2,-138.53 637.78,-136.77"/>
+<polygon fill="#000000" stroke="#000000" points="637.91,-140.27 647.72,-136.27 637.55,-133.28 637.91,-140.27"/>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;proc~envelope_size -->
+<g id="call~~graph~~CallGraph_edge21" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;proc~envelope_size</title>
+<path fill="none" stroke="#000000" d="M501.92,-260.88C513.91,-257.12 525.24,-251.46 534.54,-243.13 577.94,-204.3 527.36,-156.22 570.54,-117.13 571.32,-116.43 572.12,-115.74 572.93,-115.07"/>
+<polygon fill="#000000" stroke="#000000" points="574.7,-118.11 580.89,-109.51 570.69,-112.37 574.7,-118.11"/>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;proc~factor -->
+<g id="call~~graph~~CallGraph_edge22" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;proc~factor</title>
+<path fill="none" stroke="#000000" d="M501.81,-261.64C513.96,-257.8 525.36,-251.92 534.54,-243.13 589.71,-190.34 515.68,-128.25 570.54,-75.13 574.02,-71.77 577.84,-68.84 581.92,-66.31"/>
+<polygon fill="#000000" stroke="#000000" points="583.3,-69.54 590.51,-61.78 580.03,-63.35 583.3,-69.54"/>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;proc~is_analyzed -->
+<g id="call~~graph~~CallGraph_edge23" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;proc~is_analyzed</title>
+<path fill="none" stroke="#000000" d="M501.83,-262.08C514.05,-258.19 525.47,-252.18 534.54,-243.13 601.58,-176.26 503.89,-100.4 570.54,-33.13 571.04,-32.63 571.54,-32.14 572.05,-31.66"/>
+<polygon fill="#000000" stroke="#000000" points="574.04,-34.55 579.73,-25.61 569.71,-29.05 574.04,-34.55"/>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;proc~linear_solver -->
+<g id="call~~graph~~CallGraph_edge24" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;proc~linear_solver</title>
+<path fill="none" stroke="#000000" d="M424.5,-276.45C451.27,-298.73 511.49,-345.6 570.54,-369.13 591.26,-377.39 615.35,-382.42 636.21,-385.48"/>
+<polygon fill="#000000" stroke="#000000" points="635.54,-388.92 645.92,-386.78 636.47,-381.98 635.54,-388.92"/>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;proc~set_status -->
+<g id="call~~graph~~CallGraph_edge25" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;proc~set_status</title>
+<path fill="none" stroke="#000000" d="M420.9,-276.47C442.58,-301.38 493.01,-359.56 534.54,-409.13 550.77,-428.5 550.85,-437.3 570.54,-453.13 592.22,-470.58 619.88,-484.88 642.77,-495.03"/>
+<polygon fill="#000000" stroke="#000000" points="641.28,-498.2 651.85,-498.94 644.05,-491.77 641.28,-498.2"/>
+</g>
+<!-- initialize -->
+<g id="call~~graph~~CallGraph_node31" class="node">
+<title>initialize</title>
+<polygon fill="#777777" stroke="#777777" points="715.56,-360.27 659.79,-360.27 659.79,-336 715.56,-336 715.56,-360.27"/>
+<text xml:space="preserve" text-anchor="middle" x="687.68" y="-344.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">initialize</text>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;initialize -->
+<g id="call~~graph~~CallGraph_edge15" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;initialize</title>
+<path fill="none" stroke="#000000" d="M437.4,-276.74C468.87,-290.84 522.48,-313.49 570.54,-327.13 596.05,-334.38 625.46,-339.66 648.29,-343.12"/>
+<polygon fill="#000000" stroke="#000000" points="647.68,-346.57 658.08,-344.55 648.69,-339.64 647.68,-346.57"/>
+</g>
+<!-- lsmr_ez -->
+<g id="call~~graph~~CallGraph_node32" class="node">
+<title>lsmr_ez</title>
+<polygon fill="#777777" stroke="#777777" points="714.68,-276.27 660.68,-276.27 660.68,-252 714.68,-252 714.68,-276.27"/>
+<text xml:space="preserve" text-anchor="middle" x="687.68" y="-260.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lsmr_ez</text>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;lsmr_ez -->
+<g id="call~~graph~~CallGraph_edge16" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;lsmr_ez</title>
+<path fill="none" stroke="#000000" d="M501.85,-264.13C551.92,-264.13 611.23,-264.13 648.9,-264.13"/>
+<polygon fill="#000000" stroke="#000000" points="648.81,-267.64 658.81,-264.14 648.81,-260.64 648.81,-267.64"/>
+</g>
+<!-- solve -->
+<g id="call~~graph~~CallGraph_node33" class="node">
+<title>solve</title>
+<polygon fill="#777777" stroke="#777777" points="714.68,-234.27 660.68,-234.27 660.68,-210 714.68,-210 714.68,-234.27"/>
+<text xml:space="preserve" text-anchor="middle" x="687.68" y="-218.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">solve</text>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;solve -->
+<g id="call~~graph~~CallGraph_edge26" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;solve</title>
+<path fill="none" stroke="#000000" d="M493.12,-251.53C544.99,-243.66 609.29,-233.89 649.15,-227.83"/>
+<polygon fill="#000000" stroke="#000000" points="649.59,-231.31 658.96,-226.35 648.54,-224.39 649.59,-231.31"/>
+</g>
+<!-- proc~norm_1 -->
+<g id="call~~graph~~CallGraph_node22" class="node">
+<title>proc~norm_1</title>
+<g id="a_call~~graph~~CallGraph_node22"><a xlink:href="../proc/norm_1.html" xlink:title="norm_1">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="150.88,-736.27 96.88,-736.27 96.88,-712 150.88,-712 150.88,-736.27"/>
+<text xml:space="preserve" text-anchor="middle" x="123.88" y="-720.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">norm_1</text>
+</a>
+</g>
+</g>
+<!-- proc~norm_2 -->
+<g id="call~~graph~~CallGraph_node23" class="node">
+<title>proc~norm_2</title>
+<g id="a_call~~graph~~CallGraph_node23"><a xlink:href="../proc/norm_2.html" xlink:title="norm_2">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="150.88,-778.27 96.88,-778.27 96.88,-754 150.88,-754 150.88,-778.27"/>
+<text xml:space="preserve" text-anchor="middle" x="123.88" y="-762.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">norm_2</text>
+</a>
+</g>
+</g>
+<!-- proc~norm_inf -->
+<g id="call~~graph~~CallGraph_node24" class="node">
+<title>proc~norm_inf</title>
+<g id="a_call~~graph~~CallGraph_node24"><a xlink:href="../proc/norm_inf.html" xlink:title="norm_inf">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="153.27,-820.27 94.5,-820.27 94.5,-796 153.27,-796 153.27,-820.27"/>
+<text xml:space="preserve" text-anchor="middle" x="123.88" y="-804.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">norm_inf</text>
+</a>
+</g>
+</g>
+<!-- proc~real2str -->
+<g id="call~~graph~~CallGraph_node26" class="node">
+<title>proc~real2str</title>
+<g id="a_call~~graph~~CallGraph_node26"><a xlink:href="../proc/real2str.html" xlink:title="real2str">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="966.95,-502.27 912.95,-502.27 912.95,-478 966.95,-478 966.95,-502.27"/>
+<text xml:space="preserve" text-anchor="middle" x="939.95" y="-486.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">real2str</text>
+</a>
+</g>
+</g>
+<!-- proc~set_status&#45;&gt;proc~int2str -->
+<g id="call~~graph~~CallGraph_edge27" class="edge">
+<title>proc~set_status&#45;&gt;proc~int2str</title>
+<path fill="none" stroke="#000000" d="M763.43,-518.11C808.91,-521.74 865.07,-526.23 901.42,-529.14"/>
+<polygon fill="#000000" stroke="#000000" points="900.73,-532.59 910.98,-529.9 901.29,-525.61 900.73,-532.59"/>
+</g>
+<!-- proc~set_status&#45;&gt;proc~real2str -->
+<g id="call~~graph~~CallGraph_edge28" class="edge">
+<title>proc~set_status&#45;&gt;proc~real2str</title>
+<path fill="none" stroke="#000000" d="M763.43,-505.56C808.91,-501.57 865.07,-496.63 901.42,-493.43"/>
+<polygon fill="#000000" stroke="#000000" points="901.33,-496.96 910.98,-492.59 900.71,-489.98 901.33,-496.96"/>
+</g>
+<!-- proc~simple_step -->
+<g id="call~~graph~~CallGraph_node28" class="node">
+<title>proc~simple_step</title>
+<g id="a_call~~graph~~CallGraph_node28"><a xlink:href="../proc/simple_step.html" xlink:title="simple_step">
+<polygon fill="#d9534f" stroke="#d9534f" points="161.14,-484.27 86.62,-484.27 86.62,-460 161.14,-460 161.14,-484.27"/>
+<text xml:space="preserve" text-anchor="middle" x="123.88" y="-468.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">simple_step</text>
+</a>
+</g>
+</g>
+<!-- proc~simple_step&#45;&gt;proc~adjust_search_direction -->
+<g id="call~~graph~~CallGraph_edge29" class="edge">
+<title>proc~simple_step&#45;&gt;proc~adjust_search_direction</title>
+<path fill="none" stroke="#000000" d="M161.63,-477.58C199.49,-483.2 260.11,-492.18 311.76,-499.84"/>
+<polygon fill="#000000" stroke="#000000" points="311.07,-503.28 321.48,-501.28 312.1,-496.35 311.07,-503.28"/>
+</g>
+<!-- proc~simple_step&#45;&gt;proc~compute_next_step -->
+<g id="call~~graph~~CallGraph_edge30" class="edge">
+<title>proc~simple_step&#45;&gt;proc~compute_next_step</title>
+<path fill="none" stroke="#000000" d="M161.63,-466.69C199.49,-461.07 260.11,-452.09 311.76,-444.43"/>
+<polygon fill="#000000" stroke="#000000" points="312.1,-447.92 321.48,-442.99 311.07,-440.99 312.1,-447.92"/>
+</g>
+<!-- proc~solve -->
+<g id="call~~graph~~CallGraph_node29" class="node">
+<title>proc~solve</title>
+<g id="a_call~~graph~~CallGraph_node29"><a xlink:href="../proc/solve.html" xlink:title="cholesky_minnorm_solver%solve">
+<polygon fill="#d9534f" stroke="#d9534f" points="217.39,-694.27 30.37,-694.27 30.37,-670 217.39,-670 217.39,-694.27"/>
+<text xml:space="preserve" text-anchor="middle" x="123.88" y="-678.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">cholesky_minnorm_solver%solve</text>
+</a>
+</g>
+</g>
+<!-- proc~solve&#45;&gt;proc~lower_solve -->
+<g id="call~~graph~~CallGraph_edge31" class="edge">
+<title>proc~solve&#45;&gt;proc~lower_solve</title>
+<path fill="none" stroke="#000000" d="M217.64,-682.13C239.69,-682.13 263.53,-682.13 286.65,-682.13"/>
+<polygon fill="#000000" stroke="#000000" points="286.42,-685.64 296.42,-682.14 286.42,-678.64 286.42,-685.64"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var pancallgraphCallGraph = svgPanZoom('#callgraphCallGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CallGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="CallGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 28.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(0.873868 0.873868) rotate(0) translate(4 28.27)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28.27 729.52,-28.27 729.52,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="69.27,-24.27 0,-24.27 0,0 69.27,0 69.27,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="34.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="143.89,-24.27 87.38,-24.27 87.38,0 143.89,0 143.89,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="115.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="221.39,-24.27 161.88,-24.27 161.88,0 221.39,0 221.39,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="191.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Type Bound Procedure -->
+<g id="node4" class="node">
+<title>Type Bound Procedure</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="368.27,-24.27 239,-24.27 239,0 368.27,0 368.27,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="303.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type Bound Procedure</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node5" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="529.39,-24.27 385.88,-24.27 385.88,0 529.39,0 529.39,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="457.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node6" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="603.89,-24.27 547.38,-24.27 547.38,0 603.89,0 603.89,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="575.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node7" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="725.52,-24.27 621.75,-24.27 621.75,0 725.52,0 725.52,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="673.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.
+</p>
+ </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              nlesolver-fortran
+ was developed by Jacob Williams<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+            </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

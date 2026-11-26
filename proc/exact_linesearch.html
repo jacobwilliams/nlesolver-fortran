@@ -1,0 +1,620 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Nonlinear Equation Solver with Modern Fortran">
+    <meta name="author" content="Jacob Williams" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>exact_linesearch &ndash; nlesolver-fortran</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">nlesolver-fortran </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>exact_linesearch
+      <small>Subroutine</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 3.0% of total for procedures.">43 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/nlesolver_module.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/nlesolver_module.f90.html'>nlesolver_module.F90</a></li>
+                <li class="breadcrumb-item"><a href='../module/nlesolver_module.html'>nlesolver_module</a></li>
+            <li class="breadcrumb-item active" aria-current="page">exact_linesearch</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+      <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/exact_linesearch.html#src">exact_linesearch</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>private  subroutine exact_linesearch(me, xold, p, x, f, fvec, fjac, fjac_sparse)  
+</h2>
+    
+
+    <p>An exact linesearch that uses a derivative-free minimizer to
+find the minimum value of <code>f(x)</code> between
+<code>x = xold + p * alpha_min</code> and
+<code>x = xold + p * alpha_max</code>.</p>
+<p>Usually this is overkill and not necessary, but is here as an option for testing.</p>
+
+
+    <h3>Arguments</h3>
+        <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-me~22"></span>
+              class(<a href='../type/nlesolver_type.html'>nlesolver_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>me</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-xold~6"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>xold</strong></td>
+            <td>
+                <p>previous value of <code>x</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-p~6"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>p</strong></td>
+            <td>
+                <p>search direction</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~14"></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(me%n)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>new <code>x</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-f~11"></span>
+              real(kind=wp),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>f</strong></td>
+            <td>
+                <p>magnitude of <code>fvec</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fvec~9"></span>
+              real(kind=wp),
+            </td>
+<td>intent(inout),</td>
+              <td></td>            <td>
+              dimension(me%m)
+            </td>
+            <td>::</td>
+            <td><strong>fvec</strong></td>
+            <td>
+                <p>function vector</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fjac~5"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(:,:)
+            </td>
+            <td>::</td>
+            <td><strong>fjac</strong></td>
+            <td>
+                <p>jacobian matrix [dense]</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fjac_sparse~5"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td>optional,</td>            <td>
+              dimension(:)
+            </td>
+            <td>::</td>
+            <td><strong>fjac_sparse</strong></td>
+            <td>
+                <p>jacobian matrix [sparse]</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <br>
+    <div class="card">
+      <div class="card-header">
+  <h3 class="card-title">Calls</h3>
+      </div>
+      <div class="card-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (0)
+ -->
+<!-- Title: proc~~exact_linesearch~~CallsGraph Pages: 1 -->
+<svg id="procexact_linesearchCallsGraph" width="641pt" height="116pt"
+ viewBox="0.00 0.00 641.00 116.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~exact_linesearch~~CallsGraph" class="graph" transform="scale(0.995249 0.995249) rotate(0) translate(4 112.27)">
+<title>proc~~exact_linesearch~~CallsGraph</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-112.27 640.06,-112.27 640.06,4 -4,4"/>
+<!-- proc~exact_linesearch -->
+<g id="proc~~exact_linesearch~~CallsGraph_node1" class="node">
+<title>proc~exact_linesearch</title>
+<polygon fill="none" stroke="black" points="100.02,-66.27 0,-66.27 0,-42 100.02,-42 100.02,-66.27"/>
+<text xml:space="preserve" text-anchor="middle" x="50.01" y="-50.53" font-family="Helvetica,sans-Serif" font-size="10.50">exact_linesearch</text>
+</g>
+<!-- fmin -->
+<g id="proc~~exact_linesearch~~CallsGraph_node2" class="node">
+<title>fmin</title>
+<polygon fill="#777777" stroke="#777777" points="274.53,-108.27 220.53,-108.27 220.53,-84 274.53,-84 274.53,-108.27"/>
+<text xml:space="preserve" text-anchor="middle" x="247.53" y="-92.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">fmin</text>
+</g>
+<!-- proc~exact_linesearch&#45;&gt;fmin -->
+<g id="proc~~exact_linesearch~~CallsGraph_edge1" class="edge">
+<title>proc~exact_linesearch&#45;&gt;fmin</title>
+<path fill="none" stroke="#000000" d="M99.9,-66.7C111.7,-69.59 124.29,-72.57 136.02,-75.13 160.17,-80.41 187.45,-85.6 208.86,-89.5"/>
+<polygon fill="#000000" stroke="#000000" points="208.15,-92.93 218.61,-91.26 209.39,-86.04 208.15,-92.93"/>
+</g>
+<!-- proc~adjust_search_direction -->
+<g id="proc~~exact_linesearch~~CallsGraph_node3" class="node">
+<title>proc~adjust_search_direction</title>
+<g id="a_proc~~exact_linesearch~~CallsGraph_node3"><a xlink:href="../proc/adjust_search_direction.html" xlink:title="nlesolver_type%adjust_search_direction">
+<polygon fill="#d9534f" stroke="#d9534f" points="359.04,-66.27 136.02,-66.27 136.02,-42 359.04,-42 359.04,-66.27"/>
+<text xml:space="preserve" text-anchor="middle" x="247.53" y="-50.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%adjust_search_direction</text>
+</a>
+</g>
+</g>
+<!-- proc~exact_linesearch&#45;&gt;proc~adjust_search_direction -->
+<g id="proc~~exact_linesearch~~CallsGraph_edge2" class="edge">
+<title>proc~exact_linesearch&#45;&gt;proc~adjust_search_direction</title>
+<path fill="none" stroke="#000000" d="M100.35,-54.13C107.89,-54.13 115.95,-54.13 124.26,-54.13"/>
+<polygon fill="#000000" stroke="#000000" points="124.21,-57.64 134.21,-54.14 124.21,-50.64 124.21,-57.64"/>
+</g>
+<!-- proc~compute_next_step -->
+<g id="proc~~exact_linesearch~~CallsGraph_node4" class="node">
+<title>proc~compute_next_step</title>
+<g id="a_proc~~exact_linesearch~~CallsGraph_node4"><a xlink:href="../proc/compute_next_step.html" xlink:title="nlesolver_type%compute_next_step">
+<polygon fill="#d9534f" stroke="#d9534f" points="348.16,-24.27 146.89,-24.27 146.89,0 348.16,0 348.16,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="247.53" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%compute_next_step</text>
+</a>
+</g>
+</g>
+<!-- proc~exact_linesearch&#45;&gt;proc~compute_next_step -->
+<g id="proc~~exact_linesearch~~CallsGraph_edge3" class="edge">
+<title>proc~exact_linesearch&#45;&gt;proc~compute_next_step</title>
+<path fill="none" stroke="#000000" d="M99.9,-41.57C111.7,-38.68 124.29,-35.7 136.02,-33.13 145.65,-31.03 155.79,-28.94 165.85,-26.94"/>
+<polygon fill="#000000" stroke="#000000" points="166.52,-30.37 175.66,-25.01 165.17,-23.5 166.52,-30.37"/>
+</g>
+<!-- proc~int2str -->
+<g id="proc~~exact_linesearch~~CallsGraph_node5" class="node">
+<title>proc~int2str</title>
+<g id="a_proc~~exact_linesearch~~CallsGraph_node5"><a xlink:href="../proc/int2str.html" xlink:title="int2str">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="636.06,-86.27 582.06,-86.27 582.06,-62 636.06,-62 636.06,-86.27"/>
+<text xml:space="preserve" text-anchor="middle" x="609.06" y="-70.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">int2str</text>
+</a>
+</g>
+</g>
+<!-- proc~adjust_search_direction&#45;&gt;proc~int2str -->
+<g id="proc~~exact_linesearch~~CallsGraph_edge4" class="edge">
+<title>proc~adjust_search_direction&#45;&gt;proc~int2str</title>
+<path fill="none" stroke="#000000" d="M359.33,-60.3C431.38,-64.31 520.86,-69.28 570.47,-72.04"/>
+<polygon fill="#000000" stroke="#000000" points="570.2,-75.53 580.38,-72.6 570.59,-68.55 570.2,-75.53"/>
+</g>
+<!-- proc~set_status -->
+<g id="proc~~exact_linesearch~~CallsGraph_node6" class="node">
+<title>proc~set_status</title>
+<g id="a_proc~~exact_linesearch~~CallsGraph_node6"><a xlink:href="../proc/set_status.html" xlink:title="nlesolver_type%set_status">
+<polygon fill="#d9534f" stroke="#d9534f" points="546.06,-46.27 395.04,-46.27 395.04,-22 546.06,-22 546.06,-46.27"/>
+<text xml:space="preserve" text-anchor="middle" x="470.55" y="-30.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%set_status</text>
+</a>
+</g>
+</g>
+<!-- proc~adjust_search_direction&#45;&gt;proc~set_status -->
+<g id="proc~~exact_linesearch~~CallsGraph_edge5" class="edge">
+<title>proc~adjust_search_direction&#45;&gt;proc~set_status</title>
+<path fill="none" stroke="#000000" d="M359.36,-44.11C367.4,-43.38 375.43,-42.65 383.29,-41.94"/>
+<polygon fill="#000000" stroke="#000000" points="383.5,-45.44 393.15,-41.05 382.87,-38.46 383.5,-45.44"/>
+</g>
+<!-- proc~set_status&#45;&gt;proc~int2str -->
+<g id="proc~~exact_linesearch~~CallsGraph_edge6" class="edge">
+<title>proc~set_status&#45;&gt;proc~int2str</title>
+<path fill="none" stroke="#000000" d="M514.37,-46.68C532.46,-51.98 553.32,-58.1 570.77,-63.21"/>
+<polygon fill="#000000" stroke="#000000" points="569.64,-66.52 580.22,-65.98 571.61,-59.81 569.64,-66.52"/>
+</g>
+<!-- proc~real2str -->
+<g id="proc~~exact_linesearch~~CallsGraph_node7" class="node">
+<title>proc~real2str</title>
+<g id="a_proc~~exact_linesearch~~CallsGraph_node7"><a xlink:href="../proc/real2str.html" xlink:title="real2str">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="636.06,-44.27 582.06,-44.27 582.06,-20 636.06,-20 636.06,-44.27"/>
+<text xml:space="preserve" text-anchor="middle" x="609.06" y="-28.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">real2str</text>
+</a>
+</g>
+</g>
+<!-- proc~set_status&#45;&gt;proc~real2str -->
+<g id="proc~~exact_linesearch~~CallsGraph_edge7" class="edge">
+<title>proc~set_status&#45;&gt;proc~real2str</title>
+<path fill="none" stroke="#000000" d="M546.2,-33.04C554.53,-32.92 562.73,-32.8 570.31,-32.69"/>
+<polygon fill="#000000" stroke="#000000" points="570.16,-36.19 580.1,-32.54 570.05,-29.19 570.16,-36.19"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var panprocexact_linesearchCallsGraph = svgPanZoom('#procexact_linesearchCallsGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CallsGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="CallsGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 28.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(0.873868 0.873868) rotate(0) translate(4 28.27)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28.27 729.52,-28.27 729.52,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="69.27,-24.27 0,-24.27 0,0 69.27,0 69.27,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="34.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="143.89,-24.27 87.38,-24.27 87.38,0 143.89,0 143.89,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="115.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="221.39,-24.27 161.88,-24.27 161.88,0 221.39,0 221.39,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="191.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Type Bound Procedure -->
+<g id="node4" class="node">
+<title>Type Bound Procedure</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="368.27,-24.27 239,-24.27 239,0 368.27,0 368.27,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="303.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type Bound Procedure</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node5" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="529.39,-24.27 385.88,-24.27 385.88,0 529.39,0 529.39,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="457.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node6" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="603.89,-24.27 547.38,-24.27 547.38,0 603.89,0 603.89,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="575.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node7" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="725.52,-24.27 621.75,-24.27 621.75,0 725.52,0 725.52,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="673.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.
+</p>
+ </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+
+
+    
+    
+
+    
+    
+
+
+
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl codehilite"><pre><span></span><span class="w">    </span><span class="k">subroutine </span><span class="n">exact_linesearch</span><span class="p">(</span><span class="n">me</span><span class="p">,</span><span class="n">xold</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">fvec</span><span class="p">,</span><span class="n">fjac</span><span class="p">,</span><span class="n">fjac_sparse</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">implicit none</span>
+
+<span class="k">    class</span><span class="p">(</span><span class="n">nlesolver_type</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">me</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">xold</span><span class="w">      </span><span class="c">!! previous value of `x`</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">p</span><span class="w">         </span><span class="c">!! search direction</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="w">        </span><span class="c">!! new `x`</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">f</span><span class="w">                      </span><span class="c">!! magnitude of `fvec`</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fvec</span><span class="w">   </span><span class="c">!! function vector</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:,:),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fjac</span><span class="w"> </span><span class="c">!! jacobian matrix [dense]</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fjac_sparse</span><span class="w"> </span><span class="c">!! jacobian matrix [sparse]</span>
+
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">xnew</span><span class="w">      </span><span class="c">!! trial `x` (used in [[func_for_fmin]])</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fvecnew</span><span class="w">   </span><span class="c">!! trial `fvec` (used in [[func_for_fmin]])</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">search_direction</span><span class="w"> </span><span class="c">!! search direction to use (may be modified from `p` if bounds are violated)</span>
+<span class="w">    </span><span class="kt">logical</span><span class="p">,</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">modified</span><span class="w">  </span><span class="c">!! indicates the elements of p that were modified</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">alpha</span><span class="w">      </span><span class="c">!! step length returned by [[fmin]]</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">phi</span><span class="w">        </span><span class="c">!! value returned by [[func_for_fmin]]</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">phi_best</span><span class="w">   </span><span class="c">!! best (smallest) value of `norm(fvec)**2` found so far</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">alpha_best</span><span class="w"> </span><span class="c">!! `alpha` corresponding to `phi_best`</span>
+
+<span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="n">xnew</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">))</span>
+<span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="n">fvecnew</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">m</span><span class="p">))</span>
+<span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="n">search_direction</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">))</span>
+<span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="n">modified</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">n</span><span class="p">))</span>
+
+<span class="w">    </span><span class="c">! set the search direction (this must be done before the line search):</span>
+<span class="w">    </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">adjust_search_direction</span><span class="p">(</span><span class="n">xold</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">alpha_max</span><span class="p">,</span><span class="n">search_direction</span><span class="p">,</span><span class="n">modified</span><span class="p">)</span>
+
+<span class="w">    </span><span class="c">! the full step is evaluated explicitly, since fmin never evaluates</span>
+<span class="w">    </span><span class="c">! the endpoints of the interval, and near the solution the full</span>
+<span class="w">    </span><span class="c">! Newton step is usually the minimizer.</span>
+<span class="w">    </span><span class="n">phi_best</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">huge</span><span class="p">(</span><span class="n">one</span><span class="p">)</span>
+<span class="w">    </span><span class="n">phi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">func_for_fmin</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">alpha_max</span><span class="p">)</span>
+
+<span class="w">    </span><span class="c">! find the minimum value of f in the range of alphas.</span>
+<span class="w">    </span><span class="c">! Note: the function minimized is norm(fvec)**2, which has the same minimizer as</span>
+<span class="w">    </span><span class="c">! norm(fvec), but (for the 2-norm) is smooth at a zero, which is much better for the</span>
+<span class="w">    </span><span class="c">! parabolic interpolation used by fmin. The best point is saved in func_for_fmin.</span>
+<span class="w">    </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fmin</span><span class="p">(</span><span class="n">func_for_fmin</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">alpha_min</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">alpha_max</span><span class="p">,</span><span class="n">me</span><span class="p">%</span><span class="n">fmin_tol</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">verbose</span><span class="p">)</span><span class="w"> </span><span class="k">write</span><span class="p">(</span><span class="n">me</span><span class="p">%</span><span class="n">iunit</span><span class="p">,</span><span class="s1">'(1P,*(A,1X,E16.6))'</span><span class="p">)</span><span class="w"> </span><span class="s1">'        alpha_min = '</span><span class="p">,</span><span class="w"> </span><span class="n">alpha_best</span>
+
+<span class="w">    </span><span class="c">! x, fvec, and f were saved for the best point evaluated:</span>
+<span class="w">    </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">sqrt</span><span class="p">(</span><span class="n">phi_best</span><span class="p">)</span>
+
+<span class="k">contains</span>
+
+<span class="k">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w"> </span><span class="k">function </span><span class="n">func_for_fmin</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+<span class="w">    </span><span class="c">!! function for [[fmin]]: `norm(fvec)**2` at `xold + alpha*search_direction`.</span>
+<span class="w">    </span><span class="c">!! Also saves the best point evaluated so far in `x` and `fvec`.</span>
+<span class="w">    </span><span class="k">implicit none</span>
+<span class="k">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="c">!! indep variable</span>
+
+<span class="w">    </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">compute_next_step</span><span class="p">(</span><span class="n">xold</span><span class="p">,</span><span class="w"> </span><span class="n">search_direction</span><span class="p">,</span><span class="w"> </span><span class="n">alpha</span><span class="p">,</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">alpha_max</span><span class="p">,</span><span class="w"> </span><span class="n">modified</span><span class="p">,</span><span class="w"> </span><span class="n">xnew</span><span class="p">)</span>
+<span class="w">    </span><span class="k">call </span><span class="n">me</span><span class="p">%</span><span class="n">func</span><span class="p">(</span><span class="n">xnew</span><span class="p">,</span><span class="n">fvecnew</span><span class="p">)</span>
+<span class="w">    </span><span class="n">func_for_fmin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">me</span><span class="p">%</span><span class="n">norm</span><span class="p">(</span><span class="n">fvecnew</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">func_for_fmin</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">phi_best</span><span class="w"> </span><span class="p">.</span><span class="nb">or</span><span class="p">.</span><span class="w"> </span><span class="n">phi_best</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">huge</span><span class="p">(</span><span class="n">one</span><span class="p">))</span><span class="w"> </span><span class="k">then</span><span class="w">  </span><span class="c">! (always save the first one)</span>
+<span class="w">        </span><span class="n">phi_best</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">func_for_fmin</span>
+<span class="w">        </span><span class="n">alpha_best</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">alpha</span>
+<span class="w">        </span><span class="n">x</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="n">xnew</span>
+<span class="w">        </span><span class="n">fvec</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="n">fvecnew</span>
+<span class="w">    </span><span class="k">end if</span>
+
+<span class="k">    end function </span><span class="n">func_for_fmin</span>
+
+<span class="w">    </span><span class="k">end subroutine </span><span class="n">exact_linesearch</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              nlesolver-fortran
+ was developed by Jacob Williams<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+            </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

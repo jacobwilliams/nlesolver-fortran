@@ -1,0 +1,797 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Nonlinear Equation Solver with Modern Fortran">
+    <meta name="author" content="Jacob Williams" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>craig_solver &ndash; nlesolver-fortran</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">nlesolver-fortran </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/absint.html">Abstract Interfaces</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>craig_solver
+      <small>Subroutine</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 8.3% of total for procedures.">119 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/nlesolver_module.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/nlesolver_module.f90.html'>nlesolver_module.F90</a></li>
+                <li class="breadcrumb-item"><a href='../module/nlesolver_module.html'>nlesolver_module</a></li>
+            <li class="breadcrumb-item active" aria-current="page">craig_solver</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+      <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/craig_solver.html#src">craig_solver</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>private  subroutine craig_solver(m, n, nnz, irow, icol, a, b, damp, atol, btol, itnlim, nout, x, istop, itn, rnorm, xnorm)  
+</h2>
+    
+
+    <p>Sparse minimum-norm linear solver using CRAIG's method.</p>
+<p>Computes the minimum-norm solution of the compatible system <script type="math/tex"> A x = b </script>,
+  where <code>A</code> is an <code>m x n</code> sparse matrix stored in coordinate (triplet) format.
+  This is intended for the underdetermined case (<code>n &gt; m</code>), but works for any
+  compatible system. The dense matrix is never formed: the only operations
+  on <code>A</code> are the products <script type="math/tex"> A v </script> and <script type="math/tex"> A^T u </script>, each costing <code>O(nnz)</code>.</p>
+<p>The method is based on the Golub-Kahan bidiagonalization
+  <script type="math/tex"> A V_k = U_k L_k + \beta_{k+1} u_{k+1} e_k^T </script>, where <script type="math/tex"> L_k </script> is lower
+  bidiagonal. The iterate is <script type="math/tex"> x_k = V_k z_k </script> with <script type="math/tex"> L_k z_k = \beta_1 e_1 </script>.
+  Since every <script type="math/tex"> v_i \in \mathrm{range}(A^T) </script>, <script type="math/tex"> x_k </script> converges to the
+  minimum-norm solution <script type="math/tex"> x = A^T (A A^T)^{-1} b </script>. It is mathematically
+  equivalent to CG applied to <script type="math/tex"> A A^T y = b </script>, <script type="math/tex"> x = A^T y </script>, but without
+  forming <script type="math/tex"> A A^T </script>, and it minimizes the error <script type="math/tex"> \| x - x_k \| </script> at each step.
+  The residual is available for free: <script type="math/tex"> \| b - A x_k \| = | \beta_{k+1} \zeta_k | </script>.</p>
+<p>If <code>damp &gt; 0</code>, the regularized problem is solved instead:
+  <script type="math/tex"> \min \| x |^2 + \| s \|^2 </script> subject to <script type="math/tex"> A x + \delta s = b </script>,
+  whose solution is <script type="math/tex"> x = A^T (A A^T + \delta^2 I)^{-1} b </script>. This is done by applying
+  the same method to the operator <script type="math/tex"> [A, \; \delta I] </script>, which always has full row rank,
+  so the iteration cannot break down. This is useful when <code>A</code> is rank deficient.</p>
+<h3>Status codes (<code>istop</code>)</h3>
+<ul>
+<li>0 -- <code>b = 0</code>, so the solution is <code>x = 0</code></li>
+<li>1 -- converged: <script type="math/tex"> \| r \| \le \mathrm{btol} \| b \| + \mathrm{atol} \| A |_F \| x \| </script>
+</li>
+<li>2 -- breakdown: <script type="math/tex"> \alpha_k = 0 </script>. <code>b</code> is not in the range of <code>A</code> (incompatible system).</li>
+<li>3 -- iteration limit <code>itnlim</code> reached</li>
+</ul>
+<h3>References</h3>
+<ul>
+<li>C. C. Paige and M. A. Saunders, "LSQR: An algorithm for sparse linear equations and
+    sparse least squares", ACM TOMS 8(1), 1982.</li>
+<li>M. A. Saunders, "Solution of sparse rectangular systems using LSQR and CRAIG",
+    BIT 35, 1995.</li>
+</ul>
+
+
+    <h3>Arguments</h3>
+        <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-m~3"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>m</strong></td>
+            <td>
+                <p>number of rows in <code>A</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~3"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+                <p>number of columns in <code>A</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nnz"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>nnz</strong></td>
+            <td>
+                <p>number of nonzero elements of <code>A</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-irow~4"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(nnz)
+            </td>
+            <td>::</td>
+            <td><strong>irow</strong></td>
+            <td>
+                <p>row indices of the nonzero elements of <code>A</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-icol~4"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(nnz)
+            </td>
+            <td>::</td>
+            <td><strong>icol</strong></td>
+            <td>
+                <p>column indices of the nonzero elements of <code>A</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-a~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(nnz)
+            </td>
+            <td>::</td>
+            <td><strong>a</strong></td>
+            <td>
+                <p>nonzero elements of <code>A</code></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-b~2"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(m)
+            </td>
+            <td>::</td>
+            <td><strong>b</strong></td>
+            <td>
+                <p>right hand side</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-damp~3"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>damp</strong></td>
+            <td>
+                <p>damping (regularization) parameter <script type="math/tex"> \delta \ge 0 </script>
+</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-atol~3"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>atol</strong></td>
+            <td>
+                <p>relative error in the definition of <code>A</code>
+(values less than machine epsilon are replaced by it)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-btol~3"></span>
+              real(kind=wp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>btol</strong></td>
+            <td>
+                <p>relative error in the definition of <code>b</code>
+(values less than machine epsilon are replaced by it)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-itnlim~3"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>itnlim</strong></td>
+            <td>
+                <p>maximum number of iterations</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-nout~3"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>nout</strong></td>
+            <td>
+                <p>output unit for printing iterations (none if <code>&lt;=0</code>)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~10"></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              dimension(n)
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                <p>minimum-norm solution</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-istop"></span>
+              integer,
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>istop</strong></td>
+            <td>
+                <p>status code (see above)</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-itn~2"></span>
+              integer,
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>itn</strong></td>
+            <td>
+                <p>number of iterations performed</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-rnorm"></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>rnorm</strong></td>
+            <td>
+                <p>estimate of <script type="math/tex"> \| b - A x - \delta s \| </script>
+</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-xnorm"></span>
+              real(kind=wp),
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>xnorm</strong></td>
+            <td>
+                <p>estimate of <script type="math/tex"> \| [x; s] \| </script>
+</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <br>
+    <div class="card">
+      <div class="card-header">
+  <h3 class="card-title">Called by</h3>
+      </div>
+      <div class="card-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (0)
+ -->
+<!-- Title: proc~~craig_solver~~CalledByGraph Pages: 1 -->
+<svg id="proccraig_solverCalledByGraph" width="305pt" height="32pt"
+ viewBox="0.00 0.00 305.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~craig_solver~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28.27)">
+<title>proc~~craig_solver~~CalledByGraph</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28.27 300.79,-28.27 300.79,4 -4,4"/>
+<!-- proc~craig_solver -->
+<g id="proc~~craig_solver~~CalledByGraph_node1" class="node">
+<title>proc~craig_solver</title>
+<polygon fill="none" stroke="black" points="296.79,-24.27 220.77,-24.27 220.77,0 296.79,0 296.79,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="258.78" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50">craig_solver</text>
+</g>
+<!-- proc~nlesolver_solver -->
+<g id="proc~~craig_solver~~CalledByGraph_node2" class="node">
+<title>proc~nlesolver_solver</title>
+<g id="a_proc~~craig_solver~~CalledByGraph_node2"><a xlink:href="../proc/nlesolver_solver.html" xlink:title="nlesolver_type%nlesolver_solver">
+<polygon fill="#d9534f" stroke="#d9534f" points="184.77,-24.27 0,-24.27 0,0 184.77,0 184.77,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="92.38" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">nlesolver_type%nlesolver_solver</text>
+</a>
+</g>
+</g>
+<!-- proc~nlesolver_solver&#45;&gt;proc~craig_solver -->
+<g id="proc~~craig_solver~~CalledByGraph_edge1" class="edge">
+<title>proc~nlesolver_solver&#45;&gt;proc~craig_solver</title>
+<path fill="none" stroke="#000000" d="M185.2,-12.13C193.5,-12.13 201.67,-12.13 209.36,-12.13"/>
+<polygon fill="#000000" stroke="#000000" points="209.11,-15.64 219.11,-12.14 209.11,-8.64 209.11,-15.64"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#CalledByGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="CalledByGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="641pt" height="28pt"
+ viewBox="0.00 0.00 641.00 28.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(0.873868 0.873868) rotate(0) translate(4 28.27)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28.27 729.52,-28.27 729.52,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="69.27,-24.27 0,-24.27 0,0 69.27,0 69.27,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="34.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="143.89,-24.27 87.38,-24.27 87.38,0 143.89,0 143.89,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="115.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="221.39,-24.27 161.88,-24.27 161.88,0 221.39,0 221.39,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="191.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Interface</text>
+</g>
+<!-- Type Bound Procedure -->
+<g id="node4" class="node">
+<title>Type Bound Procedure</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="368.27,-24.27 239,-24.27 239,0 368.27,0 368.27,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="303.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Type Bound Procedure</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node5" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="529.39,-24.27 385.88,-24.27 385.88,0 529.39,0 529.39,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="457.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node6" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="603.89,-24.27 547.38,-24.27 547.38,0 603.89,0 603.89,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="575.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node7" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="725.52,-24.27 621.75,-24.27 621.75,0 725.52,0 725.52,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="673.63" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a procedure to one which it calls. Dashed 
+arrows point from an interface to procedures which implement that interface.
+This could include the module procedures in a generic interface or the
+implementation in a submodule of an interface in a parent module.
+</p>
+ </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+
+
+    
+    
+
+    
+    
+
+
+
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl codehilite"><pre><span></span><span class="w">    </span><span class="k">subroutine </span><span class="n">craig_solver</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">nnz</span><span class="p">,</span><span class="n">irow</span><span class="p">,</span><span class="n">icol</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">damp</span><span class="p">,</span><span class="n">atol</span><span class="p">,</span><span class="n">btol</span><span class="p">,</span><span class="n">itnlim</span><span class="p">,</span><span class="n">nout</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">istop</span><span class="p">,</span><span class="n">itn</span><span class="p">,</span><span class="n">rnorm</span><span class="p">,</span><span class="n">xnorm</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">implicit none</span>
+
+<span class="k">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">                   </span><span class="kd">::</span><span class="w"> </span><span class="n">m</span><span class="w">      </span><span class="c">!! number of rows in `A`</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">                   </span><span class="kd">::</span><span class="w"> </span><span class="n">n</span><span class="w">      </span><span class="c">!! number of columns in `A`</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">                   </span><span class="kd">::</span><span class="w"> </span><span class="n">nnz</span><span class="w">    </span><span class="c">!! number of nonzero elements of `A`</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">dimension</span><span class="p">(</span><span class="n">nnz</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">irow</span><span class="w">   </span><span class="c">!! row indices of the nonzero elements of `A`</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">dimension</span><span class="p">(</span><span class="n">nnz</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">icol</span><span class="w">   </span><span class="c">!! column indices of the nonzero elements of `A`</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">nnz</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="w">      </span><span class="c">!! nonzero elements of `A`</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">m</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">     </span><span class="kd">::</span><span class="w"> </span><span class="n">b</span><span class="w">      </span><span class="c">!! right hand side</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">                  </span><span class="kd">::</span><span class="w"> </span><span class="n">damp</span><span class="w">   </span><span class="c">!! damping (regularization) parameter \( \delta \ge 0 \)</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">                  </span><span class="kd">::</span><span class="w"> </span><span class="n">atol</span><span class="w">   </span><span class="c">!! relative error in the definition of `A`</span>
+<span class="w">                                                   </span><span class="c">!! (values less than machine epsilon are replaced by it)</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">                  </span><span class="kd">::</span><span class="w"> </span><span class="n">btol</span><span class="w">   </span><span class="c">!! relative error in the definition of `b`</span>
+<span class="w">                                                   </span><span class="c">!! (values less than machine epsilon are replaced by it)</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">                   </span><span class="kd">::</span><span class="w"> </span><span class="n">itnlim</span><span class="w"> </span><span class="c">!! maximum number of iterations</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">                   </span><span class="kd">::</span><span class="w"> </span><span class="n">nout</span><span class="w">   </span><span class="c">!! output unit for printing iterations (none if `&lt;=0`)</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="w">      </span><span class="c">!! minimum-norm solution</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w">                  </span><span class="kd">::</span><span class="w"> </span><span class="n">istop</span><span class="w">  </span><span class="c">!! status code (see above)</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="k">optional</span><span class="w">         </span><span class="kd">::</span><span class="w"> </span><span class="n">itn</span><span class="w">    </span><span class="c">!! number of iterations performed</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="k">optional</span><span class="w">        </span><span class="kd">::</span><span class="w"> </span><span class="n">rnorm</span><span class="w">  </span><span class="c">!! estimate of \( \| b - A x - \delta s \| \)</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="k">optional</span><span class="w">        </span><span class="kd">::</span><span class="w"> </span><span class="n">xnorm</span><span class="w">  </span><span class="c">!! estimate of \( \| [x; s] \| \)</span>
+
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">u</span><span class="w">      </span><span class="c">!! left Lanczos vector</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">v</span><span class="w">      </span><span class="c">!! right Lanczos vector (`x` part)</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">w</span><span class="w">  </span><span class="c">!! right Lanczos vector (`s` part, only if `damp&gt;0`)</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">alpha</span><span class="p">,</span><span class="w"> </span><span class="n">beta</span><span class="p">,</span><span class="w"> </span><span class="n">zeta</span><span class="w">   </span><span class="c">!! bidiagonalization and solution coefficients</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">anorm</span><span class="p">,</span><span class="w"> </span><span class="n">bnorm</span><span class="w">        </span><span class="c">!! norms of `[A, damp*I]` (Frobenius) and `b`</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">xnrm2</span><span class="w">               </span><span class="c">!! \( \| [x; s] \|^2 \)</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">res</span><span class="w">                 </span><span class="c">!! residual norm</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">atol_</span><span class="p">,</span><span class="w"> </span><span class="n">btol_</span><span class="w">        </span><span class="c">!! tolerances used</span>
+<span class="w">    </span><span class="kt">logical</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">damped</span><span class="w">              </span><span class="c">!! if `damp&gt;0`</span>
+<span class="w">    </span><span class="kt">integer</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">k</span><span class="w">                   </span><span class="c">!! iteration counter</span>
+
+<span class="w">    </span><span class="n">x</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">zero</span>
+<span class="w">    </span><span class="n">istop</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="n">k</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="n">res</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">zero</span>
+<span class="w">    </span><span class="n">xnrm2</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">zero</span>
+<span class="w">    </span><span class="n">damped</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">damp</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">zero</span>
+<span class="w">    </span><span class="n">atol_</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nb">max</span><span class="p">(</span><span class="n">atol</span><span class="p">,</span><span class="w"> </span><span class="n">eps</span><span class="p">)</span>
+<span class="w">    </span><span class="n">btol_</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nb">max</span><span class="p">(</span><span class="n">btol</span><span class="p">,</span><span class="w"> </span><span class="n">eps</span><span class="p">)</span>
+
+<span class="w">    </span><span class="c">! beta_1 u_1 = b</span>
+<span class="w">    </span><span class="n">u</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">b</span>
+<span class="w">    </span><span class="n">beta</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nb">norm2</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+<span class="w">    </span><span class="n">bnorm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">beta</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">beta</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">zero</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+
+<span class="k">        </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">beta</span>
+
+<span class="w">        </span><span class="c">! alpha_1 v_1 = A^T u_1</span>
+<span class="w">        </span><span class="k">call </span><span class="n">atx</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">damped</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">            </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">damp</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u</span>
+<span class="w">            </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">sqrt</span><span class="p">(</span><span class="nb">dot_product</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">dot_product</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">w</span><span class="p">))</span>
+<span class="w">        </span><span class="k">else</span>
+<span class="k">            </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">norm2</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+<span class="w">        </span><span class="k">end if</span>
+
+<span class="k">        if</span><span class="w"> </span><span class="p">(</span><span class="n">alpha</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">zero</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">            </span><span class="n">istop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w">  </span><span class="c">! A^T b = 0 : b is orthogonal to range(A)</span>
+<span class="w">            </span><span class="n">res</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">bnorm</span>
+<span class="w">        </span><span class="k">else</span>
+<span class="k">            </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">alpha</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">damped</span><span class="p">)</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">alpha</span>
+
+<span class="w">            </span><span class="n">anorm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">a</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">m</span><span class="o">*</span><span class="n">damp</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="w">  </span><span class="c">! Frobenius norm of [A, damp*I]</span>
+<span class="w">            </span><span class="n">zeta</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">beta</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">alpha</span><span class="w">                  </span><span class="c">! first element of z: L_k z_k = beta_1 e_1</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nout</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">write</span><span class="p">(</span><span class="n">nout</span><span class="p">,</span><span class="s1">'(A)'</span><span class="p">)</span><span class="w"> </span><span class="s1">'   itn       ||r||           ||x||'</span>
+
+<span class="w">            </span><span class="n">istop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span>
+<span class="w">            </span><span class="k">do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">itnlim</span>
+
+<span class="w">                </span><span class="c">! update the solution: x_k = x_{k-1} + zeta_k v_k</span>
+<span class="w">                </span><span class="n">x</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">zeta</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">v</span>
+<span class="w">                </span><span class="n">xnrm2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xnrm2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">zeta</span><span class="o">**</span><span class="mi">2</span>
+
+<span class="w">                </span><span class="c">! continue the bidiagonalization:</span>
+<span class="w">                </span><span class="c">! beta_{k+1} u_{k+1} = A v_k + damp w_k - alpha_k u_k</span>
+<span class="w">                </span><span class="k">call </span><span class="n">ax</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">alpha</span><span class="p">)</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">damped</span><span class="p">)</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">damp</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">w</span>
+<span class="w">                </span><span class="n">beta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">norm2</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+
+<span class="w">                </span><span class="c">! residual: r_k = -beta_{k+1} zeta_k u_{k+1}</span>
+<span class="w">                </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">beta</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">zeta</span><span class="p">)</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nout</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">write</span><span class="p">(</span><span class="n">nout</span><span class="p">,</span><span class="s1">'(I6,1P,2E16.6)'</span><span class="p">)</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">res</span><span class="p">,</span><span class="w"> </span><span class="nb">sqrt</span><span class="p">(</span><span class="n">xnrm2</span><span class="p">)</span>
+
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">res</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">btol_</span><span class="o">*</span><span class="n">bnorm</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">atol_</span><span class="o">*</span><span class="n">anorm</span><span class="o">*</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">xnrm2</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                    </span><span class="n">istop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">                    </span><span class="k">exit</span>
+<span class="k">                end if</span>
+
+<span class="k">                </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">beta</span>
+
+<span class="w">                </span><span class="c">! alpha_{k+1} v_{k+1} = A^T u_{k+1} - beta_{k+1} v_k</span>
+<span class="w">                </span><span class="k">call </span><span class="n">atx</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">beta</span><span class="p">)</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">damped</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                    </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">damp</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">beta</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">w</span>
+<span class="w">                    </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">sqrt</span><span class="p">(</span><span class="nb">dot_product</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">dot_product</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">w</span><span class="p">))</span>
+<span class="w">                </span><span class="k">else</span>
+<span class="k">                    </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">norm2</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+<span class="w">                </span><span class="k">end if</span>
+
+<span class="k">                if</span><span class="w"> </span><span class="p">(</span><span class="n">alpha</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">eps</span><span class="o">*</span><span class="n">anorm</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                    </span><span class="n">istop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w">  </span><span class="c">! breakdown: system is incompatible (rank deficient A)</span>
+<span class="w">                    </span><span class="k">exit</span>
+<span class="k">                end if</span>
+
+<span class="k">                </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">alpha</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">damped</span><span class="p">)</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">alpha</span>
+
+<span class="w">                </span><span class="c">! next element of z (forward substitution with L_k)</span>
+<span class="w">                </span><span class="n">zeta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">beta</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">zeta</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">alpha</span>
+
+<span class="w">            </span><span class="k">end do</span>
+<span class="k">            </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">min</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">itnlim</span><span class="p">)</span>
+
+<span class="w">        </span><span class="k">end if</span>
+<span class="k">    end if</span>
+
+<span class="k">    if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">itn</span><span class="p">))</span><span class="w">   </span><span class="n">itn</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">k</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">rnorm</span><span class="p">))</span><span class="w"> </span><span class="n">rnorm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">res</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">xnorm</span><span class="p">))</span><span class="w"> </span><span class="n">xnorm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">sqrt</span><span class="p">(</span><span class="n">xnrm2</span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">contains</span>
+
+<span class="k">        subroutine </span><span class="n">ax</span><span class="p">(</span><span class="n">xv</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">)</span>
+<span class="w">            </span><span class="c">!! compute `y = A*xv + c*y` using the sparse triplet representation</span>
+<span class="w">            </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">xv</span>
+<span class="w">            </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">m</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">y</span>
+<span class="w">            </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">                 </span><span class="kd">::</span><span class="w"> </span><span class="n">c</span>
+<span class="w">            </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span>
+<span class="w">            </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y</span>
+<span class="w">            </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">nnz</span>
+<span class="w">                </span><span class="n">y</span><span class="p">(</span><span class="n">irow</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="p">(</span><span class="n">irow</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">xv</span><span class="p">(</span><span class="n">icol</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+<span class="w">            </span><span class="k">end do</span>
+<span class="k">        end subroutine </span><span class="n">ax</span>
+
+<span class="w">        </span><span class="k">subroutine </span><span class="n">atx</span><span class="p">(</span><span class="n">yv</span><span class="p">,</span><span class="w"> </span><span class="n">xv</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">)</span>
+<span class="w">            </span><span class="c">!! compute `xv = A^T*yv + c*xv` using the sparse triplet representation</span>
+<span class="w">            </span><span class="c">!! (if `c` is not present, `xv` is an output only)</span>
+<span class="w">            </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">m</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">yv</span>
+<span class="w">            </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">dimension</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">xv</span>
+<span class="w">            </span><span class="kt">real</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">        </span><span class="kd">::</span><span class="w"> </span><span class="n">c</span>
+<span class="w">            </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">c</span><span class="p">))</span><span class="w"> </span><span class="k">then</span>
+<span class="k">                </span><span class="n">xv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">xv</span>
+<span class="w">            </span><span class="k">else</span>
+<span class="k">                </span><span class="n">xv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zero</span>
+<span class="w">            </span><span class="k">end if</span>
+<span class="k">            do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">nnz</span>
+<span class="w">                </span><span class="n">xv</span><span class="p">(</span><span class="n">icol</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xv</span><span class="p">(</span><span class="n">icol</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">yv</span><span class="p">(</span><span class="n">irow</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+<span class="w">            </span><span class="k">end do</span>
+<span class="k">        end subroutine </span><span class="n">atx</span>
+
+<span class="w">    </span><span class="k">end subroutine </span><span class="n">craig_solver</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              nlesolver-fortran
+ was developed by Jacob Williams<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+            </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>
